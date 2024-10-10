@@ -2,11 +2,11 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { INPUTS_KEYS } from '../types.ts';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const Register = ({ onChange, formValues }) => {
   const [error, setError] = useState({});
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onSignUp = async () => {
     //     // const [error, isValid] = validate();

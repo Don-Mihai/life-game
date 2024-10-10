@@ -50,16 +50,19 @@
   }
 
   &__modal-box {
+    display: flex;
+    flex-direction: column;
     position: absolute;
+    text-align: center;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
+    gap: 10px;
     padding: 30px;
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
-    text-align: center;
   }
 }
 

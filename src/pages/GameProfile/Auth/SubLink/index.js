@@ -3,7 +3,7 @@ import Link from '@mui/material/Link';
 const SubLink = ({ text, linkText, onClick }) => {
   return (
     <h3 className="auth__subtitle">
-      {text}
+      {text}{' '}
       <span onClick={onClick}>
         <Link sx={{ cursor: 'pointer' }} underline="hover">
           {linkText}
