@@ -2,19 +2,20 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { INPUTS_KEYS } from '../types.ts';
 import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { register } from '../../../../redux/store/User/index.ts';
 
 const Register = ({ onChange, formValues }) => {
   const [error, setError] = useState({});
-  // const navigate = useNavigate();
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSignUp = async () => {
-    //     // const [error, isValid] = validate();
-    //     // setError(error);
-    //     // if (isValid) {
-    //     //   dispatch(register(formValues));
-    //     //   navigate('/game-profile');
-    //     // }
+    setError(error);
+    dispatch(register(formValues));
+    navigate('/game-profile');
   };
 
   const handleFocus = () => {
