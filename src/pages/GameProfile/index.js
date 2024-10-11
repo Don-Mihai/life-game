@@ -3,7 +3,7 @@ import { Modal, Box, Typography, IconButton, TextField, Button } from '@mui/mate
 import './LifeStats.scss';
 import { skills as initialSkills } from '../../utils.ts';
 import CloseIcon from '@mui/icons-material/Close';
-import Profile from '../../components/Profile';
+import Profile from '../../components/Profile/index.jsx';
 import AddIcon from '@mui/icons-material/Add';
 
 function GameProfile() {
