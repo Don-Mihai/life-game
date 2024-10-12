@@ -84,8 +84,6 @@ function GameProfile() {
           <Button onClick={addSkill}>Сохранить навык</Button>
           <Typography variant="h6">Добавить уровень к навыку</Typography>
           <TextField name="level" label="Уровень" value={newLevel.level} onChange={handleNewLevelChange} />
-          <TextField name="description" label="Описание" value={newLevel.description} onChange={handleNewLevelChange} />
-          <TextField name="task" label="Задача" value={newLevel.task} onChange={handleNewLevelChange} />
           <IconButton onClick={() => addLevelToSkill(newSkill.name)}>
             <AddIcon />
           </IconButton>
@@ -144,29 +142,6 @@ function GameProfile() {
               }}
             >
               Уровень: {selectedSkill.levelData.level}
-            </Typography>
-
-            <Typography
-              sx={{
-                fontSize: '16px',
-                fontFamily: '"SF Pro Text", sans-serif',
-                color: '#1d1d1f',
-                mb: 2,
-                lineHeight: '1.8',
-              }}
-            >
-              <strong>Описание:</strong> {selectedSkill.levelData.description}
-            </Typography>
-
-            <Typography
-              sx={{
-                fontSize: '16px',
-                fontFamily: '"SF Pro Text", sans-serif',
-                color: '#1d1d1f',
-                lineHeight: '1.8',
-              }}
-            >
-              <strong>Задание для следующего уровня:</strong> {selectedSkill.levelData.task}
             </Typography>
           </Box>
         </Modal>
