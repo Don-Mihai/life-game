@@ -169,7 +169,7 @@ function GameProfile() {
             </Typography>
 
             <Box component="ul" sx={{ textAlign: 'left', pl: '24px', color: '#6e6e73' }}>
-              {selectedSkill.levelData.resources.map((resource, index) => (
+              {selectedSkill?.levelData?.resources?.map((resource, index) => (
                 <li key={index}>
                   <a href="#" target="_blank" rel="noopener noreferrer" style={{ color: '#007aff' }}>
                     {resource}
