@@ -143,6 +143,40 @@ function GameProfile() {
             >
               Уровень: {selectedSkill.levelData.level}
             </Typography>
+
+            {/* Описание задачи */}
+            <Typography
+              variant="body1"
+              sx={{
+                fontFamily: '"SF Pro Text", sans-serif',
+                color: '#1d1d1f',
+                mb: 2,
+              }}
+            >
+              <strong>Задача:</strong> {selectedSkill.levelData.task}
+            </Typography>
+
+            {/* Ресурсы */}
+            <Typography
+              variant="body1"
+              sx={{
+                fontFamily: '"SF Pro Text", sans-serif',
+                color: '#1d1d1f',
+                mb: 2,
+              }}
+            >
+              <strong>Полезные ресурсы:</strong>
+            </Typography>
+
+            <Box component="ul" sx={{ textAlign: 'left', pl: '24px', color: '#6e6e73' }}>
+              {selectedSkill.levelData.resources.map((resource, index) => (
+                <li key={index}>
+                  <a href="#" target="_blank" rel="noopener noreferrer" style={{ color: '#007aff' }}>
+                    {resource}
+                  </a>
+                </li>
+              ))}
+            </Box>
           </Box>
         </Modal>
       )}
