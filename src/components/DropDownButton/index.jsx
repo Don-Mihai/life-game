@@ -1,6 +1,7 @@
 import * as React from 'react';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import IosShareIcon from '@mui/icons-material/IosShare';
 import { MenuList, MenuItem, Popper, Paper, Grow, ClickAwayListener, ButtonGroup, Button } from '@mui/material';
+import './DropDownButton.scss';
 
 const options = ['Экспортировать в Таблице', 'Экспортировать в PDF', 'Экспортировать в TXT'];
 
@@ -31,9 +32,8 @@ export default function SplitButton() {
   };
 
   return (
-    <React.Fragment>
-      <ButtonGroup variant="contained" ref={anchorRef} aria-label="Button group with a nested menu">
-        <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+    <>
+      <ButtonGroup className="drop-down-component" variant="contained" ref={anchorRef} aria-label="Button group with a nested menu">
         <Button
           size="small"
           aria-controls={open ? 'split-button-menu' : undefined}
@@ -42,7 +42,7 @@ export default function SplitButton() {
           aria-haspopup="menu"
           onClick={handleToggle}
         >
-          <ArrowDropDownIcon />
+          <IosShareIcon />
         </Button>
       </ButtonGroup>
       <Popper sx={{ zIndex: 1 }} open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
@@ -67,6 +67,6 @@ export default function SplitButton() {
           </Grow>
         )}
       </Popper>
-    </React.Fragment>
+    </>
   );
 }
