@@ -14,6 +14,12 @@
     align-items: flex-start;
   }
 
+  &__export {
+    position: absolute;
+    top: 5px;
+    right: 150px;
+  }
+
   &__skill {
     margin-bottom: 20px;
   }
