@@ -2,17 +2,17 @@ export const skills = [
   {
     name: 'Бег',
     levels: [
-      { level: 1, description: 'Могу пробежать 1 км.', task: 'Пробежать 2 км.' },
-      { level: 2, description: 'Могу пробежать 3 км.', task: 'Пробежать 5 км.' },
-      { level: 3, description: 'Могу пробежать 5 км.', task: 'Пробежать 10 км.' },
+      { level: 1, description: 'Могу пробежать 1 км.', task: 'Пробежать 2 км.', resources: [''] },
+      { level: 2, description: 'Могу пробежать 3 км.', task: 'Пробежать 5 км.', resources: [''] },
+      { level: 3, description: 'Могу пробежать 5 км.', task: 'Пробежать 10 км.', resources: [''] },
     ],
   },
   {
     name: 'Кулинария',
     levels: [
-      { level: 1, description: 'Могу приготовить омлет.', task: 'Приготовить пасту.' },
-      { level: 2, description: 'Могу приготовить несколько блюд.', task: 'Приготовить сложный ужин.' },
-      { level: 3, description: 'Могу готовить ужины для друзей.', task: 'Организовать ужин на 6 человек.' },
+      { level: 1, description: 'Могу приготовить омлет.', task: 'Приготовить пасту.', resources: [''] },
+      { level: 2, description: 'Могу приготовить несколько блюд.', task: 'Приготовить сложный ужин.', resources: [''] },
+      { level: 3, description: 'Могу готовить ужины для друзей.', task: 'Организовать ужин на 6 человек.', resources: [''] },
     ],
   },
   {
