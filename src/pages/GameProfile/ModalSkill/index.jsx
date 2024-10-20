@@ -4,7 +4,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import styles from './ModalSkill.module.scss';
 
-const SkillLevelModal = ({ selectedSkill, handleClose, setTempValue, handleSave, editing, tempValue, handleEdit }) => {
+const SkillLevelModal = ({ selectedSkill, handleClose, handleSave, handleEdit }) => {
+  const [tempValue, setTempValue] = React.useState('');
+
+  React.useEffect(() => {
+    if (selectedSkill && selectedSkill.levelData) {
+      setTempValue(selectedSkill.levelData.description || '');
+    }
+  }, [selectedSkill]);
+
+  const handleChange = (e) => {
+    setTempValue(e.target.value);
+  };
+
   return (
     <>
       {selectedSkill && selectedSkill.levelData && (
@@ -19,12 +31,12 @@ const SkillLevelModal = ({ selectedSkill, handleClose, setTempValue, handleSave,
 
             <div className={styles.textBlock}>
               <strong>Описание:</strong>{' '}
-              {editing.field === 'description' ? (
-                <TextField value={tempValue} onChange={(e) => setTempValue(e.target.value)} onBlur={handleSave} autoFocus fullWidth />
+              {selectedSkill.editingField === 'description' ? (
+                <TextField value={tempValue} onChange={handleChange} onBlur={() => handleSave('description', tempValue)} autoFocus fullWidth />
               ) : (
                 <>
                   {selectedSkill.levelData.description}
-                  <IconButton size="small" onClick={() => handleEdit('description')} className={styles.editIcon}>
+                  <IconButton size="small" onClick={() => handleEdit('description', selectedSkill)}>
                     <EditIcon />
                   </IconButton>
                 </>
@@ -33,12 +45,12 @@ const SkillLevelModal = ({ selectedSkill, handleClose, setTempValue, handleSave,
 
             <div className={styles.textBlock}>
               <strong>Задача:</strong>{' '}
-              {editing.field === 'task' ? (
-                <TextField value={tempValue} onChange={(e) => setTempValue(e.target.value)} onBlur={handleSave} autoFocus fullWidth />
+              {selectedSkill.editingField === 'task' ? (
+                <TextField value={tempValue} onChange={handleChange} onBlur={() => handleSave('task', tempValue)} autoFocus fullWidth />
               ) : (
                 <>
                   {selectedSkill.levelData.task}
-                  <IconButton size="small" onClick={() => handleEdit('task')} className={styles.editIcon}>
+                  <IconButton size="small" onClick={() => handleEdit('task', selectedSkill)}>
                     <EditIcon />
                   </IconButton>
                 </>
@@ -51,14 +63,14 @@ const SkillLevelModal = ({ selectedSkill, handleClose, setTempValue, handleSave,
                 {selectedSkill.levelData.resources &&
                   selectedSkill.levelData.resources.map((resource, index) => (
                     <li key={index}>
-                      {editing.field === 'resources' && editing.index === index ? (
-                        <TextField value={tempValue} onChange={(e) => setTempValue(e.target.value)} onBlur={handleSave} autoFocus fullWidth />
+                      {selectedSkill.editingField === 'resources' && selectedSkill.editingIndex === index ? (
+                        <TextField value={tempValue} onChange={handleChange} onBlur={() => handleSave('resources', tempValue, index)} autoFocus fullWidth />
                       ) : (
                         <>
                           <a href={resource} target="_blank" rel="noopener noreferrer" className={styles.resourceLink}>
                             {resource}
                           </a>
-                          <IconButton size="small" onClick={() => handleEdit('resources', index)} className={styles.editIcon}>
+                          <IconButton size="small" onClick={() => handleEdit('resources', selectedSkill, index)}>
                             <EditIcon />
                           </IconButton>
                         </>

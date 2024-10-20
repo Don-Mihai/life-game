@@ -1,13 +1,13 @@
 @import 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300..800&display=swap';
 
-.game-profile {
+.gameProfile {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
   background-color: #f9f9f9;
 
-  &__skills {
+  .skills {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -15,38 +15,7 @@
     margin-top: 20px;
   }
 
-  &__export {
-    position: absolute;
-    top: 5px;
-    right: 150px;
-  }
-
-  &__modal-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    max-width: 600px;
-    gap: 10px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-
-    .game-profile__modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      cursor: pointer;
-      font-size: 20px;
-    }
-  }
-
-  &__add-skill-button {
+  .addSkillButton {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #28a745;
@@ -61,7 +30,8 @@
     }
   }
 
-  &__add-level-button {
+
+  .addLevelButton {
     cursor: pointer;
     background-color: #007bff;
     color: white;
@@ -86,7 +56,7 @@
     align-items: center;
     background-color: rgba(0, 0, 0, 0.5);
 
-    .modal-content {
+    .modalContent {
       background: white;
       padding: 20px;
       border-radius: 10px;
@@ -94,8 +64,31 @@
       max-width: 400px;
       position: relative;
     }
+  }
+}
 
+.modalBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 600px;
+  gap: 10px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 
+  .modalClose {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
   }
 }
 
