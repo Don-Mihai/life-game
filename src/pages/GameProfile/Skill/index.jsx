@@ -27,7 +27,7 @@ const Skill = ({ handleLevelClick, skill, addLevelToSkill }) => {
                 </div>
               </ContextMenuTrigger>
               <ContextMenu id={`context-menu-${skill.name}-${i}`}>
-                <ContextMenuItem onClick={() => handleMarkAsCompleted(i)}>Пометить как выполненный</ContextMenuItem>
+                <ContextMenuItem onClick={() => handleMarkAsCompleted(i)}>Уровень пройден</ContextMenuItem>
               </ContextMenu>
             </React.Fragment>
           ))}

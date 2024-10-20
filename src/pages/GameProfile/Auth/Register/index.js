@@ -4,7 +4,7 @@ import { INPUTS_KEYS } from '../types.ts';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { register } from '../../../../redux/store/User/index.ts';
+import { register } from '../../../../redux/User/index.ts';
 
 const Register = ({ onChange, formValues }) => {
   const [error, setError] = useState({});

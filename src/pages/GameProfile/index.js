@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Typography, IconButton, TextField, Button } from '@mui/material';
 import './LifeStats.scss';
-import { skills as initialSkills } from '../../utils.ts';
 import Profile from '../../components/Profile/index.jsx';
 import AddIcon from '@mui/icons-material/Add';
 import SplitButton from '../../components/DropDownButton/index.jsx';
 import Skill from './Skill';
 import ModalSkill from './ModalSkill';
+import { fetchSkills } from '../../redux/Skill';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 function GameProfile() {
-  const [skills, setSkills] = useState(initialSkills);
+  const dispatch = useDispatch();
+  const skills = useSelector((state) => state.skill.skills);
+  const skillsStatus = useSelector((state) => state.skill.status);
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [newSkill, setNewSkill] = useState({ name: '', levels: [] });
   const [newLevel, setNewLevel] = useState({ level: '', description: '', task: '' });
   const [editing, setEditing] = useState({ field: null, index: null });
   const [tempValue, setTempValue] = useState('');
-  const [openSkillModal, setOpenSkillModal] = useState(false); // Добавлено состояние для модального окна
+  const [openSkillModal, setOpenSkillModal] = useState(false);
+
+  useEffect(() => {
+    if (skillsStatus === 'idle') {
+      dispatch(fetchSkills());
+    }
+  }, [skillsStatus, dispatch]);
 
   const handleLevelClick = (skill, levelData) => {
     setSelectedSkill({ skill, levelData });
@@ -35,12 +45,13 @@ function GameProfile() {
     const { name, value } = event.target;
     setNewLevel({ ...newLevel, [name]: value });
   };
+
   const handleEdit = (field, index = null) => {
     setEditing({ field, index });
     setTempValue(field === 'task' ? selectedSkill.levelData.task : selectedSkill.levelData.resources[index]);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const updatedSkills = skills.map((skill) => {
       if (skill.name === selectedSkill.skill) {
         return {
@@ -61,31 +72,47 @@ function GameProfile() {
       }
       return skill;
     });
-    setSkills(updatedSkills);
-    setEditing({ field: null, index: null });
+
+    try {
+      // Сохраняем изменения в бэкенд (mockapi)
+      await axios.put('https://mockapi.io/your-endpoint/skills', updatedSkills);
+      setEditing({ field: null, index: null });
+    } catch (error) {
+      console.error('Error saving skills:', error);
+    }
   };
 
-  const addSkill = () => {
-    setSkills([...skills, newSkill]);
-    setNewSkill({ name: '', levels: [] });
-    setOpenSkillModal(false); // Закрыть модальное окно после добавления
+  const addSkill = async () => {
+    try {
+      const response = await axios.post('https://mockapi.io/your-endpoint/skills', newSkill);
+      // После успешного добавления обновите список
+      dispatch(fetchSkills()); // Обновление списка навыков после добавления нового
+      setNewSkill({ name: '', levels: [] });
+      setOpenSkillModal(false);
+    } catch (error) {
+      console.error('Error adding new skill:', error);
+    }
   };
 
-  const addLevelToSkill = (skillName) => {
-    const updatedSkills = skills.map((skill) => {
-      if (skill.name === skillName) {
-        const lastLevel = skill.levels.length > 0 ? skill.levels[skill.levels.length - 1].level : 0;
-        const newLevel = {
-          level: parseInt(lastLevel) + 1,
-          description: '',
-          task: '',
-        };
-        return { ...skill, levels: [...skill.levels, newLevel] };
+  const addLevelToSkill = async (skillName) => {
+    const skillToUpdate = skills.find((skill) => skill.name === skillName);
+    if (skillToUpdate) {
+      const newLevel = {
+        level: skillToUpdate.levels.length + 1,
+        description: '',
+        task: '',
+      };
+      skillToUpdate.levels.push(newLevel);
+
+      try {
+        // Обновляем конкретный навык с новым уровнем в бэкенде (mockapi)
+        await axios.put(`https://mockapi.io/your-endpoint/skills/${skillToUpdate.id}`, skillToUpdate);
+        dispatch(fetchSkills()); // Обновление списка навыков после добавления уровня
+        setNewLevel({ level: '', description: '', task: '' });
+      } catch (error) {
+        console.error('Error adding level to skill:', error);
       }
-      return skill;
-    });
-    setSkills(updatedSkills);
-    setNewLevel({ level: '', description: '', task: '' });
+    }
   };
 
   return (
@@ -94,7 +121,7 @@ function GameProfile() {
       <Profile />
       {/* Навыки */}
       <div className="game-profile__skills">
-        {skills.map((skill) => (
+        {skills?.map((skill) => (
           <Skill addLevelToSkill={addLevelToSkill} key={skill.name} skill={skill} handleLevelClick={handleLevelClick} />
         ))}
 

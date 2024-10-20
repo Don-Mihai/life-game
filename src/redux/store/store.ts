@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import user from './User/index.ts';
+import user from '../User/index.ts';
+import skill from '../Skill/index.js';
 
 export const store = configureStore({
   reducer: {
     user,
+    skill,
   },
 });
 
