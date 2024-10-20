@@ -14,21 +14,22 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(15px);
   border: 2px solid rgba(255, 255, 255, 0.2);
-}
 
-.closeButton {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background-color: transparent;
-  color: #555;
-  font-size: 24px;
-  transition: color 0.3s;
+  .closeButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: transparent;
+    color: #555;
+    font-size: 24px;
+    transition: color 0.3s;
 
-  &:hover {
-    color: #ff4757;
+    &:hover {
+      color: #ff4757;
+    }
   }
 }
+
 
 .title {
   font-size: 28px;
