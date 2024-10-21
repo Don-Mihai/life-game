@@ -28,7 +28,6 @@ const SkillLevelModal = ({ selectedSkill, handleClose, handleSave, handleEdit })
 
             <h2 className={styles.title}>{selectedSkill.skill}</h2>
             <h3 className={styles.subtitle}>Уровень: {selectedSkill.levelData.level}</h3>
-
             <div className={styles.textBlock}>
               <strong>Описание:</strong>{' '}
               {selectedSkill.editingField === 'description' ? (

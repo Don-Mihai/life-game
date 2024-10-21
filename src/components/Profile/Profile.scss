@@ -12,6 +12,7 @@
   &__avatar {
     display: flex;
     align-items: center;
+    margin-right: 5px;
   }
 
   &__avatar-image {
@@ -28,6 +29,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   &__input {
@@ -48,6 +50,7 @@
   .profile__item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: 20px;
     font-weight: 500;
     color: #333;
@@ -64,13 +67,30 @@
       margin: 0;
     }
 
-    .MuiIconButton-root {
-      margin-left: 10px;
-    }
+    // .MuiIconButton-root {
+    //   margin-left: 10px;
+    // }
   }
 
   &__edit-icon {
-    align-self: flex-start;
     margin-left: 10px;
+  }
+}
+
+@media (max-width: 430px) {
+  .profile {
+    flex-direction: column;
+    align-items: center;
+    &__info {
+      flex-wrap: nowrap;
+      padding: 0;
+    }
+    &__avatar-image {
+      width: 120px;
+      height: 120px;
+    }
+    .profile__item {
+      font-size: 15px;
+    }
   }
 }
