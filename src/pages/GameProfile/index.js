@@ -51,6 +51,14 @@ function GameProfile() {
   };
 
   const handleEditSkill = async (skill, updatedLevel) => {
+    console.log('Received skill:', skill);
+    console.log('Received updatedLevel:', updatedLevel);
+
+    if (!skill || !Array.isArray(skill.levels)) {
+      console.error('skill or skill.levels is not defined or not an array');
+      return;
+    }
+
     const updatedSkill = {
       ...skill,
       levels: skill.levels.map((level) => (level.level === updatedLevel.level ? updatedLevel : level)),
@@ -94,7 +102,7 @@ function GameProfile() {
       </Modal>
 
       {/* Модальное окно для редактирования выбранного уровня */}
-      {selectedSkill && <ModalSkill selectedSkill={selectedSkill} handleClose={handleClose} handleEdit={handleEditSkill} />}
+      {selectedSkill && <ModalSkill selectedSkill={selectedSkill} handleClose={handleClose} handleEdit={handleEditSkill} FocusOn />}
     </div>
   );
 }

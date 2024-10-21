@@ -77,12 +77,14 @@ const Profile = () => {
             ) : (
               <>
                 {value}
-                <IconButton size="small" onClick={() => handleEditField(label)} className="profile__edit-icon">
-                  <EditIcon />
-                </IconButton>
-                <IconButton size="small" onClick={() => handleDeleteCharacteristic(label)} className="profile__delete-icon">
-                  <DeleteIcon />
-                </IconButton>
+                <div>
+                  <IconButton size="small" onClick={() => handleEditField(label)} className="profile__edit-icon">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton size="small" onClick={() => handleDeleteCharacteristic(label)} className="profile__delete-icon">
+                    <DeleteIcon />
+                  </IconButton>
+                </div>
               </>
             )}
           </div>
