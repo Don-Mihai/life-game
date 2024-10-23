@@ -17,6 +17,14 @@ const SkillLevelModal = ({ selectedSkill, handleClose, handleSave, handleEdit })
     setTempValue(e.target.value);
   };
 
+  // const handleKeyDown = (e) => {
+  //   if (e.key === 'ArrowLeft') {
+  //     handlePrevLevel();
+  //   } else if (e.key === 'ArrowRight') {
+  //     handleNextLevel();
+  //   }
+  // };
+
   return (
     <>
       {selectedSkill && selectedSkill.levelData && (
