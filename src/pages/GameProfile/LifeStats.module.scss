@@ -15,6 +15,20 @@
     margin-top: 20px;
   }
 
+  .builder {
+    position: fixed;
+    left: 1;
+    height: 30px;
+    border-radius: 10px;
+    background-color: #1976d2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+  }
+
   .addSkillButton {
     margin-top: 10px;
     padding: 10px 20px;
@@ -29,7 +43,6 @@
       background-color: #218838;
     }
   }
-
 
   .addLevelButton {
     cursor: pointer;

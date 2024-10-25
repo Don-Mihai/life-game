@@ -9,6 +9,7 @@ import ModalSkill from './ModalSkill';
 import { addSkill, fetchSkills, updateSkill } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
+import ChartBuilder from '../../components/ChartBuilder/index.jsx';
 
 function GameProfile() {
   const dispatch = useDispatch();
@@ -16,6 +17,11 @@ function GameProfile() {
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [openSkillModal, setOpenSkillModal] = useState(false);
   const [newSkillName, setNewSkillName] = useState('');
+  const [isEnabledBuilder, setIsEnabledBuilder] = useState(false);
+
+  const handleOpenBuilder = () => {
+    setIsEnabledBuilder(!isEnabledBuilder);
+  };
 
   useEffect(() => {
     if (status === 'idle') {
@@ -79,6 +85,10 @@ function GameProfile() {
     <div className={styles.gameProfile}>
       <SplitButton />
       <Profile />
+      {isEnabledBuilder && <ChartBuilder />}
+      <button className={styles.builder} onClick={handleOpenBuilder}>
+        Построить график
+      </button>
       {/* Навыки */}
       <div className={styles.skills}>
         {skills?.map((skill) => (
