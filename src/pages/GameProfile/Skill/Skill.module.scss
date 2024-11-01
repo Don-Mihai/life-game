@@ -7,8 +7,6 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 100%;
   transition: background-color 0.3s;
-
-
 }
 
 .skillName {
@@ -45,5 +43,20 @@
   &:hover {
     background-color: #007aff;
     color: white;
+  }
+}
+
+@media (max-width: 430px) {
+  .skill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .skillName {
+    font-size: 16px;
+  }
+
+  .skillLevels {
+    justify-content: center;
   }
 }

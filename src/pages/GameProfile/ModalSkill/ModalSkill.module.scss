@@ -14,6 +14,7 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(15px);
   border: 2px solid rgba(255, 255, 255, 0.2);
+  overflow-y: auto;
 
   .closeButton {
     position: absolute;
@@ -29,7 +30,6 @@
     }
   }
 }
-
 
 .title {
   font-size: 28px;
@@ -48,6 +48,8 @@
 }
 
 .textBlock {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   margin-bottom: 15px;
   padding: 15px;
@@ -71,10 +73,11 @@
 }
 
 .resourcesList {
+  display: flex;
+  flex-direction: column;
   list-style-type: none;
   padding: 0;
   margin-top: 15px;
-  width: 100%;
 }
 
 .resourceLink {
@@ -87,5 +90,25 @@
   &:hover {
     color: #005bb5;
     text-decoration: underline;
+  }
+}
+
+@media (max-width: 430px) {
+  .modalBox {
+    padding: 5px;
+    height: 95%;
+    .closeButton {
+      top: 0px;
+      right: 4px;
+    }
+  }
+  .title {
+    font-size: 20px;
+  }
+  .subtitle {
+    font-size: 15px;
+  }
+  .textBlock {
+    font-size: 14px;
   }
 }

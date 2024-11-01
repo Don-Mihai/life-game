@@ -9,6 +9,7 @@ import ModalSkill from './ModalSkill';
 import { addSkill, fetchSkills, updateSkill } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
+import ChartBuilder from '../../components/ChartBuilder/index.jsx';
 
 function GameProfile() {
   const dispatch = useDispatch();
@@ -16,6 +17,11 @@ function GameProfile() {
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [openSkillModal, setOpenSkillModal] = useState(false);
   const [newSkillName, setNewSkillName] = useState('');
+  const [isEnabledBuilder, setIsEnabledBuilder] = useState(false);
+
+  const handleOpenBuilder = () => {
+    setIsEnabledBuilder(!isEnabledBuilder);
+  };
 
   useEffect(() => {
     if (status === 'idle') {
@@ -51,6 +57,14 @@ function GameProfile() {
   };
 
   const handleEditSkill = async (skill, updatedLevel) => {
+    console.log('Received skill:', skill);
+    console.log('Received updatedLevel:', updatedLevel);
+
+    if (!skill || !Array.isArray(skill.levels)) {
+      console.error('skill or skill.levels is not defined or not an array');
+      return;
+    }
+
     const updatedSkill = {
       ...skill,
       levels: skill.levels.map((level) => (level.level === updatedLevel.level ? updatedLevel : level)),
@@ -71,6 +85,10 @@ function GameProfile() {
     <div className={styles.gameProfile}>
       <SplitButton />
       <Profile />
+      {isEnabledBuilder && <ChartBuilder />}
+      <button className={styles.builder} onClick={handleOpenBuilder}>
+        Построить график
+      </button>
       {/* Навыки */}
       <div className={styles.skills}>
         {skills?.map((skill) => (
@@ -94,7 +112,7 @@ function GameProfile() {
       </Modal>
 
       {/* Модальное окно для редактирования выбранного уровня */}
-      {selectedSkill && <ModalSkill selectedSkill={selectedSkill} handleClose={handleClose} handleEdit={handleEditSkill} />}
+      {selectedSkill && <ModalSkill selectedSkill={selectedSkill} handleClose={handleClose} handleEdit={handleEditSkill} FocusOn />}
     </div>
   );
 }
