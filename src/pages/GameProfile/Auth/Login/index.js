@@ -15,7 +15,7 @@ const Login = ({ onChange, formValues }) => {
   const dispatch = useDispatch();
 
   const onSignIn = async () => {
-    const payload = { email: formValues.email, password: formValues.password };
+    const payload = { email: formValues[INPUTS_KEYS.EMAIL], password: formValues[INPUTS_KEYS.PASSWORD] };
     const user = (await dispatch(auth(payload))).payload;
 
     if (user?.id) {
