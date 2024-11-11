@@ -66,25 +66,16 @@ const SkillLevelModal = ({ selectedSkill, handleClose, handleSave, handleEdit })
 
             <div className={styles.textBlock}>
               <strong>Полезные ресурсы:</strong>
-              <ul className={styles.resourcesList}>
-                {selectedSkill.levelData.resources &&
-                  selectedSkill.levelData.resources.map((resource, index) => (
-                    <li key={index}>
-                      {selectedSkill.editingField === 'resources' && selectedSkill.editingIndex === index ? (
-                        <TextField value={tempValue} onChange={handleChange} onBlur={() => handleSave('resources', tempValue, index)} autoFocus fullWidth />
-                      ) : (
-                        <>
-                          <a href={resource} target="_blank" rel="noopener noreferrer" className={styles.resourceLink}>
-                            {resource}
-                          </a>
-                          <IconButton size="small" onClick={() => handleEdit('resources', selectedSkill, index)}>
-                            <EditIcon />
-                          </IconButton>
-                        </>
-                      )}
-                    </li>
-                  ))}
-              </ul>
+              {selectedSkill.editingField === 'resources' ? (
+                <TextField value={tempValue} onChange={handleChange} onBlur={() => handleSave('resources', tempValue)} autoFocus fullWidth />
+              ) : (
+                <>
+                  {selectedSkill.levelData.resources}
+                  <IconButton size="small" onClick={() => handleEdit('resources', selectedSkill)}>
+                    <EditIcon />
+                  </IconButton>
+                </>
+              )}
             </div>
           </div>
         </Modal>
