@@ -3,8 +3,8 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { UserState, IUser, PAuth } from './types.ts';
 
-// const API_URL = 'https://6715244433bc2bfe40b986f6.mockapi.io/users';
-const API_URL = 'https://671924ac7fc4c5ff8f4c9c00.mockapi.io/users';
+const API_URL = 'https://6715244433bc2bfe40b986f6.mockapi.io/users';
+// const API_URL = 'https://671924ac7fc4c5ff8f4c9c00.mockapi.io/users';
 
 const initialState: UserState = {
   user: {} as IUser,
