@@ -16,7 +16,7 @@ const Register = ({ onChange, formValues }) => {
     const payload = {
       firstName: formValues[INPUTS_KEYS.FIRST_NAME],
       email: formValues[INPUTS_KEYS.EMAIL],
-      password: formValues[INPUTS_KEYS.PASSWORD],
+      password: formValues[INPUTS_KEYS.PASSWORD]
     };
     const resultAction = await dispatch(register(payload));
 

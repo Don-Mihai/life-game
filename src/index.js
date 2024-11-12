@@ -5,13 +5,13 @@ import GameProfile from './pages/GameProfile';
 import Auth from './pages/GameProfile/Auth';
 import { store } from './redux/store/store.ts';
 import { Provider } from 'react-redux';
-import ProtectedRoute from './components/ProtectedRoute';
-import { LOCAL_STORAGE_KEY } from './redux/User/types';
+import ProtectedRoute from './components/ProtectedRoute/index.tsx';
+import { LOCAL_STORAGE_KEY } from './redux/User/types.ts';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Auth />,
+    element: <Auth />
   },
   {
     path: '/game-profile',
@@ -21,8 +21,8 @@ const router = createBrowserRouter([
       >
         <GameProfile />
       </ProtectedRoute>
-    ),
-  },
+    )
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

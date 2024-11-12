@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import user from '../User/index.ts';
-import skill from '../Skill/index.js';
+import user from '../User';
+import skill from '../Skill';
 
 export const store = configureStore({
   reducer: {
     user,
-    skill,
-  },
+    skill
+  }
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -1,17 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { LOCAL_STORAGE_KEY } from '../User/types.ts';
 
 // API Base URL
 const API_URL = 'https://6715244433bc2bfe40b986f6.mockapi.io/skills';
 
 // Async thunks
 export const fetchSkills = createAsyncThunk('skills/fetchSkills', async () => {
-  const response = await axios.get(API_URL);
+  const userId = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const response = await axios.get(API_URL, {
+    params: { userId } // Фильтрация навыков по userId
+  });
   return response.data;
 });
 
 export const addSkill = createAsyncThunk('skills/addSkill', async (newSkill) => {
-  const response = await axios.post(API_URL, newSkill);
+  const userId = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const skillWithUser = { ...newSkill, userId };
+  const response = await axios.post(API_URL, skillWithUser);
   return response.data;
 });
 
@@ -30,7 +36,7 @@ const skillsSlice = createSlice({
   initialState: {
     skills: [],
     status: 'idle',
-    error: null,
+    error: null
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -58,7 +64,7 @@ const skillsSlice = createSlice({
       .addCase(deleteSkill.fulfilled, (state, action) => {
         state.skills = state.skills.filter((skill) => skill.id !== action.payload);
       });
-  },
+  }
 });
 
 export default skillsSlice.reducer;

@@ -1,36 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IconButton, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './Profile.scss';
+import { editUser } from '../../redux/User';
 
 const Profile = () => {
   const [editingField, setEditingField] = useState(null);
-  const { users } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
-  const [characteristics, setCharacteristics] = useState([
-    { label: 'Имя', value: 'Иван Иванов' },
-    { label: 'Возраст', value: 28 },
-    { label: 'Профессия', value: 'Программист' },
-  ]);
+  const [characteristics, setCharacteristics] = useState([]);
 
   const [newCharacteristic, setNewCharacteristic] = useState({ label: '', value: '' });
   const [showNewCharacteristicInputs, setShowNewCharacteristicInputs] = useState(false);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setCharacteristics(user.characteristics || []);
+  }, [user]);
+  console.log(user);
   const handleEditField = (label) => {
     setEditingField(label);
   };
 
   const handleChangeValue = (event, label) => {
     const newValue = event.target.value;
-    setCharacteristics((prevCharacteristics) => prevCharacteristics.map((char) => (char.label === label ? { ...char, value: newValue } : char)));
+    setCharacteristics((prevCharacteristics) =>
+      prevCharacteristics.map((char) =>
+        char.label === label
+          ? {
+              ...char,
+              value: newValue
+            }
+          : char
+      )
+    );
   };
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
+    await dispatch(editUser({ characteristics }));
     setEditingField(null);
   };
 
@@ -49,15 +62,17 @@ const Profile = () => {
           fontSize: '20px',
           fontWeight: 500,
           color: '#333',
-          marginLeft: '6px',
-        },
+          marginLeft: '6px'
+        }
       }}
     />
   );
 
-  const handleAddCharacteristic = () => {
+  const handleAddCharacteristic = async () => {
+    const payload = [...characteristics, newCharacteristic];
     if (newCharacteristic.label && newCharacteristic.value) {
-      setCharacteristics([...characteristics, newCharacteristic]);
+      setCharacteristics(payload);
+      await dispatch(editUser({ characteristics: payload }));
       setNewCharacteristic({ label: '', value: '' });
       setShowNewCharacteristicInputs(false);
     }

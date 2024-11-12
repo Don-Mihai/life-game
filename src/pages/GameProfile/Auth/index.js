@@ -5,15 +5,15 @@ import SubLink from './SubLink';
 import Register from './Register';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
-import { LOCAL_STORAGE_KEY } from '../../../redux/User/types';
+import { LOCAL_STORAGE_KEY } from '../../../redux/User/types.ts';
 
 const Auth = () => {
   const [formValues, setFormValues] = useState(initValues);
   const [mode, setMode] = useState(AUTH_MODE.LOGIN);
   const navigate = useNavigate();
-
   useEffect(() => {
-    if (localStorage.getItem(LOCAL_STORAGE_KEY)) {
+    const token = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (token) {
       navigate('/game-profile');
     }
   }, [navigate]);

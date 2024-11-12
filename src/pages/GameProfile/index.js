@@ -10,6 +10,7 @@ import { addSkill, fetchSkills, updateSkill } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
 import ChartBuilder from '../../components/ChartBuilder/index.jsx';
+import { getById } from '../../redux/User';
 
 function GameProfile() {
   const dispatch = useDispatch();
@@ -24,10 +25,9 @@ function GameProfile() {
   };
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchSkills());
-    }
-  }, [status, dispatch]);
+    dispatch(fetchSkills());
+    dispatch(getById());
+  }, [dispatch]);
 
   const handleLevelClick = (skill, levelData) => {
     setSelectedSkill({ skill, levelData });
@@ -46,8 +46,9 @@ function GameProfile() {
     try {
       const newSkill = {
         name: newSkillName,
-        levels: [],
+        levels: []
       };
+      console.log(newSkill);
       await dispatch(addSkill(newSkill)).unwrap();
       setNewSkillName('');
       setOpenSkillModal(false);
@@ -67,7 +68,7 @@ function GameProfile() {
 
     const updatedSkill = {
       ...skill,
-      levels: skill.levels.map((level) => (level.level === updatedLevel.level ? updatedLevel : level)),
+      levels: skill.levels.map((level) => (level.level === updatedLevel.level ? updatedLevel : level))
     };
 
     try {
@@ -79,7 +80,7 @@ function GameProfile() {
   };
 
   if (status === 'loading') return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  console.log(newSkillName, 'newSkillName');
 
   return (
     <div className={styles.gameProfile}>
