@@ -6,17 +6,13 @@ import Register from './Register';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_KEY } from '../../../redux/User/types.ts';
+import { useSelector } from 'react-redux';
 
 const Auth = () => {
   const [formValues, setFormValues] = useState(initValues);
   const [mode, setMode] = useState(AUTH_MODE.LOGIN);
   const navigate = useNavigate();
-  useEffect(() => {
-    const token = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (token) {
-      navigate('/game-profile');
-    }
-  }, [navigate]);
+  const { user } = useSelector((state) => state.user);
 
   const onChange = (event) => {
     setFormValues({ ...formValues, [event.target.name]: event.target.value });

@@ -17,10 +17,9 @@ const Login = ({ onChange, formValues }) => {
   const onSignIn = async () => {
     const payload = { email: formValues[INPUTS_KEYS.EMAIL], password: formValues[INPUTS_KEYS.PASSWORD] };
     const user = (await dispatch(auth(payload))).payload;
-    console.log(user);
-    navigate('/game-profile');
+
     if (user?.id) {
-      navigate('/game-profile');
+      navigate('/');
     } else {
       setOpen(true);
     }

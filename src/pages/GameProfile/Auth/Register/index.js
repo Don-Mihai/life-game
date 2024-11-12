@@ -21,7 +21,7 @@ const Register = ({ onChange, formValues }) => {
     const resultAction = await dispatch(register(payload));
 
     if (resultAction.meta?.requestStatus === 'fulfilled') {
-      navigate('/game-profile');
+      navigate('/');
     } else {
       setError('Registration failed');
     }

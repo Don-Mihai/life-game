@@ -1,27 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import GameProfile from './pages/GameProfile';
 import Auth from './pages/GameProfile/Auth';
 import { store } from './redux/store/store.ts';
 import { Provider } from 'react-redux';
-import ProtectedRoute from './components/ProtectedRoute/index.tsx';
 import { LOCAL_STORAGE_KEY } from './redux/User/types.ts';
+
+const authLoader = () => {
+  const token = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (!token) {
+    throw new Response('Unauthorized', { status: 401 });
+  }
+  return token;
+};
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/auth',
     element: <Auth />
   },
   {
-    path: '/game-profile',
-    element: (
-      <ProtectedRoute
-        isAuthenticated={!!localStorage.getItem(LOCAL_STORAGE_KEY)} // Проверка авторизации
-      >
-        <GameProfile />
-      </ProtectedRoute>
-    )
+    path: '/',
+    loader: authLoader, // Проверка аутентификации
+    element: <GameProfile />,
+    errorElement: <Navigate to="/auth" replace /> // Перенаправление при ошибке
   }
 ]);
 
