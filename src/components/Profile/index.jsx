@@ -4,10 +4,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
+import { useSelector } from 'react-redux';
+
 import './Profile.scss';
 
 const Profile = () => {
   const [editingField, setEditingField] = useState(null);
+  const { users } = useSelector((state) => state.user);
+
   const [characteristics, setCharacteristics] = useState([
     { label: 'Имя', value: 'Иван Иванов' },
     { label: 'Возраст', value: 28 },

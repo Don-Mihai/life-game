@@ -1,12 +1,10 @@
 export interface UserState {
-  user: IUser;
-  token?: string;
+  user: null | IUser;
   users: IUser[];
 }
 
 export interface IUser {
   id: number;
-  token?: string;
   email: string;
   password: string;
   firstName?: string;

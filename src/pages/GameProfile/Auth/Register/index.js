@@ -13,21 +13,17 @@ const Register = ({ onChange, formValues }) => {
   const dispatch = useDispatch();
 
   const onSignUp = async () => {
-    try {
-      const payload = {
-        firstName: formValues[INPUTS_KEYS.FIRST_NAME],
-        email: formValues[INPUTS_KEYS.EMAIL],
-        password: formValues[INPUTS_KEYS.PASSWORD],
-      };
-      const user = (await dispatch(register(payload))).payload;
+    const payload = {
+      firstName: formValues[INPUTS_KEYS.FIRST_NAME],
+      email: formValues[INPUTS_KEYS.EMAIL],
+      password: formValues[INPUTS_KEYS.PASSWORD],
+    };
+    const resultAction = await dispatch(register(payload));
 
-      if (user?.id) {
-        navigate('/game-profile');
-      } else {
-        setError('Registration failed');
-      }
-    } catch (error) {
-      setError(error.message || 'An error occurred during registration');
+    if (resultAction.meta?.requestStatus === 'fulfilled') {
+      navigate('/game-profile');
+    } else {
+      setError('Registration failed');
     }
   };
 
