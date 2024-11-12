@@ -5,6 +5,8 @@ import GameProfile from './pages/GameProfile';
 import Auth from './pages/GameProfile/Auth';
 import { store } from './redux/store/store.ts';
 import { Provider } from 'react-redux';
+import ProtectedRoute from './components/ProtectedRoute';
+import { LOCAL_STORAGE_KEY } from './redux/User/types';
 
 const router = createBrowserRouter([
   {
@@ -13,7 +15,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/game-profile',
-    element: <GameProfile />,
+    element: (
+      <ProtectedRoute
+        isAuthenticated={!!localStorage.getItem(LOCAL_STORAGE_KEY)} // Проверка авторизации
+      >
+        <GameProfile />
+      </ProtectedRoute>
+    ),
   },
 ]);
 

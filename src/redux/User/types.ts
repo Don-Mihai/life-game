@@ -16,3 +16,5 @@ export interface PAuth {
   email?: string;
   password?: string;
 }
+
+export const LOCAL_STORAGE_KEY = 'GAME_USER_ID';

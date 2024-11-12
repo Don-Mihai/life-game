@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { UserState, IUser, PAuth } from './types.ts';
+import { UserState, IUser, PAuth, LOCAL_STORAGE_KEY } from './types.ts';
 
 const API_URL = 'https://6715244433bc2bfe40b986f6.mockapi.io/users';
 // const API_URL = 'https://671924ac7fc4c5ff8f4c9c00.mockapi.io/users';
@@ -16,7 +16,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => {
-      localStorage.setItem('userId', String(action.payload.id));
+      localStorage.setItem(LOCAL_STORAGE_KEY, String(action.payload.id));
       state.user = action.payload;
     },
   },
@@ -44,7 +44,7 @@ export const get = createAsyncThunk('user/get', async (): Promise<IUser[] | unde
 });
 
 export const getById = createAsyncThunk('user/getById', async (userId?: number): Promise<IUser[] | undefined> => {
-  const id = localStorage.getItem('userId') || String(userId);
+  const id = localStorage.getItem(LOCAL_STORAGE_KEY) || String(userId);
   const user = (await axios.get(`${API_URL}/${id}`)).data;
 
   return user;
@@ -53,20 +53,31 @@ export const getById = createAsyncThunk('user/getById', async (userId?: number):
 export const auth = createAsyncThunk('user/auth', async (payload: PAuth): Promise<IUser | undefined> => {
   try {
     const user = (await axios.get(`${API_URL}/?email=${payload.email}&password=${payload.password}`)).data[0];
-    localStorage.setItem('userId', String(user.id));
+    localStorage.setItem(LOCAL_STORAGE_KEY, String(user.id));
     return user;
   } catch (error) {}
 });
 
-export const register = createAsyncThunk('user/register', async (payload: any): Promise<{ user: IUser, userId: number } | undefined> => {
-  try {
-    const response = await axios.post(API_URL, payload);
-    if (response.data && response.data.user && response.data.userId) {
-      localStorage.setItem('userId', String(response.data.userId));
-      return { user: response.data.user, userId: response.data.userId };
+export const register = createAsyncThunk(
+  'user/register',
+  async (
+    payload: any
+  ): Promise<
+    | {
+        user: IUser,
+        userId: number,
+      }
+    | undefined,
+  > => {
+    try {
+      const response = await axios.post(API_URL, payload);
+      if (response.data && response.data.user && response.data.userId) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, String(response.data.userId));
+        return { user: response.data.user, userId: response.data.userId };
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
     }
-    return undefined;
-  } catch (error) {
-    return undefined;
   }
-});
+);
