@@ -1,18 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './Auth.scss';
 import { AUTH_MODE, initValues } from './types.ts';
 import SubLink from './SubLink';
 import Register from './Register';
 import Login from './Login';
-import { useNavigate } from 'react-router-dom';
-import { LOCAL_STORAGE_KEY } from '../../../redux/User/types.ts';
-import { useSelector } from 'react-redux';
 
 const Auth = () => {
   const [formValues, setFormValues] = useState(initValues);
   const [mode, setMode] = useState(AUTH_MODE.LOGIN);
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.user);
 
   const onChange = (event) => {
     setFormValues({ ...formValues, [event.target.name]: event.target.value });
