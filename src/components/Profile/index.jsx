@@ -5,27 +5,29 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import { useDispatch, useSelector } from 'react-redux';
-
 import './Profile.scss';
 import { editUser } from '../../redux/User';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { LOCAL_STORAGE_KEY } from '../../redux/User/types.ts';
 
 const Profile = () => {
   const [editingField, setEditingField] = useState(null);
   const { user } = useSelector((state) => state.user);
-
   const [characteristics, setCharacteristics] = useState([]);
-
   const [newCharacteristic, setNewCharacteristic] = useState({ label: '', value: '' });
   const [showNewCharacteristicInputs, setShowNewCharacteristicInputs] = useState(false);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     setCharacteristics(user.characteristics || []);
   }, [user]);
-  console.log(user);
   const handleEditField = (label) => {
     setEditingField(label);
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    window.location.reload();
   };
 
   const handleChangeValue = (event, label) => {
@@ -102,6 +104,9 @@ const Profile = () => {
                   </IconButton>
                   <IconButton size="small" onClick={() => handleDeleteCharacteristic(label)} className="profile__delete-icon">
                     <DeleteIcon />
+                  </IconButton>
+                  <IconButton>
+                    <LogoutIcon onClick={handleLogOut} />
                   </IconButton>
                 </div>
               </>

@@ -80,7 +80,6 @@ function GameProfile() {
   };
 
   if (status === 'loading') return <div>Loading...</div>;
-  console.log(newSkillName, 'newSkillName');
 
   return (
     <div className={styles.gameProfile}>
