@@ -2,6 +2,8 @@ import * as React from 'react';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import { MenuList, MenuItem, Popper, Paper, Grow, ClickAwayListener, ButtonGroup, Button } from '@mui/material';
 import './DropDownButton.scss';
+import { useSelector } from 'react-redux';
+import { exportToExcel, exportToPDF, exportToTXT } from './utils';
 
 const options = ['Экспортировать в Таблице', 'Экспортировать в PDF', 'Экспортировать в TXT'];
 
@@ -9,10 +11,12 @@ export default function SplitButton() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const { skills } = useSelector((state) => state.skill);
 
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
     setOpen(false);
+    handleExport(index);
   };
 
   const handleToggle = () => {
@@ -23,8 +27,17 @@ export default function SplitButton() {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-
     setOpen(false);
+  };
+
+  const handleExport = (index) => {
+    if (index === 0) {
+      exportToExcel(skills);
+    } else if (index === 1) {
+      exportToPDF(skills);
+    } else if (index === 2) {
+      exportToTXT(skills);
+    }
   };
 
   return (
@@ -46,7 +59,7 @@ export default function SplitButton() {
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'
             }}
           >
             <Paper>

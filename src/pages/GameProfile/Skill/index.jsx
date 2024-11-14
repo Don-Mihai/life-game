@@ -15,12 +15,12 @@ const Skill = ({ handleLevelClick, skill, addLevelToSkill }) => {
       level: skill.levels.length + 1,
       description: '',
       task: '',
-      completed: false,
+      completed: false
     };
 
     const updatedSkill = {
       ...skill,
-      levels: [...skill.levels, newLevel],
+      levels: [...skill.levels, newLevel]
     };
 
     try {
@@ -35,14 +35,14 @@ const Skill = ({ handleLevelClick, skill, addLevelToSkill }) => {
 
     const updatedSkill = {
       ...skill,
-      levels: updatedLevels,
+      levels: updatedLevels
     };
 
     try {
       await dispatch(updateSkill(updatedSkill)).unwrap();
       setCompletedLevels((prev) => ({
         ...prev,
-        [index]: true,
+        [index]: true
       }));
     } catch (error) {
       console.error('Error marking level as completed:', error);
@@ -52,7 +52,7 @@ const Skill = ({ handleLevelClick, skill, addLevelToSkill }) => {
   const handleDeleteLevel = async (index) => {
     const updatedSkill = {
       ...skill,
-      levels: skill.levels.filter((_, i) => i !== index),
+      levels: skill.levels.filter((_, i) => i !== index)
     };
 
     try {
@@ -75,7 +75,7 @@ const Skill = ({ handleLevelClick, skill, addLevelToSkill }) => {
                     className={`${styles.level} ${completedLevels[i] || levelData.completed ? styles.completed : ''}`}
                     onClick={() => handleLevelClick(skill.name, levelData)}
                   >
-                    {levelData.level}
+                    {i + 1}
                   </div>
                 </Tooltip>
               </ContextMenuTrigger>
