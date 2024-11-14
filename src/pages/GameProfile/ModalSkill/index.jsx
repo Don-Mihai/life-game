@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import styles from './ModalSkill.module.scss';
 
-const SkillLevelModal = ({ selectedSkill, handleClose, handleSave, handleEdit }) => {
+const SkillLevelModal = ({ selectedSkill, handleClose, handleSave, handleEdit, handleChangeLevel }) => {
   const [tempValue, setTempValue] = React.useState('');
 
   React.useEffect(() => {
@@ -17,13 +17,20 @@ const SkillLevelModal = ({ selectedSkill, handleClose, handleSave, handleEdit })
     setTempValue(e.target.value);
   };
 
-  // const handleKeyDown = (e) => {
-  //   if (e.key === 'ArrowLeft') {
-  //     handlePrevLevel();
-  //   } else if (e.key === 'ArrowRight') {
-  //     handleNextLevel();
-  //   }
-  // };
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        handleChangeLevel(-1);
+      } else if (e.key === 'ArrowRight') {
+        handleChangeLevel(1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleChangeLevel]);
 
   return (
     <>
@@ -34,8 +41,8 @@ const SkillLevelModal = ({ selectedSkill, handleClose, handleSave, handleEdit })
               <CloseIcon />
             </IconButton>
 
-            <h2 className={styles.title}>{selectedSkill.skill}</h2>
-            <h3 className={styles.subtitle}>Уровень: {selectedSkill.levelData.level}</h3>
+            <h2 className={styles.title}>{selectedSkill.skill.name}</h2>
+            <h3 className={styles.subtitle}>Уровень: {selectedSkill.levelIndex + 1}</h3>
             <div className={styles.textBlock}>
               <strong>Описание:</strong>{' '}
               {selectedSkill.editingField === 'description' ? (

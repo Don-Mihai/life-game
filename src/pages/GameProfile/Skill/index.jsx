@@ -6,7 +6,7 @@ import styles from './Skill.module.scss';
 import { updateSkill } from '../../../redux/Skill';
 import { useDispatch } from 'react-redux';
 
-const Skill = ({ handleLevelClick, skill, addLevelToSkill }) => {
+const Skill = ({ handleLevelClick, skill }) => {
   const dispatch = useDispatch();
   const [completedLevels, setCompletedLevels] = useState({});
 
@@ -73,7 +73,7 @@ const Skill = ({ handleLevelClick, skill, addLevelToSkill }) => {
                 <Tooltip title={levelData.description} placement="top" arrow>
                   <div
                     className={`${styles.level} ${completedLevels[i] || levelData.completed ? styles.completed : ''}`}
-                    onClick={() => handleLevelClick(skill.name, levelData)}
+                    onClick={() => handleLevelClick(skill, levelData, i)}
                   >
                     {i + 1}
                   </div>

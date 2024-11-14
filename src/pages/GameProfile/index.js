@@ -14,80 +14,80 @@ import { getById } from '../../redux/User';
 
 function GameProfile() {
   const dispatch = useDispatch();
-  const { skills, status, error } = useSelector((state) => state.skill); // Обновлено для соответствия структуре state
+  const { skills, status } = useSelector((state) => state.skill);
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [openSkillModal, setOpenSkillModal] = useState(false);
   const [newSkillName, setNewSkillName] = useState('');
-  const [isEnabledBuilder, setIsEnabledBuilder] = useState(false);
-
-  const handleOpenBuilder = () => {
-    setIsEnabledBuilder(!isEnabledBuilder);
-  };
+  const [isBuilderEnabled, setBuilderEnabled] = useState(false);
 
   useEffect(() => {
     dispatch(fetchSkills());
     dispatch(getById());
   }, [dispatch]);
 
-  const handleLevelClick = (skill, levelData) => {
-    setSelectedSkill({ skill, levelData });
-  };
+  const toggleBuilder = () => setBuilderEnabled((prev) => !prev);
 
-  const handleClose = () => {
-    setSelectedSkill(null);
-  };
+  const handleLevelClick = (skill, levelData, levelIndex) => setSelectedSkill({ skill, levelData, levelIndex });
 
-  const handleNewSkillChange = (event) => {
-    setNewSkillName(event.target.value);
-  };
+  const handleCloseModal = () => setSelectedSkill(null);
+
+  const handleSkillNameChange = (e) => setNewSkillName(e.target.value);
 
   const handleAddSkill = async () => {
-    if (!newSkillName.trim()) return; // Проверка на пустое имя
+    if (!newSkillName.trim()) return;
     try {
-      const newSkill = {
-        name: newSkillName,
-        levels: []
-      };
-      console.log(newSkill);
-      await dispatch(addSkill(newSkill)).unwrap();
+      await dispatch(addSkill({ name: newSkillName, levels: [] })).unwrap();
       setNewSkillName('');
       setOpenSkillModal(false);
-    } catch (error) {
-      console.error('Error adding new skill:', error);
+    } catch (err) {
+      console.error('Error adding skill:', err);
     }
   };
 
   const handleEditSkill = async (skill, updatedLevel) => {
-    console.log('Received skill:', skill);
-    console.log('Received updatedLevel:', updatedLevel);
-
-    if (!skill || !Array.isArray(skill.levels)) {
-      console.error('skill or skill.levels is not defined or not an array');
+    if (!skill?.levels) {
+      console.error('Invalid skill data');
       return;
     }
 
-    const updatedSkill = {
-      ...skill,
-      levels: skill.levels.map((level) => (level.level === updatedLevel.level ? updatedLevel : level))
-    };
-
     try {
+      const updatedSkill = {
+        ...skill,
+        levels: skill.levels.map((level) => (level.level === updatedLevel.level ? updatedLevel : level))
+      };
       await dispatch(updateSkill(updatedSkill)).unwrap();
       setSelectedSkill(null);
-    } catch (error) {
-      console.error('Error updating skill:', error);
+    } catch (err) {
+      console.error('Error updating skill:', err);
     }
   };
 
+  const changeLevel = (direction) => {
+    if (!selectedSkill) return;
+
+    const { skill, levelIndex } = selectedSkill;
+    const newIndex = levelIndex + direction;
+
+    if (newIndex < 0 || newIndex >= skill.levels.length) {
+      console.log(`Вы уже на ${newIndex < 0 ? 'первом' : 'последнем'} уровне.`);
+      return;
+    }
+
+    setSelectedSkill({
+      skill,
+      levelData: skill.levels[newIndex],
+      levelIndex: newIndex
+    });
+  };
+
   if (status === 'loading') return <div>Loading...</div>;
-  console.log(newSkillName, 'newSkillName');
 
   return (
     <div className={styles.gameProfile}>
       <SplitButton />
       <Profile />
-      {isEnabledBuilder && <ChartBuilder />}
-      <button className={styles.builder} onClick={handleOpenBuilder}>
+      {isBuilderEnabled && <ChartBuilder />}
+      <button className={styles.builder} onClick={toggleBuilder}>
         Построить график
       </button>
       {/* Навыки */}
@@ -105,7 +105,7 @@ function GameProfile() {
       <Modal open={openSkillModal} onClose={() => setOpenSkillModal(false)}>
         <div className={styles.modalBox}>
           <Typography variant="h6">Добавить новый навык</Typography>
-          <TextField name="name" label="Имя навыка" value={newSkillName} onChange={handleNewSkillChange} fullWidth margin="normal" />
+          <TextField name="name" label="Имя навыка" value={newSkillName} onChange={handleSkillNameChange} fullWidth margin="normal" />
           <Button onClick={handleAddSkill} variant="contained" color="primary">
             Сохранить навык
           </Button>
@@ -113,7 +113,9 @@ function GameProfile() {
       </Modal>
 
       {/* Модальное окно для редактирования выбранного уровня */}
-      {selectedSkill && <ModalSkill selectedSkill={selectedSkill} handleClose={handleClose} handleEdit={handleEditSkill} FocusOn />}
+      {selectedSkill && (
+        <ModalSkill selectedSkill={selectedSkill} handleClose={handleCloseModal} handleEdit={handleEditSkill} handleChangeLevel={changeLevel} />
+      )}
     </div>
   );
 }
