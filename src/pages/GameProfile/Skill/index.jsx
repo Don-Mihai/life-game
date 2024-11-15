@@ -12,8 +12,6 @@ const Skill = ({ handleLevelClick, skill }) => {
 
   const handleAddLevel = async (skill) => {
     const newLevel = {
-      level: skill.levels.length + 1,
-      description: '',
       task: '',
       completed: false
     };

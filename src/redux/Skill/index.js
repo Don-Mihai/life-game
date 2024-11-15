@@ -31,6 +31,21 @@ export const deleteSkill = createAsyncThunk('skills/deleteSkill', async (skillId
   return skillId;
 });
 
+export const updateSkillLevel = createAsyncThunk('skills/updateSkillLevel', async ({ skillId, levelIndex, updatedLevelData }) => {
+  const response = await axios.get(`${API_URL}/${skillId}`);
+  const skill = response.data;
+
+  // Обновляем нужный уровень внутри навыка
+  skill.levels[levelIndex] = {
+    ...skill.levels[levelIndex],
+    ...updatedLevelData
+  };
+
+  // Отправляем обновленный навык обратно
+  const updatedResponse = await axios.put(`${API_URL}/${skillId}`, skill);
+  return updatedResponse.data;
+});
+
 const skillsSlice = createSlice({
   name: 'skills',
   initialState: {
@@ -63,6 +78,12 @@ const skillsSlice = createSlice({
       })
       .addCase(deleteSkill.fulfilled, (state, action) => {
         state.skills = state.skills.filter((skill) => skill.id !== action.payload);
+      })
+      .addCase(updateSkillLevel.fulfilled, (state, action) => {
+        const index = state.skills.findIndex((skill) => skill.id === action.payload.id);
+        if (index !== -1) {
+          state.skills[index] = action.payload; // Обновляем навык с обновленным уровнем
+        }
       });
   }
 });

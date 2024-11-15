@@ -5,7 +5,7 @@ import Profile from '../../components/Profile/index.jsx';
 import AddIcon from '@mui/icons-material/Add';
 import SplitButton from '../../components/DropDownButton/index.jsx';
 import Skill from './Skill';
-import ModalSkill from './ModalSkill';
+import ModalLevel from './ModalLevel';
 import { addSkill, fetchSkills, updateSkill } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
@@ -15,7 +15,7 @@ import { getById } from '../../redux/User';
 function GameProfile() {
   const dispatch = useDispatch();
   const { skills, status } = useSelector((state) => state.skill);
-  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [selectedLevel, setSelectedLevel] = useState(null);
   const [openSkillModal, setOpenSkillModal] = useState(false);
   const [newSkillName, setNewSkillName] = useState('');
   const [isBuilderEnabled, setBuilderEnabled] = useState(false);
@@ -27,9 +27,9 @@ function GameProfile() {
 
   const toggleBuilder = () => setBuilderEnabled((prev) => !prev);
 
-  const handleLevelClick = (skill, levelData, levelIndex) => setSelectedSkill({ skill, levelData, levelIndex });
+  const handleLevelClick = (skill, levelData, levelIndex) => setSelectedLevel({ skill, levelData, levelIndex });
 
-  const handleCloseModal = () => setSelectedSkill(null);
+  const handleCloseModal = () => setSelectedLevel(null);
 
   const handleSkillNameChange = (e) => setNewSkillName(e.target.value);
 
@@ -56,16 +56,16 @@ function GameProfile() {
         levels: skill.levels.map((level) => (level.level === updatedLevel.level ? updatedLevel : level))
       };
       await dispatch(updateSkill(updatedSkill)).unwrap();
-      setSelectedSkill(null);
+      setSelectedLevel(null);
     } catch (err) {
       console.error('Error updating skill:', err);
     }
   };
 
   const changeLevel = (direction) => {
-    if (!selectedSkill) return;
+    if (!selectedLevel) return;
 
-    const { skill, levelIndex } = selectedSkill;
+    const { skill, levelIndex } = selectedLevel;
     const newIndex = levelIndex + direction;
 
     if (newIndex < 0 || newIndex >= skill.levels.length) {
@@ -73,7 +73,7 @@ function GameProfile() {
       return;
     }
 
-    setSelectedSkill({
+    setSelectedLevel({
       skill,
       levelData: skill.levels[newIndex],
       levelIndex: newIndex
@@ -84,12 +84,13 @@ function GameProfile() {
 
   return (
     <div className={styles.gameProfile}>
-      <SplitButton />
-      <Profile />
       {isBuilderEnabled && <ChartBuilder />}
       <button className={styles.builder} onClick={toggleBuilder}>
         Построить график
       </button>
+      <SplitButton />
+      <Profile />
+
       {/* Навыки */}
       <div className={styles.skills}>
         {skills?.map((skill) => (
@@ -113,8 +114,8 @@ function GameProfile() {
       </Modal>
 
       {/* Модальное окно для редактирования выбранного уровня */}
-      {selectedSkill && (
-        <ModalSkill selectedSkill={selectedSkill} handleClose={handleCloseModal} handleEdit={handleEditSkill} handleChangeLevel={changeLevel} />
+      {selectedLevel && (
+        <ModalLevel selectedLevel={selectedLevel} handleClose={handleCloseModal} handleEdit={handleEditSkill} handleChangeLevel={changeLevel} />
       )}
     </div>
   );
