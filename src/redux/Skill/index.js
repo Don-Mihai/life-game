@@ -1,9 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { LOCAL_STORAGE_KEY } from '../User/types.ts';
+import { convertToEditorDescription } from '../../utils';
+import OpenAI from 'openai';
 
 // API Base URL
 const API_URL = 'https://6715244433bc2bfe40b986f6.mockapi.io/skills';
+const openai = new OpenAI({
+  apiKey: process.env.REACT_APP_OPEN_API_KEY, // Замените "your-openai-api-key" на ваш ключ
+  dangerouslyAllowBrowser: true
+});
 
 // Async thunks
 export const fetchSkills = createAsyncThunk('skills/fetchSkills', async () => {
@@ -46,6 +52,78 @@ export const updateSkillLevel = createAsyncThunk('skills/updateSkillLevel', asyn
   return updatedResponse.data;
 });
 
+export const generateSkillLevels = createAsyncThunk('skills/generateSkillLevels', async ({ skillId, skillName }, { rejectWithValue }) => {
+  try {
+    // Шаг 1: Получение текущего навыка
+    const response = await axios.get(`${API_URL}/${skillId}`);
+    const skill = response.data;
+
+    // Шаг 2: Отправка запроса в OpenAI
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-2024-08-06', // Используем последнюю модель
+      messages: [
+        {
+          role: 'system',
+          content: `You are a professional curriculum developer for skills. Respond with a structured JSON for levels.`
+        },
+        {
+          role: 'user',
+          content: `Generate a 10-level progression plan for the skill "${skillName}". Each level must include:
+- "completed": false
+- "description": a JSON string for Editor.js with:
+  - a header block (level 2) for the description,
+  - a paragraph block for the task,
+  - a list block for the resources as an array of URLs.
+Respond with an object containing a "levels" key, where the value is an array of levels in this format.`
+        }
+      ],
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'skill_levels_schema',
+          schema: {
+            type: 'object',
+            properties: {
+              levels: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    completed: { type: 'boolean', default: false },
+                    description: {
+                      type: 'string',
+                      description: 'Editor.js JSON string including task, description, and resources'
+                    }
+                  },
+                  required: ['completed', 'description']
+                }
+              }
+            },
+            required: ['levels']
+          }
+        }
+      }
+    });
+
+    // Шаг 3: Получение сгенерированных уровней
+    const generatedData = completion.choices[0].message.content;
+    const generatedLevels = JSON.parse(generatedData).levels;
+
+    console.log('Generated Levels:', generatedLevels);
+
+    // Шаг 4: Обновление навыка с новыми уровнями
+    skill.levels = generatedLevels;
+
+    console.log('skill', skill);
+
+    const updatedResponse = await axios.put(`${API_URL}/${skillId}`, skill);
+
+    return updatedResponse.data;
+  } catch (error) {
+    return rejectWithValue(error.response ? error.response.data : error.message);
+  }
+});
+
 const skillsSlice = createSlice({
   name: 'skills',
   initialState: {
@@ -83,6 +161,12 @@ const skillsSlice = createSlice({
         const index = state.skills.findIndex((skill) => skill.id === action.payload.id);
         if (index !== -1) {
           state.skills[index] = action.payload; // Обновляем навык с обновленным уровнем
+        }
+      })
+      .addCase(generateSkillLevels.fulfilled, (state, action) => {
+        const index = state.skills.findIndex((skill) => skill.id === action.payload.id);
+        if (index !== -1) {
+          state.skills[index] = action.payload; // Обновляем навык с новыми уровнями
         }
       });
   }

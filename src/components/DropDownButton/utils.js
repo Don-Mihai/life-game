@@ -2,6 +2,27 @@ import * as XLSX from 'xlsx';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
+const parseEditorDescription = (description) => {
+  if (!description) return '';
+  try {
+    const data = JSON.parse(description);
+    return data.blocks
+      .map((block) => {
+        if (block.type === 'paragraph') {
+          return block.data.text;
+        } else if (block.type === 'list') {
+          return block.data.items.join(', ');
+        } else if (block.type === 'header') {
+          return `${'#'.repeat(block.data.level)} ${block.data.text}`;
+        }
+        return '';
+      })
+      .join('\n');
+  } catch (error) {
+    return description; // Возвращаем как есть, если это не JSON
+  }
+};
+
 const autoFitColumns = (data, worksheet) => {
   const columnWidths = Object.keys(data[0]).map((key) => {
     const maxContentWidth = Math.max(
@@ -31,9 +52,9 @@ export const exportToExcel = (skills) => {
       fullDescriptions.push({
         Skill: index === 0 ? skill.name : '',
         Level: index + 1,
-        Description: level.description,
+        Description: parseEditorDescription(level.description),
         Task: level.task,
-        Resources: level.resources,
+        Resources: parseEditorDescription(level.description),
         Completed: level.completed ? 'Yes' : 'No'
       });
     });
@@ -43,7 +64,7 @@ export const exportToExcel = (skills) => {
       currentStatistics.push({
         Skill: skill.name,
         CurrentLevel: currentLevelIndex + 1,
-        Description: currentLevel.description
+        Description: parseEditorDescription(currentLevel.description)
       });
     }
   });
@@ -64,8 +85,6 @@ export const exportToExcel = (skills) => {
   XLSX.writeFile(workbook, 'skills.xlsx');
 };
 
-pdfMake.vfs = pdfFonts.vfs; // Подключение стандартных шрифтов
-
 export const exportToPDF = (skills) => {
   const content = [];
 
@@ -76,18 +95,13 @@ export const exportToPDF = (skills) => {
     // Добавляем уровни навыка
     skill.levels.forEach((level, index) => {
       content.push({
-        text: `  Уровень ${index + 1}: ${level.description}`,
+        text: `  Уровень ${index + 1}:`,
         style: 'subheader'
       });
+      content.push({ text: `    Описание: ${parseEditorDescription(level.description)}`, margin: [20, 0, 0, 5] });
       content.push({ text: `    Задача: ${level.task}`, margin: [20, 0, 0, 5] });
-      content.push({
-        text: `    Ресурсы: ${level.resources}`,
-        margin: [20, 0, 0, 5]
-      });
-      content.push({
-        text: `    Завершено: ${level.completed ? 'Да' : 'Нет'}`,
-        margin: [20, 0, 0, 10]
-      });
+      content.push({ text: `    Ресурсы: ${parseEditorDescription(level.description)}`, margin: [20, 0, 0, 5] });
+      content.push({ text: `    Завершено: ${level.completed ? 'Да' : 'Нет'}`, margin: [20, 0, 0, 10] });
     });
   });
 
@@ -125,9 +139,9 @@ export const exportToTXT = (skills) => {
     // Добавляем уровни
     skill.levels.forEach((level, index) => {
       content += `  Level ${index + 1}:\n`;
-      content += `    Description: ${level.description}\n`;
+      content += `    Description: ${parseEditorDescription(level.description)}\n`;
       content += `    Task: ${level.task}\n`;
-      content += `    Resources: ${level.resources}\n`;
+      content += `    Resources: ${parseEditorDescription(level.description)}\n`;
       content += `    Completed: ${level.completed ? 'Yes' : 'No'}\n\n`;
     });
 

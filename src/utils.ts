@@ -1,3 +1,43 @@
+// Вспомогательная функция для преобразования уровня в формат Editor.js
+export const convertToEditorDescription = (level: any) => {
+  const blocks = [
+    {
+      id: `header_${Date.now()}`,
+      type: 'header',
+      data: {
+        text: level.description || 'Описание отсутствует',
+        level: 2
+      }
+    },
+    {
+      id: `paragraph_${Date.now()}`,
+      type: 'paragraph',
+      data: {
+        text: level.task || 'Задача отсутствует'
+      }
+    },
+    {
+      id: `resources_${Date.now()}`,
+      type: 'list',
+      data: {
+        style: 'unordered',
+        meta: {},
+        items: (level.resources || []).map((resource: any) => ({
+          content: resource,
+          meta: {},
+          items: []
+        }))
+      }
+    }
+  ];
+
+  return JSON.stringify({
+    time: Date.now(),
+    blocks,
+    version: '2.30.7'
+  });
+};
+
 export const skills = [
   {
     id: '1',

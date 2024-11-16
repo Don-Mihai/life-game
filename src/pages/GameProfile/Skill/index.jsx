@@ -2,7 +2,7 @@ import { IconButton, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import React, { useState } from 'react';
 import styles from './Skill.module.scss';
-import { updateSkill } from '../../../redux/Skill';
+import { generateSkillLevels, updateSkill } from '../../../redux/Skill';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
@@ -51,11 +51,16 @@ const Skill = ({ handleLevelClick, skill }) => {
 
   const lastCompletedLevelIndex = skill.levels.findIndex((level) => !level.completed) - 1;
 
+  const handleGenerateLevels = () => {
+    dispatch(generateSkillLevels({ skillId: skill.id, skillName: skill.name }));
+  };
+
   return (
     <div className={styles.skill}>
       <div className={styles.skillHeader} onClick={toggleExpand}>
         <div className={styles.skillName}>{skill.name}</div>
         {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
+        <button onClick={handleGenerateLevels}>Генерировать уровни</button>
       </div>
       <motion.div
         initial={{ height: 0, opacity: 0 }}

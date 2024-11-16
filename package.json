@@ -25,6 +25,7 @@
     "framer-motion": "^11.11.17",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
+    "openai": "^4.72.0",
     "pdfmake": "^0.2.15",
     "rctx-contextmenu": "^1.4.1",
     "react": "^18.3.1",
