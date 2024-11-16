@@ -6,6 +6,7 @@ import { generateSkillLevels, updateSkill } from '../../../redux/Skill';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 const Skill = ({ handleLevelClick, skill }) => {
   const dispatch = useDispatch();
@@ -57,10 +58,14 @@ const Skill = ({ handleLevelClick, skill }) => {
 
   return (
     <div className={styles.skill}>
-      <div className={styles.skillHeader} onClick={toggleExpand}>
-        <div className={styles.skillName}>{skill.name}</div>
-        {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
-        <button onClick={handleGenerateLevels}>Генерировать уровни</button>
+      <div className={styles.skillContainer}>
+        <div className={styles.skillHeader} onClick={toggleExpand}>
+          <div className={styles.skillName}>{skill.name}</div>
+          {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
+          <Tooltip title="Генерировать уровни" arrow>
+            <AutoFixHighIcon className={styles.generateIcon} onClick={handleGenerateLevels} />
+          </Tooltip>
+        </div>
       </div>
       <motion.div
         initial={{ height: 0, opacity: 0 }}

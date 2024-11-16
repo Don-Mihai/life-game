@@ -16,6 +16,7 @@
 }
 
 .skillHeader {
+  gap: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -27,7 +28,22 @@
   color: #333;
 }
 
+/* Стили для иконки */
+.generateIcon {
+  color: #88c0d0;
+  font-size: 28px;
+  cursor: pointer;
+  transition: transform 0.2s, color 0.3s;
+}
+
+.generateIcon:hover {
+  transform: scale(1.2);
+  color: #a3be8c;
+}
+
+
 .completedLevel {
+  margin-left: auto;
   font-size: 14px;
   color: #555;
 }
