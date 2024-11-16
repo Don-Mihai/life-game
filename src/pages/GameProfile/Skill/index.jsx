@@ -1,14 +1,15 @@
 import { IconButton, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import React, { useState } from 'react';
-import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 import styles from './Skill.module.scss';
 import { updateSkill } from '../../../redux/Skill';
 import { useDispatch } from 'react-redux';
+import { motion } from 'framer-motion';
+import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 
 const Skill = ({ handleLevelClick, skill }) => {
   const dispatch = useDispatch();
-  const [completedLevels, setCompletedLevels] = useState({});
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleAddLevel = async (skill) => {
     const newLevel = {
@@ -21,11 +22,7 @@ const Skill = ({ handleLevelClick, skill }) => {
       levels: [...skill.levels, newLevel]
     };
 
-    try {
-      await dispatch(updateSkill(updatedSkill)).unwrap();
-    } catch (error) {
-      console.error('Error adding level:', error);
-    }
+    dispatch(updateSkill(updatedSkill));
   };
 
   const handleMarkAsCompleted = async (index) => {
@@ -36,15 +33,7 @@ const Skill = ({ handleLevelClick, skill }) => {
       levels: updatedLevels
     };
 
-    try {
-      await dispatch(updateSkill(updatedSkill)).unwrap();
-      setCompletedLevels((prev) => ({
-        ...prev,
-        [index]: true
-      }));
-    } catch (error) {
-      console.error('Error marking level as completed:', error);
-    }
+    dispatch(updateSkill(updatedSkill));
   };
 
   const handleDeleteLevel = async (index) => {
@@ -53,26 +42,33 @@ const Skill = ({ handleLevelClick, skill }) => {
       levels: skill.levels.filter((_, i) => i !== index)
     };
 
-    try {
-      await dispatch(updateSkill(updatedSkill)).unwrap();
-    } catch (error) {
-      console.error('Error deleting level:', error);
-    }
+    dispatch(updateSkill(updatedSkill));
   };
 
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const lastCompletedLevelIndex = skill.levels.findIndex((level) => !level.completed) - 1;
+
   return (
-    <>
-      <div key={skill.name} className={styles.skill}>
+    <div className={styles.skill}>
+      <div className={styles.skillHeader} onClick={toggleExpand}>
         <div className={styles.skillName}>{skill.name}</div>
+        {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
+      </div>
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={isExpanded ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className={styles.skillContent}
+      >
         <div className={styles.skillLevels}>
           {skill.levels.map((levelData, i) => (
             <React.Fragment key={i}>
               <ContextMenuTrigger id={`context-menu-${skill.name}-${i}`}>
-                <Tooltip title={levelData.description} placement="top" arrow>
-                  <div
-                    className={`${styles.level} ${completedLevels[i] || levelData.completed ? styles.completed : ''}`}
-                    onClick={() => handleLevelClick(skill, levelData, i)}
-                  >
+                <Tooltip title={levelData.description && JSON.parse(levelData.description).blocks[0]?.data.text} placement="top" arrow>
+                  <div className={`${styles.level} ${levelData.completed ? styles.completed : ''}`} onClick={() => handleLevelClick(skill, levelData, i)}>
                     {i + 1}
                   </div>
                 </Tooltip>
@@ -83,13 +79,12 @@ const Skill = ({ handleLevelClick, skill }) => {
               </ContextMenu>
             </React.Fragment>
           ))}
-
           <IconButton onClick={() => handleAddLevel(skill)}>
             <AddIcon />
           </IconButton>
         </div>
-      </div>
-    </>
+      </motion.div>
+    </div>
   );
 };
 
