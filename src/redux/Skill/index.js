@@ -7,7 +7,7 @@ import OpenAI from 'openai';
 // API Base URL
 const API_URL = 'https://6715244433bc2bfe40b986f6.mockapi.io/skills';
 const openai = new OpenAI({
-  apiKey: process.env.REACT_APP_OPEN_API_KEY, // Замените "your-openai-api-key" на ваш ключ
+  apiKey: process.env.REACT_APP_OPEN_API_KEY || '', // Замените "your-openai-api-key" на ваш ключ
   dangerouslyAllowBrowser: true
 });
 
@@ -68,13 +68,13 @@ export const generateSkillLevels = createAsyncThunk('skills/generateSkillLevels'
         },
         {
           role: 'user',
-          content: `Generate a 10-level progression plan for the skill "${skillName}". Each level must include:
-- "completed": false
-- "description": a JSON string for Editor.js with:
-  - a header block (level 2) for the description,
-  - a paragraph block for the task,
-  - a list block for the resources as an array of URLs.
-Respond with an object containing a "levels" key, where the value is an array of levels in this format.`
+          content: `Generate a detailed 10-level learning guide for the skill "${skillName}". Each level should provide:
+- A clear, concise **goal** for what the learner will achieve.
+- A detailed **methodology** or steps for learning the level.
+- A curated list of **resources** including:
+  - At least 2-3 high-quality YouTube videos with accurate URLs.
+  - At least 1 article or documentation link.
+  - Optionally, any additional learning tools (e.g., interactive platforms or tutorials).`
         }
       ],
       response_format: {
