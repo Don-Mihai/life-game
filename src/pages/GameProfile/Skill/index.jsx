@@ -1,16 +1,25 @@
+import React, { useState } from 'react';
 import { IconButton, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import React, { useState } from 'react';
-import styles from './Skill.module.scss';
-import { generateSkillLevels, updateSkill } from '../../../redux/Skill';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import AddCommentIcon from '@mui/icons-material/AddComment';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import { generateSkillLevels, updateSkill, deleteSkill } from '../../../redux/Skill';
+import styles from './Skill.module.scss';
 
 const Skill = ({ handleLevelClick, skill }) => {
   const dispatch = useDispatch();
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleDeleteSkill = async () => {
+    dispatch(deleteSkill(skill.id));
+  };
+
+  const handleEditSkill = () => {};
 
   const handleAddLevel = async (skill) => {
     const newLevel = {
@@ -62,9 +71,20 @@ const Skill = ({ handleLevelClick, skill }) => {
         <div className={styles.skillHeader} onClick={toggleExpand}>
           <div className={styles.skillName}>{skill.name}</div>
           {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
-          <Tooltip title="Генерировать уровни" arrow>
-            <AutoFixHighIcon className={styles.generateIcon} onClick={handleGenerateLevels} />
-          </Tooltip>
+          <div>
+            <Tooltip title="Генерировать уровни" arrow>
+              <AutoFixHighIcon className={styles.generateIcon} onClick={handleGenerateLevels} />
+            </Tooltip>
+            <Tooltip title="Редактировать навык">
+              <EditIcon className={styles.editIcon} onClick={handleEditSkill} />
+            </Tooltip>
+            <Tooltip title="Добавить комментарий" placement="top">
+              <AddCommentIcon className={styles.addCommentIcon} />
+            </Tooltip>
+            <Tooltip title="Удалить навык" className={styles.deleteIcon}>
+              <DeleteIcon className={styles.deleteIcon} onClick={handleDeleteSkill} />
+            </Tooltip>
+          </div>
         </div>
       </div>
       <motion.div
@@ -84,8 +104,8 @@ const Skill = ({ handleLevelClick, skill }) => {
                 </Tooltip>
               </ContextMenuTrigger>
               <ContextMenu id={`context-menu-${skill.name}-${i}`}>
-                <ContextMenuItem onClick={() => handleMarkAsCompleted(i)}>Уровень пройден</ContextMenuItem>
                 <ContextMenuItem onClick={() => handleDeleteLevel(i)}>Удалить</ContextMenuItem>
+                <ContextMenuItem onClick={() => handleMarkAsCompleted(i)}>Уровень пройден</ContextMenuItem>
               </ContextMenu>
             </React.Fragment>
           ))}

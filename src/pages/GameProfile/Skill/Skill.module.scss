@@ -17,6 +17,7 @@
 
 .skillHeader {
   gap: 20px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,7 +34,9 @@
   color: #88c0d0;
   font-size: 28px;
   cursor: pointer;
-  transition: transform 0.2s, color 0.3s;
+  transition:
+    transform 0.2s,
+    color 0.3s;
 }
 
 .generateIcon:hover {
@@ -41,6 +44,41 @@
   color: #a3be8c;
 }
 
+.addCommentIcon {
+  color: #88c0d0;
+  font-size: 28px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    color 0.3s;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.editIcon {
+  color: #1976d2;
+  font-size: 28px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    color 0.3s;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.deleteIcon {
+  color: #ff4757;
+  font-size: 28px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    color 0.3s;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
 
 .completedLevel {
   margin-left: auto;
@@ -82,7 +120,6 @@
   background-color: #007aff;
   color: white;
 }
-
 
 @media (max-width: 430px) {
   .skill {
