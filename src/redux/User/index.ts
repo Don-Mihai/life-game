@@ -40,7 +40,7 @@ export const { setUser } = userSlice.actions;
 
 export default userSlice.reducer;
 
-export const editUser = createAsyncThunk('user/getById', async (user: object): Promise<IUser[] | undefined> => {
+export const editUser = createAsyncThunk('user/editUser', async (user: object): Promise<IUser[] | undefined> => {
   const id = localStorage.getItem(LOCAL_STORAGE_KEY);
   const userRes = (await axios.put(`${API_URL}/${id}`, user)).data;
 

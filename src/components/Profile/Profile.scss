@@ -9,6 +9,9 @@
   box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
   background-color: white;
 
+  &__hint {
+    font-weight: normal;
+  }
   &__avatar {
     display: flex;
     align-items: center;
