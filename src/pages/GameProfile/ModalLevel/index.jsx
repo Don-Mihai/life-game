@@ -14,6 +14,8 @@ import SimpleImage from '@editorjs/simple-image';
 import Checklist from '@editorjs/checklist';
 import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
+import LinkTool from '@editorjs/link';
+import CodeTool from '@editorjs/code';
 
 const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
   const editorRef = useRef(null);
@@ -34,7 +36,14 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
           simpleImage: SimpleImage,
           checklist: Checklist,
           list: List,
-          quote: Quote
+          quote: Quote,
+          linkTool: {
+            class: LinkTool,
+            config: {
+              endpoint: 'https://jsonproxy.io/api/proxy?url={url}'
+            }
+          },
+          code: CodeTool
         },
         autofocus: true,
         onChange: async () => {
