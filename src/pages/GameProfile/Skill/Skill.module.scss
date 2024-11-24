@@ -17,9 +17,7 @@
 
 .skillHeader {
   gap: 20px;
-
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -29,14 +27,22 @@
   color: #333;
 }
 
+.skillContext {
+  display: flex;
+  align-items: center;
+}
+
+.skillMenu {
+  width: auto;
+}
+
 /* Стили для иконки */
 .generateIcon {
   color: #88c0d0;
   font-size: 28px;
   cursor: pointer;
-  transition:
-    transform 0.2s,
-    color 0.3s;
+  transition: transform 0.2s,
+  color 0.3s;
 }
 
 .generateIcon:hover {
@@ -48,9 +54,9 @@
   color: #88c0d0;
   font-size: 28px;
   cursor: pointer;
-  transition:
-    transform 0.2s,
-    color 0.3s;
+  transition: transform 0.2s,
+  color 0.3s;
+
   &:hover {
     transform: scale(1.2);
   }
@@ -60,9 +66,9 @@
   color: #1976d2;
   font-size: 28px;
   cursor: pointer;
-  transition:
-    transform 0.2s,
-    color 0.3s;
+  transition: transform 0.2s,
+  color 0.3s;
+
   &:hover {
     transform: scale(1.2);
   }
@@ -72,9 +78,9 @@
   color: #ff4757;
   font-size: 28px;
   cursor: pointer;
-  transition:
-    transform 0.2s,
-    color 0.3s;
+  transition: transform 0.2s,
+  color 0.3s;
+
   &:hover {
     transform: scale(1.2);
   }
@@ -119,6 +125,13 @@
 .level:hover {
   background-color: #007aff;
   color: white;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  margin-right: 8px;
 }
 
 @media (max-width: 430px) {

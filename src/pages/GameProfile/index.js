@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Typography, IconButton, TextField, Button } from '@mui/material';
+import { Modal, Typography, TextField, Button } from '@mui/material';
 import './LifeStats.module.scss';
 import Profile from '../../components/Profile/index.jsx';
-import AddIcon from '@mui/icons-material/Add';
 import SplitButton from '../../components/DropDownButton/index.jsx';
-import Skill from './Skill';
 import ModalLevel from './ModalLevel';
 import { addSkill, fetchSkills, updateSkill } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
 import ChartBuilder from '../../components/ChartBuilder/index.jsx';
 import { getById } from '../../redux/User';
+import SkillsList from './SkillsList';
 
 function GameProfile() {
   const dispatch = useDispatch();
-  const { skills, status } = useSelector((state) => state.skill);
+  const { status } = useSelector((state) => state.skill);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [openSkillModal, setOpenSkillModal] = useState(false);
   const [newSkillName, setNewSkillName] = useState('');
@@ -89,18 +88,10 @@ function GameProfile() {
         Построить график
       </button>
       <SplitButton />
-      <Profile />
+      <Profile className={styles.profile} />
 
-      {/* Навыки */}
-      <div className={styles.skills}>
-        {skills?.map((skill) => (
-          <Skill key={skill.id} skill={skill} handleLevelClick={handleLevelClick} />
-        ))}
-
-        <IconButton onClick={() => setOpenSkillModal(true)}>
-          <AddIcon />
-        </IconButton>
-      </div>
+      {/* Используем новый компонент SkillsList */}
+      <SkillsList handleLevelClick={handleLevelClick} setOpenSkillModal={setOpenSkillModal} />
 
       {/* Модальное окно для добавления навыка */}
       <Modal open={openSkillModal} onClose={() => setOpenSkillModal(false)}>

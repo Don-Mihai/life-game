@@ -130,9 +130,11 @@ const Profile = () => {
               </IconButton>
             </>
           ) : (
-            <IconButton onClick={() => setShowNewCharacteristicInputs(true)}>
-              <AddIcon />
-            </IconButton>
+            // todo: добавление характеритсик пока уберу, потом подумать нужны ли они
+            // <IconButton onClick={() => setShowNewCharacteristicInputs(true)}>
+            //   <AddIcon />
+            // </IconButton>
+            <></>
           )}
         </div>
       </div>

@@ -10,18 +10,21 @@ import { motion } from 'framer-motion';
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 import { generateSkillLevels, updateSkill, deleteSkill } from '../../../redux/Skill';
 import styles from './Skill.module.scss';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
-const Skill = ({ handleLevelClick, skill }) => {
+const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
   const dispatch = useDispatch();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
-  const handleDeleteSkill = async () => {
+  const handleDeleteSkill = () => {
     dispatch(deleteSkill(skill.id));
   };
 
-  const handleEditSkill = () => {};
+  const handleEditSkill = () => {
+    // Реализуйте функционал редактирования навыка
+  };
 
-  const handleAddLevel = async (skill) => {
+  const handleAddLevel = () => {
     const newLevel = {
       task: '',
       completed: false
@@ -35,7 +38,7 @@ const Skill = ({ handleLevelClick, skill }) => {
     dispatch(updateSkill(updatedSkill));
   };
 
-  const handleMarkAsCompleted = async (index) => {
+  const handleMarkAsCompleted = (index) => {
     const updatedLevels = skill.levels.map((level, i) => (i === index ? { ...level, completed: true } : level));
 
     const updatedSkill = {
@@ -46,7 +49,7 @@ const Skill = ({ handleLevelClick, skill }) => {
     dispatch(updateSkill(updatedSkill));
   };
 
-  const handleDeleteLevel = async (index) => {
+  const handleDeleteLevel = (index) => {
     const updatedSkill = {
       ...skill,
       levels: skill.levels.filter((_, i) => i !== index)
@@ -67,26 +70,31 @@ const Skill = ({ handleLevelClick, skill }) => {
 
   return (
     <div className={styles.skill}>
-      <div className={styles.skillContainer}>
-        <div className={styles.skillHeader} onClick={toggleExpand}>
-          <div className={styles.skillName}>{skill.name}</div>
-          {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
-          <div>
-            <Tooltip title="Генерировать уровни" arrow>
-              <AutoFixHighIcon className={styles.generateIcon} onClick={handleGenerateLevels} />
-            </Tooltip>
-            <Tooltip title="Редактировать навык">
-              <EditIcon className={styles.editIcon} onClick={handleEditSkill} />
-            </Tooltip>
-            <Tooltip title="Добавить комментарий" placement="top">
-              <AddCommentIcon className={styles.addCommentIcon} />
-            </Tooltip>
-            <Tooltip title="Удалить навык" className={styles.deleteIcon}>
-              <DeleteIcon className={styles.deleteIcon} onClick={handleDeleteSkill} />
-            </Tooltip>
+      <ContextMenuTrigger id={`skill-context-menu-${skill.name}`}>
+        <div className={styles.skillContainer}>
+          <div className={styles.skillHeader} onClick={toggleExpand}>
+            <div {...dragHandleProps} className={styles.dragHandle}>
+              <DragIndicatorIcon />
+            </div>
+            <div className={styles.skillName}>{skill.name}</div>
+            {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
           </div>
         </div>
-      </div>
+      </ContextMenuTrigger>
+      <ContextMenu className={styles.skillMenu} id={`skill-context-menu-${skill.name}`}>
+        <ContextMenuItem className={styles.skillContext} onClick={handleGenerateLevels}>
+          <AutoFixHighIcon fontSize="small" style={{ marginRight: '8px' }} />
+          Генерировать уровни
+        </ContextMenuItem>
+        <ContextMenuItem className={styles.skillContext} onClick={handleEditSkill}>
+          <EditIcon fontSize="small" style={{ marginRight: '8px' }} />
+          Редактировать навык
+        </ContextMenuItem>
+        <ContextMenuItem className={styles.skillContext} onClick={handleDeleteSkill}>
+          <DeleteIcon fontSize="small" style={{ marginRight: '8px' }} />
+          Удалить навык
+        </ContextMenuItem>
+      </ContextMenu>
       <motion.div
         initial={{ height: 0, opacity: 0 }}
         animate={isExpanded ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
@@ -98,7 +106,13 @@ const Skill = ({ handleLevelClick, skill }) => {
             <React.Fragment key={i}>
               <ContextMenuTrigger id={`context-menu-${skill.name}-${i}`}>
                 <Tooltip title={levelData.description && JSON.parse(levelData.description).blocks[0]?.data.text} placement="top" arrow>
-                  <div className={`${styles.level} ${levelData.completed ? styles.completed : ''}`} onClick={() => handleLevelClick(skill, levelData, i)}>
+                  <div
+                    className={`${styles.level} ${levelData.completed ? styles.completed : ''}`}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleLevelClick(skill, levelData, i);
+                    }}
+                  >
                     {i + 1}
                   </div>
                 </Tooltip>
@@ -109,7 +123,12 @@ const Skill = ({ handleLevelClick, skill }) => {
               </ContextMenu>
             </React.Fragment>
           ))}
-          <IconButton onClick={() => handleAddLevel(skill)}>
+          <IconButton
+            onClick={(event) => {
+              event.stopPropagation();
+              handleAddLevel(skill);
+            }}
+          >
             <AddIcon />
           </IconButton>
         </div>

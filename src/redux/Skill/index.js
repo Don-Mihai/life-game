@@ -131,7 +131,11 @@ const skillsSlice = createSlice({
     status: 'idle',
     error: null
   },
-  reducers: {},
+  reducers: {
+    reorderSkills: (state, action) => {
+      state.skills = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSkills.pending, (state) => {
@@ -171,5 +175,7 @@ const skillsSlice = createSlice({
       });
   }
 });
+
+export const { reorderSkills } = skillsSlice.actions;
 
 export default skillsSlice.reducer;

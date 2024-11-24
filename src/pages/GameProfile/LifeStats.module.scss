@@ -3,7 +3,7 @@
 .gameProfile {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding: 8px;
   background-color: #f9f9f9;
 
@@ -17,6 +17,7 @@
 
   .builder {
     position: absolute;
+    right: 100px;
     height: 30px;
     border-radius: 10px;
     background-color: #1976d2;
@@ -114,4 +115,8 @@ body {
 * {
   box-sizing: inherit;
   outline: none;
+}
+
+.profile {
+
 }

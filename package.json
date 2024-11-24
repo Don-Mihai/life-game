@@ -15,6 +15,7 @@
     "@editorjs/simple-image": "^1.6.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@hello-pangea/dnd": "^17.0.0",
     "@iconify/react": "^5.0.2",
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.2",
