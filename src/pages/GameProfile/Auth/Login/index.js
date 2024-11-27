@@ -31,7 +31,7 @@ const Login = ({ onChange, formValues }) => {
 
   return (
     <div className="register-form">
-      <h2 className="register-form__title">Вход</h2>
+      <h2 className="register-form__title">вход</h2>
       <div className="register-form__inputs">
         <TextField onChange={onChange} value={formValues[INPUTS_KEYS.EMAIL]} label="Email" name="email" fullWidth />
         <TextField onChange={onChange} value={formValues[INPUTS_KEYS.PASSWORD]} label="Password" name="password" fullWidth />

@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { UserState, IUser, PAuth, LOCAL_STORAGE_KEY } from './types';
+import { URL } from '../../utils';
 
-const API_URL = 'https://6715244433bc2bfe40b986f6.mockapi.io/users';
-// const API_URL = 'https://671924ac7fc4c5ff8f4c9c00.mockapi.io/users';
+const API_URL = URL + 'users';
 
 const initialState: UserState = {
   user: {} as IUser,
@@ -56,7 +56,7 @@ export const getById = createAsyncThunk('user/getById', async (userId?: number):
 
 export const auth = createAsyncThunk('user/auth', async (payload: PAuth): Promise<IUser | undefined> => {
   try {
-    const user = (await axios.get(`${API_URL}/?email=${payload.email}&password=${payload.password}`)).data[0];
+    const user = (await axios.post(`${API_URL}/auth`, payload)).data;
     localStorage.setItem(LOCAL_STORAGE_KEY, String(user.id));
     return user;
   } catch (error) {}
@@ -74,8 +74,8 @@ export const register = createAsyncThunk(
     | undefined
   > => {
     try {
-      const response = await axios.post(API_URL, payload);
-      if (response.data && response.data.user && response.data.id) {
+      const response = await axios.post(API_URL + '/register', payload);
+      if (response.data && response.data.id) {
         localStorage.setItem(LOCAL_STORAGE_KEY, String(response.data.id));
         return response.data.user;
       }

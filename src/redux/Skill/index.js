@@ -3,9 +3,11 @@ import axios from 'axios';
 import { LOCAL_STORAGE_KEY } from '../User/types.ts';
 import { convertToEditorDescription } from '../../utils';
 import OpenAI from 'openai';
+import { URL } from '../../utils';
 
 // API Base URL
-const API_URL = 'https://6715244433bc2bfe40b986f6.mockapi.io/skills';
+const API_URL = URL + 'skills';
+
 const openai = new OpenAI({
   apiKey: process.env.REACT_APP_OPEN_API_KEY || '', // Замените "your-openai-api-key" на ваш ключ
   dangerouslyAllowBrowser: true
