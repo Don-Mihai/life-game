@@ -1,5 +1,3 @@
-import * as process from 'node:process';
-
 export const URL = process.env.REACT_APP_BACK_URL || 'http://localhost:5000/';
 
 // Вспомогательная функция для преобразования уровня в формат Editor.js
