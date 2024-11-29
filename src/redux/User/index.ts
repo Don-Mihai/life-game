@@ -4,7 +4,7 @@ import axios from 'axios';
 import { UserState, IUser, PAuth, LOCAL_STORAGE_KEY } from './types';
 import { URL } from '../../utils';
 
-const API_URL = URL + 'users';
+const API_URL = URL + '/users';
 
 const initialState: UserState = {
   user: {} as IUser,
