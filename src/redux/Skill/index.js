@@ -6,7 +6,7 @@ import OpenAI from 'openai';
 import { URL } from '../../utils';
 
 // API Base URL
-const API_URL = URL + 'skills';
+const API_URL = URL + '/skills';
 
 const openai = new OpenAI({
   apiKey: process.env.REACT_APP_OPEN_API_KEY || '', // Замените "your-openai-api-key" на ваш ключ
