@@ -1,4 +1,5 @@
-export const URL = process.env.REACT_APP_BACK_URL || 'http://localhost:5000/';
+export const URL = 'http://skill-manager.ru/api';
+// 'http://localhost:5000/';
 
 // Вспомогательная функция для преобразования уровня в формат Editor.js
 export const convertToEditorDescription = (level: any) => {
