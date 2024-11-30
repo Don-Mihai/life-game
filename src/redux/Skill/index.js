@@ -39,20 +39,14 @@ export const deleteSkill = createAsyncThunk('skills/deleteSkill', async (skillId
   return skillId;
 });
 
-// todo: поправить редактирование навыка, на бэке чтобы он сам находил уровень и здесь тоже
 export const updateSkillLevel = createAsyncThunk('skills/updateSkillLevel', async ({ skillId, levelIndex, updatedLevelData }) => {
-  const response = await axios.get(`${API_URL}/${skillId}`);
-  const skill = response.data;
-
-  // Обновляем нужный уровень внутри навыка
-  skill.levels[levelIndex] = {
-    ...skill.levels[levelIndex],
-    ...updatedLevelData
+  const payload = {
+    levelIndex,
+    updatedLevelData
   };
 
-  // Отправляем обновленный навык обратно
-  const updatedResponse = await axios.put(`${API_URL}/${skillId}`, skill);
-  return updatedResponse.data;
+  const response = await axios.put(`${API_URL}/${skillId}`, payload);
+  return response.data;
 });
 
 export const generateSkillLevels = createAsyncThunk('skills/generateSkillLevels', async ({ skillId, skillName }, { rejectWithValue }) => {
