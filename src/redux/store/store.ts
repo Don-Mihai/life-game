@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import user from '../User';
 import skill from '../Skill';
+import common from '../Common';
 
 export const store = configureStore({
   reducer: {
     user,
-    skill
+    skill,
+    common
   }
 });
 

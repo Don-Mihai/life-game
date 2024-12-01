@@ -16,6 +16,8 @@ import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
 import LinkTool from '@editorjs/link';
 import CodeTool from '@editorjs/code';
+import { URL } from '../../../utils';
+import { validateLink } from '../../../redux/Common';
 
 const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
   const editorRef = useRef(null);
@@ -40,7 +42,7 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
           linkTool: {
             class: LinkTool,
             config: {
-              endpoint: 'https://jsonproxy.io/api/proxy?url={url}'
+              endpoint: URL + '/common/validate-link'
             }
           },
           code: CodeTool
