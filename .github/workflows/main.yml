@@ -26,7 +26,13 @@ jobs:
             echo "Сборка фронтенда..."
             cd /var/www/life-game || { echo "Не удалось перейти в директорию фронтенда."; exit 1; }
           
+            # Обновляем код
+            git pull origin master
+          
             # Установка зависимостей и сборка фронтенда
             npm install || { echo "Ошибка при установке зависимостей фронтенда."; exit 1; }
             npm run build || { echo "Ошибка при сборке фронтенда."; exit 1; }
+          
+            # Перезагружаем Nginx для обновления статических файлов
+            sudo systemctl reload nginx
           EOF
