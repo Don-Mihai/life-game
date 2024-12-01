@@ -101,12 +101,15 @@ const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
                 <div className={styles.skillName}>{skill.name}</div>
                 <Autocomplete
                   multiple
-                  limitTags={2}
                   id="multiple-limit-tags"
                   options={tags}
+                  sx={{
+                    '& .MuiAutocomplete-input': {
+                      minWidth: '36px !important'
+                    }
+                  }}
                   getOptionLabel={(option) => option.title}
-                  renderInput={(params) => <TextField {...params} label="limitTags" placeholder="Теги" />}
-                  sx={{ width: 300 }}
+                  renderInput={(params) => <TextField {...params} placeholder="Теги" variant="standard" />}
                 />
               </>
             )}
