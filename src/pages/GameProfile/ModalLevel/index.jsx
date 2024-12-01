@@ -53,7 +53,7 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
             updateSkillLevel({
               skillId: selectedLevel.skill.id, // ID навыка
               levelIndex: selectedLevel.levelIndex, // Индекс уровня
-              updatedLevelData: { description: JSON.stringify(savedData) } // Новые данные уровня
+              description: JSON.stringify(savedData) // Новые данные уровня
             })
           );
         }

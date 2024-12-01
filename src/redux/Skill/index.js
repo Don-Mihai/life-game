@@ -39,13 +39,13 @@ export const deleteSkill = createAsyncThunk('skills/deleteSkill', async (skillId
   return skillId;
 });
 
-export const updateSkillLevel = createAsyncThunk('skills/updateSkillLevel', async ({ skillId, levelIndex, updatedLevelData }) => {
+export const updateSkillLevel = createAsyncThunk('skills/updateSkillLevel', async ({ skillId, levelIndex, description }) => {
   const payload = {
     levelIndex,
-    updatedLevelData
+    description
   };
 
-  const response = await axios.put(`${API_URL}/${skillId}`, payload);
+  const response = await axios.put(`${API_URL}/${skillId}/level`, payload);
   return response.data;
 });
 
