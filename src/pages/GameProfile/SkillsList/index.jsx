@@ -27,15 +27,19 @@ const SkillsList = ({ handleLevelClick, setOpenSkillModal }) => {
         <Droppable droppableId="skillsDroppable">
           {(provided) => (
             <div className={styles.skillsList} {...provided.droppableProps} ref={provided.innerRef}>
-              {skills.map((skill, index) => (
-                <Draggable key={skill.id} draggableId={skill.id.toString()} index={index}>
-                  {(provided, snapshot) => (
-                    <div className={`${styles.skillItem} ${snapshot.isDragging ? styles.dragging : ''}`} ref={provided.innerRef} {...provided.draggableProps}>
-                      <Skill key={skill.id} skill={skill} handleLevelClick={handleLevelClick} dragHandleProps={provided.dragHandleProps} />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+              {skills.length === 0 ? (
+                <h3>Добавьте навык</h3>
+              ) : (
+                skills.map((skill, index) => (
+                  <Draggable key={skill.id} draggableId={skill.id.toString()} index={index}>
+                    {(provided, snapshot) => (
+                      <div className={`${styles.skillItem} ${snapshot.isDragging ? styles.dragging : ''}`} ref={provided.innerRef} {...provided.draggableProps}>
+                        <Skill key={skill.id} skill={skill} handleLevelClick={handleLevelClick} dragHandleProps={provided.dragHandleProps} />
+                      </div>
+                    )}
+                  </Draggable>
+                ))
+              )}
               {provided.placeholder}
             </div>
           )}
