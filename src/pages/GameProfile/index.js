@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
 import ChartBuilder from '../../components/ChartBuilder/index.jsx';
 import { getById } from '../../redux/User';
-import SkillsList from './SkillsList';
+import SkillsList from './SkillsList/index.jsx';
 
 function GameProfile() {
   const dispatch = useDispatch();
