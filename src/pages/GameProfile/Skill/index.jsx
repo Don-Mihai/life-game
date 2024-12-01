@@ -84,6 +84,8 @@ const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
     dispatch(generateSkillLevels({ skillId: skill.id, skillName: skill.name }));
   };
 
+  //
+
   return (
     <div className={styles.skill}>
       <ContextMenuTrigger id={`skill-context-menu-${skill.name}`}>
