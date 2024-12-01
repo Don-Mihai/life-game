@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
+
+import { IconButton, Tooltip, TextField, Autocomplete } from '@mui/material';
+
 import AddIcon from '@mui/icons-material/Add';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,13 +16,29 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
   const dispatch = useDispatch();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newSkillName, setNewSkillName] = useState(skill.name);
+  
+  const tags = [{ title: 'Тег 1' }, { title: 'Тег 2' }, { title: 'Тег 3' }];
+ 
 
   const handleDeleteSkill = () => {
     dispatch(deleteSkill(skill.id));
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSaveSkill();
+    }
+  };
+
   const handleEditSkill = () => {
-    // Реализуйте функционал редактирования навыка
+    setIsEditing(true);
+  };
+
+  const handleSaveSkill = () => {
+    dispatch(updateSkill({ ...skill, name: newSkillName }));
+    setIsEditing(false);
   };
 
   const handleAddLevel = () => {
@@ -75,7 +93,20 @@ const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
             <div {...dragHandleProps} className={styles.dragHandle}>
               <DragIndicatorIcon />
             </div>
-            <div className={styles.skillName}>{skill.name}</div>
+            {isEditing ? (
+              <TextField onKeyDown={handleKeyDown} value={newSkillName} onChange={(e) => setNewSkillName(e.target.value)} onBlur={handleSaveSkill} autoFocus />
+            ) : (
+              <div className={styles.skillName}>{skill.name}</div>
+              <Autocomplete
+              multiple
+              limitTags={2}
+              id="multiple-limit-tags"
+              options={tags}
+              getOptionLabel={(option) => option.title}
+              renderInput={(params) => <TextField {...params} label="limitTags" placeholder="Теги" />}
+              sx={{ width: 300 }}
+            />
+            )}
             {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
           </div>
         </div>
