@@ -34,6 +34,16 @@ export const updateSkill = createAsyncThunk('skills/updateSkill', async (updated
   return response.data;
 });
 
+export const updateSkillsOrder = createAsyncThunk('skills/updateSkillsOrder', async (updatedSkills) => {
+  const userId = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const skills = updatedSkills.map((skill, index) => ({
+    id: skill.id,
+    order: index
+  }));
+  const response = await axios.put(`${API_URL}/update-order`, { userId, skills });
+  return response.data;
+});
+
 export const deleteSkill = createAsyncThunk('skills/deleteSkill', async (skillId) => {
   await axios.delete(`${API_URL}/${skillId}`);
   return skillId;
@@ -148,6 +158,10 @@ const skillsSlice = createSlice({
       })
       .addCase(addSkill.fulfilled, (state, action) => {
         state.skills.push(action.payload);
+      })
+      .addCase(updateSkillsOrder.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.skills = action.payload;
       })
       .addCase(updateSkill.fulfilled, (state, action) => {
         const index = state.skills.findIndex((skill) => skill.id === action.payload.id);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { reorderSkills } from '../../../redux/Skill';
+import { updateSkillsOrder } from '../../../redux/Skill';
 import Skill from '../Skill';
 import styles from './SkillsList.module.scss';
 import AddIcon from '@mui/icons-material/Add';
@@ -19,7 +19,7 @@ const SkillsList = ({ handleLevelClick, setOpenSkillModal }) => {
     const [movedSkill] = reorderedSkills.splice(result.source.index, 1);
     reorderedSkills.splice(result.destination.index, 0, movedSkill);
 
-    dispatch(reorderSkills(reorderedSkills));
+    dispatch(updateSkillsOrder(reorderedSkills));
   };
 
   return (
