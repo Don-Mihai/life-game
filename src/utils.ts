@@ -1,6 +1,16 @@
 export const URL = 'http://skill-manager.ru/api';
 // 'http://localhost:5000/';
 
+export const processTextLinks = (data: any) => {
+  // Рекурсивно обрабатываем текст в контенте
+  data.blocks.forEach((block: any) => {
+    if (block.data && block.data.text) {
+      block.data.text = block.data.text.replace(/https?:\/\/[^\s]+/g, (url: any) => `<a href="${url}" target="_blank">${url}</a>`);
+    }
+  });
+  return data;
+};
+
 // Вспомогательная функция для преобразования уровня в формат Editor.js
 export const convertToEditorDescription = (level: any) => {
   const blocks = [

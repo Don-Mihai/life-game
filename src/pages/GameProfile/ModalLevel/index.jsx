@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { IconButton, Modal, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EditIcon from '@mui/icons-material/Edit';
 import styles from './ModalLevel.module.scss';
 import EditorJS from '@editorjs/editorjs';
@@ -16,20 +18,23 @@ import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
 import LinkTool from '@editorjs/link';
 import CodeTool from '@editorjs/code';
-import { URL } from '../../../utils';
-import { validateLink } from '../../../redux/Common';
+import { URL, processTextLinks } from '../../../utils';
 
 const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
-  const editorRef = useRef(null);
   const [editorInstance, setEditorInstance] = useState(null);
-  console.log('selectedLevel', selectedLevel);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (selectedLevel && selectedLevel.levelData) {
+      // Уничтожаем предыдущий редактор, если он существует
+      if (editorInstance) {
+        editorInstance?.destroy?.();
+        setEditorInstance(null);
+      }
+
       // Инициализация Editor.js
       const editor = new EditorJS({
-        holder: 'editorjs',
+        holder: `editorjs-${selectedLevel.levelIndex}`,
         data: selectedLevel.levelData.description ? JSON.parse(selectedLevel.levelData.description) : {},
         tools: {
           header: Header,
@@ -39,23 +44,26 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
           checklist: Checklist,
           list: List,
           quote: Quote,
-          linkTool: {
-            class: LinkTool,
-            config: {
-              endpoint: URL + '/common/validate-link'
-            }
-          },
+          // linkTool: {
+          //   class: LinkTool,
+          //   config: {
+          //     endpoint: URL + '/common/validate-link'
+          //   }
+          // },
           code: CodeTool
         },
         autofocus: true,
         onChange: async () => {
           const savedData = await editor.save();
 
+          // Обработка текста и поиск ссылок
+          const updatedDescription = processTextLinks(savedData);
+
           dispatch(
             updateSkillLevel({
               skillId: selectedLevel.skill.id, // ID навыка
               levelIndex: selectedLevel.levelIndex, // Индекс уровня
-              description: JSON.stringify(savedData) // Новые данные уровня
+              description: JSON.stringify(updatedDescription) // Новые данные уровня
             })
           );
         }
@@ -64,7 +72,7 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
     }
     return () => {
       if (editorInstance) {
-        editorInstance.destroy();
+        editorInstance?.destroy?.();
         setEditorInstance(null);
       }
     };
@@ -93,11 +101,27 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
             <IconButton onClick={handleClose} className={styles.closeButton}>
               <CloseIcon />
             </IconButton>
+            <div className={styles.navigationButtons}>
+              <IconButton onClick={() => handleChangeLevel(-1)} disabled={selectedLevel.levelIndex === 0} className={styles.arrowButton}>
+                <ArrowBackIcon />
+              </IconButton>
 
-            <h2 className={styles.title}>{selectedLevel.skill.name}</h2>
-            <h3 className={styles.subtitle}>Уровень: {selectedLevel.levelIndex + 1}</h3>
+              <div>
+                <h2 className={styles.title}>{selectedLevel.skill.name}</h2>
+                <h3 className={styles.subtitle}>Уровень: {selectedLevel.levelIndex + 1}</h3>
+              </div>
+
+              <IconButton
+                onClick={() => handleChangeLevel(+1)}
+                disabled={selectedLevel.levelIndex === selectedLevel.skill.levels.length - 1}
+                className={styles.arrowButton}
+              >
+                <ArrowForwardIcon />
+              </IconButton>
+            </div>
+
             <div className={styles.editorContainer}>
-              <div id="editorjs" style={{ height: '100%', width: '100%' }}></div>
+              <div id={`editorjs-${selectedLevel.levelIndex}`} style={{ height: '100%', width: '100%' }}></div>
             </div>
           </div>
         </Modal>

@@ -90,7 +90,7 @@ const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
     <div className={styles.skill}>
       <ContextMenuTrigger id={`skill-context-menu-${skill.name}`}>
         <div className={styles.skillContainer}>
-          <div className={styles.skillHeader} onClick={toggleExpand}>
+          <div className={styles.skillHeader}>
             <div {...dragHandleProps} className={styles.dragHandle}>
               <DragIndicatorIcon />
             </div>
