@@ -11,6 +11,39 @@ export const processTextLinks = (data: any) => {
   return data;
 };
 
+export const processCodeBlocks = (data: any) => {
+  // Функция для декодирования HTML сущностей
+  const decodeHtmlEntities = (str: string) => {
+    const textArea = document.createElement('textarea');
+    textArea.innerHTML = str;
+    return textArea.value;
+  };
+
+  // Обработка блоков текста с кодом
+  data.blocks.forEach((block: any) => {
+    if (block.data && block.data.text) {
+      // Ищем кодовые блоки, обрабатываем текст внутри блоков
+      const codeMatches = block.data.text.match(/```([\s\S]+?)```/); // Ищем кодовые блоки
+
+      if (codeMatches) {
+        const codeBlock = codeMatches[1]; // Извлекаем код
+
+        // Декодируем HTML сущности, чтобы вернуть правильный JSX
+        const decodedCode = decodeHtmlEntities(codeBlock);
+
+        // Устанавливаем тип блока как 'code'
+        block.type = 'code';
+
+        // Добавляем сам код
+        block.data = {
+          code: decodedCode
+        };
+      }
+    }
+  });
+  return data;
+};
+
 // Вспомогательная функция для преобразования уровня в формат Editor.js
 export const convertToEditorDescription = (level: any) => {
   const blocks = [

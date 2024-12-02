@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { IconButton, Modal, TextField } from '@mui/material';
+import { IconButton, Modal } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import EditIcon from '@mui/icons-material/Edit';
 import styles from './ModalLevel.module.scss';
 import EditorJS from '@editorjs/editorjs';
 import { updateSkillLevel } from '../../../redux/Skill';
@@ -16,9 +15,10 @@ import SimpleImage from '@editorjs/simple-image';
 import Checklist from '@editorjs/checklist';
 import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
-import LinkTool from '@editorjs/link';
+
+// import LinkTool from '@editorjs/link';
 import CodeTool from '@editorjs/code';
-import { URL, processTextLinks } from '../../../utils';
+import { URL, processTextLinks, processCodeBlocks } from '../../../utils';
 
 const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
   const [editorInstance, setEditorInstance] = useState(null);
@@ -57,13 +57,14 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
           const savedData = await editor.save();
 
           // Обработка текста и поиск ссылок
-          const updatedDescription = processTextLinks(savedData);
+          // const updatedDescription = processTextLinks(savedData);
+          const finalDescription = processCodeBlocks(savedData);
 
           dispatch(
             updateSkillLevel({
               skillId: selectedLevel.skill.id, // ID навыка
               levelIndex: selectedLevel.levelIndex, // Индекс уровня
-              description: JSON.stringify(updatedDescription) // Новые данные уровня
+              description: JSON.stringify(finalDescription) // Новые данные уровня
             })
           );
         }
