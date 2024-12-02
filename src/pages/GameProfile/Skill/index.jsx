@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { IconButton, Tooltip, TextField, Autocomplete } from '@mui/material';
 
@@ -13,13 +13,28 @@ import { generateSkillLevels, updateSkill, deleteSkill } from '../../../redux/Sk
 import styles from './Skill.module.scss';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
-const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
+const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
   const dispatch = useDispatch();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newSkillName, setNewSkillName] = useState(skill.name);
 
-  const tags = [{ title: 'Тег 1' }, { title: 'Тег 2' }, { title: 'Тег 3' }];
+  const [options, setOptions] = useState(user.tags || []);
+  const [tags, setTags] = useState(skill.tags || []);
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    // Если теги изменились, обновляем локальное состояние и отправляем на сервер
+    dispatch(updateSkill({ ...skill, tags }));
+  }, [tags.length, skill.id]);
+
+  const handleKeyDownTags = (event) => {
+    if (event.key === 'Enter' && inputValue && !tags.some((tag) => tag.title === inputValue)) {
+      const payload = [...tags, { title: inputValue }];
+      setTags(payload);
+      setInputValue('');
+    }
+  };
 
   const handleDeleteSkill = () => {
     dispatch(deleteSkill(skill.id));
@@ -84,7 +99,9 @@ const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
     dispatch(generateSkillLevels({ skillId: skill.id, skillName: skill.name }));
   };
 
-  //
+  const handleTagChange = (event, newValue) => {
+    setTags(newValue);
+  };
 
   return (
     <div className={styles.skill}>
@@ -102,13 +119,18 @@ const Skill = ({ handleLevelClick, skill, dragHandleProps }) => {
                 <Autocomplete
                   multiple
                   id="multiple-limit-tags"
-                  options={tags}
+                  options={options}
+                  getOptionLabel={(option) => option.title}
+                  value={tags}
+                  onChange={handleTagChange}
+                  inputValue={inputValue}
+                  onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
+                  onKeyDown={handleKeyDownTags}
                   sx={{
                     '& .MuiAutocomplete-input': {
                       minWidth: '36px !important'
                     }
                   }}
-                  getOptionLabel={(option) => option.title}
                   renderInput={(params) => <TextField {...params} placeholder="Теги" variant="standard" />}
                 />
               </>

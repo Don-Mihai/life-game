@@ -10,6 +10,7 @@ import { IconButton } from '@mui/material';
 const SkillsList = ({ handleLevelClick, setOpenSkillModal }) => {
   const dispatch = useDispatch();
   const { skills } = useSelector((state) => state.skill);
+  const { user } = useSelector((state) => state.user);
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -34,7 +35,7 @@ const SkillsList = ({ handleLevelClick, setOpenSkillModal }) => {
                   <Draggable key={skill.id} draggableId={skill.id.toString()} index={index}>
                     {(provided, snapshot) => (
                       <div className={`${styles.skillItem} ${snapshot.isDragging ? styles.dragging : ''}`} ref={provided.innerRef} {...provided.draggableProps}>
-                        <Skill key={skill.id} skill={skill} handleLevelClick={handleLevelClick} dragHandleProps={provided.dragHandleProps} />
+                        <Skill key={skill.id} skill={skill} user={user} handleLevelClick={handleLevelClick} dragHandleProps={provided.dragHandleProps} />
                       </div>
                     )}
                   </Draggable>

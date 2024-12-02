@@ -108,7 +108,6 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
               </IconButton>
 
               <div>
-                <h2 className={styles.title}>{selectedLevel.skill.name}</h2>
                 <h3 className={styles.subtitle}>Уровень: {selectedLevel.levelIndex + 1}</h3>
               </div>
 
