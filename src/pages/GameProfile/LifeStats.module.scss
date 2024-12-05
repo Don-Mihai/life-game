@@ -15,18 +15,11 @@
     margin-top: 20px;
   }
 
-  .builder {
-    position: absolute;
-    right: 100px;
-    height: 30px;
-    border-radius: 10px;
-    background-color: #1976d2;
+  .menu {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    color: #fff;
-    cursor: pointer;
+    position: fixed;
+    top: 10px;
+    right: 10px;
   }
 
   .addSkillButton {
@@ -118,5 +111,4 @@ body {
 }
 
 .profile {
-
 }

@@ -1,15 +1,4 @@
 .drop-down-component {
-  position: absolute;
-  right: 8px;
   margin-left: auto;
   margin-bottom: 10px;
-}
-
-@media (max-width: 430px) {
-  .drop-down-component {
-    position: absolute;
-    right: 3svh;
-    top: 3svh;
-    margin: 0;
-  }
 }
