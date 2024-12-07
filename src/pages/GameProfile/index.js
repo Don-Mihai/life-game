@@ -7,9 +7,10 @@ import ModalLevel from './ModalLevel';
 import { addSkill, fetchSkills, updateSkill } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
-import ChartBuilder from '../../components/ChartBuilder/index.jsx';
+import ChartBuilderModal from '../../components/ChartBuilderModal/index.jsx';
 import { getById } from '../../redux/User';
 import SkillsList from './SkillsList/index.jsx';
+import BasicMenu from 'components/MenuButton';
 
 function GameProfile() {
   const dispatch = useDispatch();
@@ -24,7 +25,9 @@ function GameProfile() {
     dispatch(getById());
   }, [dispatch]);
 
-  const toggleBuilder = () => setBuilderEnabled((prev) => !prev);
+  const handleCloseBuilder = () => {
+    setBuilderEnabled(false);
+  };
 
   const handleLevelClick = (skill, levelData, levelIndex) => setSelectedLevel({ skill, levelData, levelIndex });
 
@@ -83,11 +86,12 @@ function GameProfile() {
 
   return (
     <div className={styles.gameProfile}>
-      {isBuilderEnabled && <ChartBuilder />}
-      <button className={styles.builder} onClick={toggleBuilder}>
-        Построить график
-      </button>
-      <SplitButton />
+      <ChartBuilderModal isOpen={isBuilderEnabled} onClose={handleCloseBuilder} />
+      <div className={styles.menu}>
+        <BasicMenu setBuilderEnabled={setBuilderEnabled} />
+        <SplitButton />
+      </div>
+
       <Profile className={styles.profile} />
 
       {/* Используем новый компонент SkillsList */}
