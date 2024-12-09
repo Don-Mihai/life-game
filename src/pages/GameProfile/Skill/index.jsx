@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
-import { IconButton, Tooltip, TextField, Autocomplete } from '@mui/material';
-
-import AddIcon from '@mui/icons-material/Add';
+import { TextField, Autocomplete, IconButton } from '@mui/material';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 import { generateSkillLevels, updateSkill, deleteSkill } from '../../../redux/Skill';
 import styles from './Skill.module.scss';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+
+import Level from './Level';
 
 const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
   const dispatch = useDispatch();
@@ -64,26 +65,6 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
     const updatedSkill = {
       ...skill,
       levels: [...skill.levels, newLevel]
-    };
-
-    dispatch(updateSkill(updatedSkill));
-  };
-
-  const handleMarkAsCompleted = (index) => {
-    const updatedLevels = skill.levels.map((level, i) => (i === index ? { ...level, completed: true } : level));
-
-    const updatedSkill = {
-      ...skill,
-      levels: updatedLevels
-    };
-
-    dispatch(updateSkill(updatedSkill));
-  };
-
-  const handleDeleteLevel = (index) => {
-    const updatedSkill = {
-      ...skill,
-      levels: skill.levels.filter((_, i) => i !== index)
     };
 
     dispatch(updateSkill(updatedSkill));
@@ -161,25 +142,7 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
       >
         <div className={styles.skillLevels}>
           {skill.levels.map((levelData, i) => (
-            <React.Fragment key={i}>
-              <ContextMenuTrigger id={`context-menu-${skill.name}-${i}`}>
-                <Tooltip title={levelData.description && JSON.parse(levelData.description).blocks[0]?.data.text} placement="top" arrow>
-                  <div
-                    className={`${styles.level} ${levelData.completed ? styles.completed : ''}`}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleLevelClick(skill, levelData, i);
-                    }}
-                  >
-                    {i + 1}
-                  </div>
-                </Tooltip>
-              </ContextMenuTrigger>
-              <ContextMenu id={`context-menu-${skill.name}-${i}`}>
-                <ContextMenuItem onClick={() => handleDeleteLevel(i)}>Удалить</ContextMenuItem>
-                <ContextMenuItem onClick={() => handleMarkAsCompleted(i)}>Уровень пройден</ContextMenuItem>
-              </ContextMenu>
-            </React.Fragment>
+            <Level key={i} skill={skill} levelData={levelData} i={i} />
           ))}
           <IconButton
             onClick={(event) => {
