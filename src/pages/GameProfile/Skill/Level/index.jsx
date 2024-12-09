@@ -7,13 +7,21 @@ import EmojiPicker from 'emoji-picker-react';
 import styles from './Level.module.scss';
 
 const Level = ({ skill, levelData, i, handleLevelClick }) => {
-  const [selectedEmoji, setSelectedEmoji] = useState(null); // Состояние для выбранной эмодзи
+  const [selectedEmoji, setSelectedEmoji] = useState(levelData.icon || null); // Состояние для выбранной эмодзи
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Состояние для отображения эмодзи-пикера
 
   const dispatch = useDispatch();
 
-  const handleEmojiClick = (emoji) => {
-    setSelectedEmoji(emoji.emoji); // Устанавливаем выбранную эмодзи
+  const handleEmojiClick = async (emoji, index) => {
+    setSelectedEmoji(emoji.emoji);
+    const updatedLevels = skill.levels.map((level, i) => (i === index ? { ...level, icon: emoji.emoji } : level));
+
+    const updatedSkill = {
+      ...skill,
+      levels: updatedLevels
+    };
+
+    await dispatch(updateSkill(updatedSkill));
     setShowEmojiPicker(false); // Закрываем пикер после выбора эмодзи
   };
 
@@ -46,7 +54,7 @@ const Level = ({ skill, levelData, i, handleLevelClick }) => {
       <ContextMenuTrigger id={`context-menu-${skill.name}-${i}`}>
         <Tooltip title={levelData.description && JSON.parse(levelData.description).blocks[0]?.data.text} placement="top" arrow>
           <div
-            className={`${styles.level} ${levelData.completed ? styles.completed : ''}`}
+            className={`${styles.level} ${levelData.completed ? styles.completed : ''} ${selectedEmoji ? styles.levelWithIcon : ''}`}
             onClick={(event) => {
               event.stopPropagation();
               handleLevelClick(skill, levelData, i);
@@ -65,7 +73,7 @@ const Level = ({ skill, levelData, i, handleLevelClick }) => {
       <Dialog open={showEmojiPicker} onClose={toggleEmojiPicker}>
         <DialogTitle>Выберите иконку для уровня</DialogTitle>
         <DialogContent>
-          <EmojiPicker onEmojiClick={handleEmojiClick} /> {/* Компонент выбора эмодзи */}
+          <EmojiPicker onEmojiClick={(emoji) => handleEmojiClick(emoji, i)} /> {/* Компонент выбора эмодзи */}
         </DialogContent>
         <DialogActions>
           <Button onClick={toggleEmojiPicker} color="primary">
