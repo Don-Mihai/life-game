@@ -142,7 +142,7 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
       >
         <div className={styles.skillLevels}>
           {skill.levels.map((levelData, i) => (
-            <Level key={i} skill={skill} levelData={levelData} i={i} />
+            <Level key={i} skill={skill} levelData={levelData} i={i} handleLevelClick={handleLevelClick} />
           ))}
           <IconButton
             onClick={(event) => {
