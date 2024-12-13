@@ -6,6 +6,7 @@ import Auth from './pages/GameProfile/Auth';
 import { store } from './redux/store/store.ts';
 import { Provider } from 'react-redux';
 import { LOCAL_STORAGE_KEY } from './redux/User/types.ts';
+import Profile from 'pages/Profile';
 
 const authLoader = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
     loader: authLoader, // Проверка аутентификации
     element: <GameProfile />,
     errorElement: <Navigate to="/auth" replace /> // Перенаправление при ошибке
+  },
+  {
+    path: '/profile',
+    element: <Profile />
   }
 ]);
 
