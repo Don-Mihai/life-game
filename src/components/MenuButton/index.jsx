@@ -3,14 +3,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SplitButton from 'components/DropDownButton';
-import { styled } from '@mui/system';
-
-const StyledMenu = styled(Menu)(({ theme }) => ({
-  '& .MuiPaper-root': {
-    width: 300, // Установите желаемую ширину
-    maxHeight: 400 // Установите желаемую максимальную высоту
-  }
-}));
+import './MenuButton.scss';
 
 export default function BasicMenu({ setBuilderEnabled }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -40,7 +33,8 @@ export default function BasicMenu({ setBuilderEnabled }) {
         Меню
       </Button>
 
-      <StyledMenu
+      <Menu
+        className="menu"
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
@@ -61,7 +55,7 @@ export default function BasicMenu({ setBuilderEnabled }) {
         <MenuItem>
           <SplitButton />
         </MenuItem>
-      </StyledMenu>
+      </Menu>
     </div>
   );
 }
