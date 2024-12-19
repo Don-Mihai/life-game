@@ -2,6 +2,8 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import SplitButton from 'components/DropDownButton';
+import './MenuButton.scss';
 
 export default function BasicMenu({ setBuilderEnabled }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -30,7 +32,9 @@ export default function BasicMenu({ setBuilderEnabled }) {
       >
         Меню
       </Button>
+
       <Menu
+        className="menu"
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
@@ -48,6 +52,9 @@ export default function BasicMenu({ setBuilderEnabled }) {
           Построить График
         </MenuItem>
         <MenuItem onClick={onClickLogOut}>Выйти</MenuItem>
+        <MenuItem>
+          <SplitButton />
+        </MenuItem>
       </Menu>
     </div>
   );

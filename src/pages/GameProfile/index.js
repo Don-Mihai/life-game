@@ -89,7 +89,6 @@ function GameProfile() {
       <ChartBuilderModal isOpen={isBuilderEnabled} onClose={handleCloseBuilder} />
       <div className={styles.menu}>
         <BasicMenu setBuilderEnabled={setBuilderEnabled} />
-        <SplitButton />
       </div>
 
       <Profile className={styles.profile} />
