@@ -43,6 +43,9 @@ export default function BasicMenu({ setBuilderEnabled }) {
           'aria-labelledby': 'basic-button'
         }}
       >
+        <MenuItem>
+          <SplitButton />
+        </MenuItem>
         <MenuItem
           onClick={() => {
             setBuilderEnabled(true);
@@ -52,9 +55,6 @@ export default function BasicMenu({ setBuilderEnabled }) {
           Построить График
         </MenuItem>
         <MenuItem onClick={onClickLogOut}>Выйти</MenuItem>
-        <MenuItem>
-          <SplitButton />
-        </MenuItem>
       </Menu>
     </div>
   );
