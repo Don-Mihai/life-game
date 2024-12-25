@@ -3,13 +3,17 @@ export interface UserState {
   users: IUser[];
 }
 
+export enum UserFields {
+  NAME = 'name',
+  EMAIL = 'email',
+  PASSWORD = 'password'
+}
+
 export interface IUser {
-  id: number;
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  url?: string;
+  id: string;
+  [UserFields.NAME]: string;
+  [UserFields.EMAIL]: string;
+  [UserFields.PASSWORD]: string;
 }
 
 export interface PAuth {

@@ -6,6 +6,8 @@ import { URL } from '../../utils';
 
 const API_URL = URL + '/users';
 
+const PROFILE_URL = 'https://6762f51117ec5852cae7acd4.mockapi.io/users/1';
+
 const initialState: UserState = {
   user: {} as IUser,
   users: []
@@ -32,6 +34,9 @@ export const userSlice = createSlice({
         if (action.payload && action.payload.user) {
           state.user = action.payload.user;
         }
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.user = action.payload || null;
       });
   }
 });
@@ -40,7 +45,7 @@ export const { setUser } = userSlice.actions;
 
 export default userSlice.reducer;
 
-export const editUser = createAsyncThunk('user/editUser', async (user: object): Promise<IUser[] | undefined> => {
+export const editUser = createAsyncThunk('user/editUser', async (user: Partial<IUser>): Promise<IUser | undefined> => {
   const id = localStorage.getItem(LOCAL_STORAGE_KEY);
   const userRes = (await axios.put(`${API_URL}/${id}`, user)).data;
 

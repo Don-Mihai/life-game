@@ -4,49 +4,36 @@ import styles from './Profile.module.scss';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useDebounce from './useDebounce';
+import { IUser, UserFields } from '../../redux/User/types';
+import { editUser, getById } from '../../redux/User';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store/store';
 
-enum ProfileFields {
-  NAME = 'name',
-  EMAIL = 'email',
-  PASSWORD = 'password'
-}
-
-interface ProfileI {
-  id: string;
-  [ProfileFields.NAME]: string;
-  [ProfileFields.EMAIL]: string;
-  [ProfileFields.PASSWORD]: string;
-}
-
-const initialValues: Omit<ProfileI, 'id'> = {
-  [ProfileFields.NAME]: '',
-  [ProfileFields.EMAIL]: '',
-  [ProfileFields.PASSWORD]: ''
+const initialValues: Omit<IUser, 'id'> = {
+  [UserFields.NAME]: '',
+  [UserFields.EMAIL]: '',
+  [UserFields.PASSWORD]: ''
 };
 
-const PROFILE_URL = 'https://6762f51117ec5852cae7acd4.mockapi.io/users/1';
-
 const Profile = () => {
-  const [formValues, setFormValues] = useState<ProfileI>(initialValues as ProfileI);
+  const [formValues, setFormValues] = useState<IUser>(initialValues as IUser);
+  const user = useSelector((store: RootState) => store.user.user);
 
-  const editUser = () => {
-    axios.put(PROFILE_URL, formValues);
-  };
+  const dispatch = useDispatch<AppDispatch>();
 
   const debauncedFormValues = useDebounce(formValues, 1000);
 
   useEffect(() => {
-    getUser();
+    dispatch(getById());
   }, []);
 
   useEffect(() => {
-    if (debauncedFormValues?.id) editUser();
-  }, [debauncedFormValues]);
+    setFormValues(user as IUser);
+  }, [user?.id]);
 
-  const getUser = async () => {
-    const user: ProfileI = (await axios.get(PROFILE_URL)).data;
-    setFormValues(user);
-  };
+  useEffect(() => {
+    if (debauncedFormValues?.id) dispatch(editUser(formValues));
+  }, [debauncedFormValues]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value;
@@ -55,7 +42,7 @@ const Profile = () => {
   };
 
   const clearInputs = () => {
-    setFormValues(initialValues as ProfileI);
+    setFormValues(initialValues as IUser);
   };
 
   return (
@@ -63,9 +50,9 @@ const Profile = () => {
       <h1>Профиль</h1>
       <Avatar className={styles.avatar}></Avatar>
       <div className={styles.form}>
-        <TextField onChange={handleChange} value={formValues[ProfileFields.NAME]} name={ProfileFields.NAME} label="Имя" fullWidth />
-        <TextField onChange={handleChange} value={formValues[ProfileFields.EMAIL]} name={ProfileFields.EMAIL} label="Почта" fullWidth />
-        <TextField onChange={handleChange} value={formValues[ProfileFields.PASSWORD]} name={ProfileFields.PASSWORD} label="Пароль" fullWidth />
+        <TextField onChange={handleChange} value={formValues[UserFields.NAME]} name={UserFields.NAME} label="Имя" fullWidth />
+        <TextField onChange={handleChange} value={formValues[UserFields.EMAIL]} name={UserFields.EMAIL} label="Почта" fullWidth />
+        <TextField onChange={handleChange} value={formValues[UserFields.PASSWORD]} name={UserFields.PASSWORD} label="Пароль" fullWidth />
         <button onClick={clearInputs}>очистить</button>
       </div>
     </div>
