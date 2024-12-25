@@ -4,6 +4,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SplitButton from 'components/DropDownButton';
 import './MenuButton.scss';
+import { Link } from 'react-router-dom';
 
 export default function BasicMenu({ setBuilderEnabled }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -43,6 +44,12 @@ export default function BasicMenu({ setBuilderEnabled }) {
           'aria-labelledby': 'basic-button'
         }}
       >
+        <MenuItem>
+          <Link to={'/profile'}>Профиль</Link>
+        </MenuItem>
+        <MenuItem>
+          <Link to={'/characteristics'}>Характеристики</Link>
+        </MenuItem>
         <MenuItem
           onClick={() => {
             setBuilderEnabled(true);

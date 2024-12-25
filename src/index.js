@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import GameProfile from './pages/GameProfile';
+import Characteristics from './pages/Characteristics';
 import Auth from './pages/GameProfile/Auth';
 import { store } from './redux/store/store.ts';
 import { Provider } from 'react-redux';
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <Profile />
+  },
+  {
+    path: '/characteristics',
+    element: <Characteristics />
   }
 ]);
 

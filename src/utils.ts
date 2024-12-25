@@ -1,5 +1,5 @@
-export const URL = 'http://skill-manager.ru/api';
-// export const URL = 'http://localhost:5000';
+// export const URL = 'http://skill-manager.ru/api';
+export const URL = 'http://localhost:5000';
 
 export const processTextLinks = (data: any) => {
   // Рекурсивно обрабатываем текст в контенте
