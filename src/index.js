@@ -8,6 +8,7 @@ import { store } from './redux/store/store.ts';
 import { Provider } from 'react-redux';
 import { LOCAL_STORAGE_KEY } from './redux/User/types.ts';
 import Profile from 'pages/Profile';
+import TreeSkill from 'pages/TreeSkill';
 
 const authLoader = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/tree/:skillId',
-    element: <Characteristics />
+    element: <TreeSkill />
   }
 ]);
 

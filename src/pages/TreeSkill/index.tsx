@@ -11,7 +11,7 @@ import 'primeicons/primeicons.css';
 const TreeSkill = () => {
   const { skillId } = useParams();
   const skill: any = useSelector((state: RootState) => state.skill.skills.find((s: any) => s.id === skillId));
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<any[] | undefined>(undefined);
 
   useEffect(() => {
     if (skill) {
@@ -21,8 +21,8 @@ const TreeSkill = () => {
         className: 'bg-purple-500 text-white',
         style: { borderRadius: '12px' },
         data: {
-          completed: level.completed,
-          description: level.description,
+          //   completed: level.completed,
+          description: level.description && JSON.parse(level.description).blocks[0]?.data.text,
           icon: level.icon
         },
         label: `Level ${index + 1}`,
@@ -40,7 +40,7 @@ const TreeSkill = () => {
         children: levels
       };
 
-      setData(skillData);
+      setData([skillData]);
     }
   }, [skill]);
 
