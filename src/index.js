@@ -35,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: '/characteristics',
     element: <Characteristics />
+  },
+  {
+    path: '/tree/:skillId',
+    element: <Characteristics />
   }
 ]);
 

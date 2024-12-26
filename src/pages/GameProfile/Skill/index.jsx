@@ -13,6 +13,7 @@ import styles from './Skill.module.scss';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 import Level from './Level';
+import { useNavigate } from 'react-router-dom';
 
 const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
   const dispatch = useDispatch();
@@ -23,6 +24,8 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
   const [options, setOptions] = useState(user.tags || []);
   const [tags, setTags] = useState(skill.tags || []);
   const [inputValue, setInputValue] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Если теги изменились, обновляем локальное состояние и отправляем на сервер
@@ -84,6 +87,10 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
     setTags(newValue);
   };
 
+  const handleOpenTree = () => {
+    navigate(`/tree/${skill.id}`);
+  };
+
   return (
     <div className={styles.skill}>
       <ContextMenuTrigger id={`skill-context-menu-${skill.name}`}>
@@ -121,6 +128,10 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
         </div>
       </ContextMenuTrigger>
       <ContextMenu className={styles.skillMenu} id={`skill-context-menu-${skill.name}`}>
+        <ContextMenuItem className={styles.skillContext} onClick={handleOpenTree}>
+          <DeleteIcon fontSize="small" style={{ marginRight: '8px' }} />
+          Открыть в режиме дерева
+        </ContextMenuItem>
         <ContextMenuItem className={styles.skillContext} onClick={handleGenerateLevels}>
           <AutoFixHighIcon fontSize="small" style={{ marginRight: '8px' }} />
           Генерировать уровни
