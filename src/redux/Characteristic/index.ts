@@ -17,7 +17,7 @@ export const getCharacteristics = createAsyncThunk('characteristic/getCharacteri
   return characteristics;
 });
 
-export const deleteCharacteristics = createAsyncThunk('characteristic/getCharacteristics', async (characteristicId?: string): Promise<Characteristic> => {
+export const deleteCharacteristics = createAsyncThunk('characteristic/deleteCharacteristics', async (characteristicId?: string): Promise<Characteristic> => {
   const deletedCharacteristic: Characteristic = (await axios.delete(`${URL}/characteristics/${characteristicId}`)).data;
   return deletedCharacteristic;
 });
