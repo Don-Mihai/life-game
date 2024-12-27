@@ -1,4 +1,4 @@
-import { RootState } from '../../redux/store/store';
+import { RootState } from '../../redux/store';
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';

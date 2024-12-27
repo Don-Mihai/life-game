@@ -4,7 +4,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import GameProfile from './pages/GameProfile';
 import Characteristics from './pages/Characteristics';
 import Auth from './pages/GameProfile/Auth';
-import { store } from './redux/store/store.ts';
+import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { LOCAL_STORAGE_KEY } from './redux/User/types.ts';
 import Profile from 'pages/Profile';

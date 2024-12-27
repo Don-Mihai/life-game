@@ -7,7 +7,7 @@ import useDebounce from './useDebounce';
 import { IUser, UserFields } from '../../redux/User/types';
 import { editUser, getById } from '../../redux/User';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store/store';
+import { AppDispatch, RootState } from '../../redux/store';
 
 const initialValues: Omit<IUser, 'id'> = {
   [UserFields.NAME]: '',

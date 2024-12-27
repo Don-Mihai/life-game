@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import user from '../User';
-import skill from '../Skill';
-import common from '../Common';
+import user from './User';
+import skill from './Skill';
+import common from './Common';
+import characteristic from './Characteristic';
 
 export const store = configureStore({
   reducer: {
     user,
     skill,
-    common
+    common,
+    characteristic
   }
 });
 
