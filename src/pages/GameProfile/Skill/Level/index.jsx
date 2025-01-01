@@ -6,7 +6,7 @@ import { updateSkill } from '../../../../redux/Skill';
 import EmojiPicker from 'emoji-picker-react';
 import styles from './Level.module.scss';
 
-const Level = ({ skill, levelData, i, handleLevelClick }) => {
+const Level = React.memo(({ skill, levelData, i, handleLevelClick }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(levelData.icon || null); // Состояние для выбранной эмодзи
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Состояние для отображения эмодзи-пикера
 
@@ -83,5 +83,5 @@ const Level = ({ skill, levelData, i, handleLevelClick }) => {
       </Dialog>
     </React.Fragment>
   );
-};
+});
 export default Level;

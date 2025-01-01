@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal, Typography, TextField, Button } from '@mui/material';
 import './LifeStats.module.scss';
 import Profile from '../../components/Profile/index.jsx';
@@ -29,7 +29,7 @@ function GameProfile() {
     setBuilderEnabled(false);
   };
 
-  const handleLevelClick = (skill, levelData, levelIndex) => setSelectedLevel({ skill, levelData, levelIndex });
+  const handleLevelClick = useCallback((skill, levelData, levelIndex) => setSelectedLevel({ skill, levelData, levelIndex }), []);
 
   const handleCloseModal = () => setSelectedLevel(null);
 

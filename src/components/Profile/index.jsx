@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import './Profile.scss';
 
-const Profile = () => {
+const Profile = React.memo(() => {
   const { user } = useSelector((state) => state.user);
 
   return (
@@ -17,6 +17,6 @@ const Profile = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Profile;
