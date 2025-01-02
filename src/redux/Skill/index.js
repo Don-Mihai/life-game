@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { LOCAL_STORAGE_KEY } from '../User/types.ts';
-import { convertToEditorDescription } from '../../utils';
 import OpenAI from 'openai';
 import { URL } from '../../utils';
 

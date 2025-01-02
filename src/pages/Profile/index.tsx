@@ -1,4 +1,4 @@
-import { Avatar, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 // @ts-ignore
 import styles from './Profile.module.scss';
 import { useEffect, useState } from 'react';
@@ -8,8 +8,10 @@ import { IUser, UserFields } from '../../redux/User/types';
 import { editUser, getById } from '../../redux/User';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
+import Avatar, { genConfig } from 'react-nice-avatar';
+import React from 'react';
 
-const initialValues: Omit<IUser, 'id'> = {
+const initialValues: Partial<IUser> = {
   [UserFields.NAME]: '',
   [UserFields.EMAIL]: '',
   [UserFields.PASSWORD]: ''
@@ -18,6 +20,8 @@ const initialValues: Omit<IUser, 'id'> = {
 const Profile = () => {
   const [formValues, setFormValues] = useState<IUser>(initialValues as IUser);
   const user = useSelector((store: RootState) => store.user.user);
+
+  const config = genConfig(user?.email);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -48,7 +52,7 @@ const Profile = () => {
   return (
     <div className={styles.profile}>
       <h1>Профиль</h1>
-      <Avatar className={styles.avatar}></Avatar>
+      <Avatar className="profile__avatar-image" {...config} />
       <div className={styles.form}>
         <TextField onChange={handleChange} value={formValues[UserFields.NAME]} name={UserFields.NAME} label="Имя" fullWidth />
         <TextField onChange={handleChange} value={formValues[UserFields.EMAIL]} name={UserFields.EMAIL} label="Почта" fullWidth />

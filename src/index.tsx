@@ -6,9 +6,17 @@ import Characteristics from './pages/Characteristics';
 import Auth from './pages/GameProfile/Auth';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
-import { LOCAL_STORAGE_KEY } from './redux/User/types.ts';
-import Profile from 'pages/Profile';
-import TreeSkill from 'pages/TreeSkill';
+import { LOCAL_STORAGE_KEY } from './redux/User/types';
+import Profile from './pages/Profile';
+import TreeSkill from './pages/TreeSkill';
+import ErrorBoundary from './ErrorBoundary';
+
+const originalError = console.error;
+console.error = (...args) => {
+  // убираю ошибку из библиотеки drang-and-drop
+  if (args[0].includes('defaultProps')) return;
+  originalError.call(console, ...args);
+};
 
 const authLoader = () => {
   const token = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -43,11 +51,13 @@ const router = createBrowserRouter([
   }
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider>
+  <ErrorBoundary>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </ErrorBoundary>
 );
 
 // Регистрация Service Worker

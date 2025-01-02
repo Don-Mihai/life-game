@@ -9,19 +9,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
 import ChartBuilderModal from '../../components/ChartBuilderModal/index.jsx';
 import { getById } from '../../redux/User';
-import SkillsList from './SkillsList/index.jsx';
-import BasicMenu from 'components/MenuButton';
+import SkillsList from './SkillsList';
+import BasicMenu from '../../components/MenuButton';
+import { RootState } from '../../redux/store';
 
-function GameProfile() {
+const GameProfile = () => {
   const dispatch = useDispatch();
-  const { status } = useSelector((state) => state.skill);
-  const [selectedLevel, setSelectedLevel] = useState(null);
+  const { status } = useSelector((state: RootState) => state.skill);
+  const [selectedLevel, setSelectedLevel] = useState<any>(null);
   const [openSkillModal, setOpenSkillModal] = useState(false);
   const [newSkillName, setNewSkillName] = useState('');
   const [isBuilderEnabled, setBuilderEnabled] = useState(false);
 
   useEffect(() => {
+    // @ts-ignore
     dispatch(fetchSkills());
+    // @ts-ignore
     dispatch(getById());
   }, [dispatch]);
 
@@ -29,15 +32,16 @@ function GameProfile() {
     setBuilderEnabled(false);
   };
 
-  const handleLevelClick = useCallback((skill, levelData, levelIndex) => setSelectedLevel({ skill, levelData, levelIndex }), []);
+  const handleLevelClick = useCallback((skill: any, levelData: any, levelIndex: number) => setSelectedLevel({ skill, levelData, levelIndex }), []);
 
   const handleCloseModal = () => setSelectedLevel(null);
 
-  const handleSkillNameChange = (e) => setNewSkillName(e.target.value);
+  const handleSkillNameChange = (e: any) => setNewSkillName(e.target.value);
 
   const handleAddSkill = async () => {
     if (!newSkillName.trim()) return;
     try {
+      // @ts-ignore
       await dispatch(addSkill({ name: newSkillName, levels: [] })).unwrap();
       setNewSkillName('');
       setOpenSkillModal(false);
@@ -46,7 +50,7 @@ function GameProfile() {
     }
   };
 
-  const handleEditSkill = async (skill, updatedLevel) => {
+  const handleEditSkill = async (skill: any, updatedLevel: any) => {
     if (!skill?.levels) {
       console.error('Invalid skill data');
       return;
@@ -55,8 +59,9 @@ function GameProfile() {
     try {
       const updatedSkill = {
         ...skill,
-        levels: skill.levels.map((level) => (level.level === updatedLevel.level ? updatedLevel : level))
+        levels: skill.levels.map((level: any) => (level.level === updatedLevel.level ? updatedLevel : level))
       };
+      // @ts-ignore
       await dispatch(updateSkill(updatedSkill)).unwrap();
       setSelectedLevel(null);
     } catch (err) {
@@ -64,14 +69,13 @@ function GameProfile() {
     }
   };
 
-  const changeLevel = (direction) => {
+  const changeLevel = (direction: number) => {
     if (!selectedLevel) return;
 
     const { skill, levelIndex } = selectedLevel;
     const newIndex = levelIndex + direction;
 
     if (newIndex < 0 || newIndex >= skill.levels.length) {
-      console.log(`Вы уже на ${newIndex < 0 ? 'первом' : 'последнем'} уровне.`);
       return;
     }
 
@@ -91,7 +95,7 @@ function GameProfile() {
         <BasicMenu setBuilderEnabled={setBuilderEnabled} />
       </div>
 
-      <Profile className={styles.profile} />
+      <Profile />
 
       {/* Используем новый компонент SkillsList */}
       <SkillsList handleLevelClick={handleLevelClick} setOpenSkillModal={setOpenSkillModal} />
@@ -113,6 +117,6 @@ function GameProfile() {
       )}
     </div>
   );
-}
+};
 
 export default GameProfile;

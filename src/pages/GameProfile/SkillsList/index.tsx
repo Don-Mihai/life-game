@@ -6,19 +6,21 @@ import Skill from '../Skill';
 import styles from './SkillsList.module.scss';
 import AddIcon from '@mui/icons-material/Add';
 import { IconButton } from '@mui/material';
+import { RootState } from '../../../redux/store';
 
-const SkillsList = ({ handleLevelClick, setOpenSkillModal }) => {
+const SkillsList = ({ handleLevelClick, setOpenSkillModal }: any) => {
   const dispatch = useDispatch();
-  const { skills } = useSelector((state) => state.skill);
-  const { user } = useSelector((state) => state.user);
+  const { skills } = useSelector((state: RootState) => state.skill);
+  const { user } = useSelector((state: RootState) => state.user);
 
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: any) => {
     if (!result.destination) return;
 
     const reorderedSkills = Array.from(skills);
     const [movedSkill] = reorderedSkills.splice(result.source.index, 1);
     reorderedSkills.splice(result.destination.index, 0, movedSkill);
 
+    // @ts-ignore
     dispatch(updateSkillsOrder(reorderedSkills));
   };
 
@@ -31,7 +33,7 @@ const SkillsList = ({ handleLevelClick, setOpenSkillModal }) => {
               {skills.length === 0 ? (
                 <h3>Добавьте навык</h3>
               ) : (
-                skills.map((skill, index) => (
+                skills.map((skill: any, index) => (
                   <Draggable key={skill.id} draggableId={skill.id.toString()} index={index}>
                     {(provided, snapshot) => (
                       <div className={`${styles.skillItem} ${snapshot.isDragging ? styles.dragging : ''}`} ref={provided.innerRef} {...provided.draggableProps}>

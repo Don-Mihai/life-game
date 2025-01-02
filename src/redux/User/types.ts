@@ -4,7 +4,7 @@ export interface UserState {
 }
 
 export enum UserFields {
-  NAME = 'name',
+  NAME = 'firstName',
   EMAIL = 'email',
   PASSWORD = 'password'
 }
@@ -14,6 +14,10 @@ export interface IUser {
   [UserFields.NAME]: string;
   [UserFields.EMAIL]: string;
   [UserFields.PASSWORD]: string;
+  characteristics: object[];
+  tags: object[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface PAuth {

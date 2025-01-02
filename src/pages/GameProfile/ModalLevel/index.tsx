@@ -20,8 +20,8 @@ import Quote from '@editorjs/quote';
 import CodeTool from '@editorjs/code';
 import { URL, processTextLinks, processCodeBlocks } from '../../../utils';
 
-const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
-  const [editorInstance, setEditorInstance] = useState(null);
+const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }: any) => {
+  const [editorInstance, setEditorInstance] = useState<any>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,6 +38,7 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
         data: selectedLevel.levelData.description ? JSON.parse(selectedLevel.levelData.description) : {},
         tools: {
           header: Header,
+          // @ts-ignore
           embed: Embed,
           raw: Raw,
           simpleImage: SimpleImage,
@@ -61,6 +62,7 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
           const finalDescription = processCodeBlocks(savedData);
 
           dispatch(
+            // @ts-ignore
             updateSkillLevel({
               skillId: selectedLevel.skill.id, // ID навыка
               levelIndex: selectedLevel.levelIndex, // Индекс уровня
@@ -80,7 +82,7 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }) => {
   }, [selectedLevel]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: any) => {
       if (e.key === 'ArrowLeft') {
         handleChangeLevel(-1);
       } else if (e.key === 'ArrowRight') {
