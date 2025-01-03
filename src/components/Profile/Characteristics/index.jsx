@@ -1,10 +1,12 @@
 import { IconButton, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect, useState } from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import { useDispatch, useSelector } from 'react-redux';
 import { editUser } from '../../../redux/User';
+import styles from './Characteristics.module.scss';
 
 const Characteristics = () => {
   const { user } = useSelector((state) => state.user);
@@ -19,7 +21,7 @@ const Characteristics = () => {
   useEffect(() => {
     setCharacteristics(user.characteristics || []);
   }, [user]);
-  console.log(user);
+
   const handleEditField = (label) => {
     setEditingField(label);
   };
@@ -87,7 +89,7 @@ const Characteristics = () => {
           ) : (
             <>
               {value}
-              <div>
+              <div className={styles.actions}>
                 <IconButton size="small" onClick={() => handleEditField(label)} className="profile__edit-icon">
                   <EditIcon />
                 </IconButton>
@@ -122,10 +124,10 @@ const Characteristics = () => {
           </>
         ) : (
           // todo: добавление характеритсик пока уберу, потом подумать нужны ли они
-          // <IconButton onClick={() => setShowNewCharacteristicInputs(true)}>
-          //   <AddIcon />
-          // </IconButton>
-          <></>
+          <IconButton onClick={() => setShowNewCharacteristicInputs(true)}>
+            <AddIcon />
+          </IconButton>
+          // <></>
         )}
       </div>
     </>

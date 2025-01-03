@@ -9,13 +9,17 @@ export enum UserFields {
   PASSWORD = 'password'
 }
 
+export interface UserTag {
+  title: string;
+}
+
 export interface IUser {
   id: string;
   [UserFields.NAME]: string;
   [UserFields.EMAIL]: string;
   [UserFields.PASSWORD]: string;
   characteristics: object[];
-  tags: object[];
+  tags: UserTag[];
   createdAt: string;
   updatedAt: string;
 }

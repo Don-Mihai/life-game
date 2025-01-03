@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Tooltip, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 import { useDispatch } from 'react-redux';
-import { updateSkill } from '../../../../redux/Skill';
+import { updateSkill } from '../../../../../redux/Skill';
 import EmojiPicker from 'emoji-picker-react';
 import styles from './Level.module.scss';
 

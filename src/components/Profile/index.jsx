@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Avatar, { genConfig } from 'react-nice-avatar';
+import Characteristics from './Characteristics';
 
 import './Profile.scss';
 
@@ -17,6 +18,7 @@ const Profile = React.memo(() => {
       </div>
       <div className="profile__info">
         <div className="profile__item">{user.firstName}</div>
+        <Characteristics />
       </div>
     </div>
   );

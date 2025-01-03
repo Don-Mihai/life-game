@@ -7,13 +7,17 @@
   box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
   background-color: white;
 
+  &:hover [class*="Characteristics_actions"] {
+    display: block;
+  }
+
   &__hint {
     font-weight: normal;
   }
 
   &__avatar {
     display: flex;
-    align-items: center;
+    // align-items: center;
     margin-right: 5px;
   }
 
