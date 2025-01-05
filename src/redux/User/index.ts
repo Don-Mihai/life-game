@@ -60,11 +60,9 @@ export const getById = createAsyncThunk('user/getById', async (userId?: number):
 });
 
 export const auth = createAsyncThunk('user/auth', async (payload: PAuth): Promise<IUser | undefined> => {
-  try {
-    const user = (await axios.post(`${API_URL}/auth`, payload)).data;
-    localStorage.setItem(LOCAL_STORAGE_KEY, String(user.id));
-    return user;
-  } catch (error) {}
+  const user = (await axios.post(`${API_URL}/auth`, payload)).data;
+  localStorage.setItem(LOCAL_STORAGE_KEY, String(user.id));
+  return user;
 });
 
 export const register = createAsyncThunk(

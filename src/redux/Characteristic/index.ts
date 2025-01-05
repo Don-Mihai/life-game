@@ -43,6 +43,4 @@ const characteristicSlice = createSlice({
   }
 });
 
-export const {} = characteristicSlice.actions;
-
 export default characteristicSlice.reducer;

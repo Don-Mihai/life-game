@@ -20,7 +20,7 @@ const Characteristics = () => {
     <div>
       <h2>Характеристики</h2>
       {characteristics.map((item) => (
-        <div>
+        <div key={item.id}>
           {item.label + ': ' + item.value} <button onClick={() => deleteCharacteristic(item.id)}>Удалить</button>
         </div>
       ))}

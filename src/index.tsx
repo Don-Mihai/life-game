@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { LOCAL_STORAGE_KEY } from './redux/User/types';
 import Profile from './pages/Profile';
 import TreeSkill from './pages/TreeSkill';
+import Test from './pages/Test';
 import ErrorBoundary from './ErrorBoundary';
 
 const originalError = console.error;
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: '/tree/:skillId',
     element: <TreeSkill />
+  },
+  {
+    path: '/test',
+    element: <Test />
   }
 ]);
 

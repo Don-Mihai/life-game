@@ -84,4 +84,7 @@ const Level = React.memo(({ skill, levelData, i, handleLevelClick }) => {
     </React.Fragment>
   );
 });
+
+Level.displayName = 'Level';
+
 export default Level;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { updateSkillsOrder } from '../../../redux/Skill';
-import { SkillI } from '../../../redux/Skill/types';
+import { Skill as SkillI } from '../../../redux/Skill/types';
 import Skill from './Skill';
 import styles from './SkillsList.module.scss';
 import AddIcon from '@mui/icons-material/Add';
@@ -26,8 +26,8 @@ const SkillsList = ({ handleLevelClick, setOpenSkillModal }: any) => {
   };
 
   const filteredSkills = skills.filter((skill: SkillI) => {
-    const tags = skill.tags.map((tag) => tag.title);
-    return selectedTags.length === 0 || selectedTags.some((tag) => tags.includes(tag));
+    const tags = skill?.tags?.map?.((tag) => tag.title);
+    return selectedTags.length === 0 || selectedTags.some((tag) => tags?.includes(tag));
   });
 
   const onDragEnd = (result: any) => {
@@ -69,7 +69,7 @@ const SkillsList = ({ handleLevelClick, setOpenSkillModal }: any) => {
               {skills.length === 0 ? (
                 <h3>Добавьте навык</h3>
               ) : (
-                filteredSkills.map((skill: any, index) => (
+                filteredSkills.map((skill: any, index: number) => (
                   <Draggable key={skill.id} draggableId={skill.id.toString()} index={index}>
                     {(provided, snapshot) => (
                       <div className={`${styles.skillItem} ${snapshot.isDragging ? styles.dragging : ''}`} ref={provided.innerRef} {...provided.draggableProps}>
