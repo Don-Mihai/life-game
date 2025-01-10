@@ -3,8 +3,9 @@ import axios from 'axios';
 import OpenAI from 'openai';
 import { getUserId } from '../User/types.ts';
 import { URL } from '../../utils.ts';
-import { SKILL_LEVELS_JSON_SCHEMA, Skill, Level, initialState } from './types.ts';
+import { SKILL_LEVELS_JSON_SCHEMA, Skill, initialState } from './types.ts';
 import { OPEN_AI_CONFIG } from './openAIConfig.ts';
+import { Level } from '../Level/types.ts';
 
 const API_URL = `${URL}/skills`;
 const openai = new OpenAI(OPEN_AI_CONFIG);
@@ -36,14 +37,6 @@ export const deleteSkill = createAsyncThunk<string, string>('skills/deleteSkill'
   await axios.delete(`${API_URL}/${skillId}`);
   return skillId;
 });
-
-export const updateSkillLevel = createAsyncThunk<Skill, { skillId: string, levelIndex: number, description: string }>(
-  'skills/updateSkillLevel',
-  async ({ skillId, levelIndex, description }) => {
-    const response = await axios.put<Skill>(`${API_URL}/${skillId}/level`, { levelIndex, description });
-    return response.data;
-  }
-);
 
 export const generateSkillLevels = createAsyncThunk<Skill, { skillId: string, skillName: string }, { rejectValue: string }>(
   'skills/generateSkillLevels',
@@ -101,16 +94,8 @@ const skillsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSkills.pending, (state) => {
-        state.status = 'loading';
-      })
       .addCase(fetchSkills.fulfilled, (state, action) => {
-        state.status = 'succeeded';
         state.skills = action.payload;
-      })
-      .addCase(fetchSkills.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
       })
       .addCase(addSkill.fulfilled, (state, action) => {
         state.skills.push(action.payload);
@@ -124,10 +109,6 @@ const skillsSlice = createSlice({
       })
       .addCase(deleteSkill.fulfilled, (state, action) => {
         state.skills = state.skills.filter((skill) => skill.id !== action.payload);
-      })
-      .addCase(updateSkillLevel.fulfilled, (state, action) => {
-        const index = state.skills.findIndex((skill) => skill.id === action.payload.id);
-        if (index !== -1) state.skills[index] = action.payload;
       })
       .addCase(generateSkillLevels.fulfilled, (state, action) => {
         const index = state.skills.findIndex((skill) => skill.id === action.payload.id);

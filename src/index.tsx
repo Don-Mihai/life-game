@@ -1,16 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import GameProfile from './pages/GameProfile';
-import Characteristics from './pages/Characteristics';
-import Auth from './pages/GameProfile/Auth';
+import ErrorBoundary from './ErrorBoundary';
+
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { LOCAL_STORAGE_KEY } from './redux/User/types';
+
+import GameProfile from './pages/GameProfile';
+import Characteristics from './pages/Characteristics';
+import Auth from './pages/GameProfile/Auth';
 import Profile from './pages/Profile';
 import TreeSkill from './pages/TreeSkill';
 import Test from './pages/Test';
-import ErrorBoundary from './ErrorBoundary';
+
+// const LazyGameProfile = lazy(() => import('./pages/GameProfile'));
+// const LazyCharacteristics = lazy(() => import('./pages/Characteristics'));
+// const LazyTreeSkill = lazy(() => import('./pages/TreeSkill'));
+// const LazyTest = lazy(() => import('./pages/Test'));
+// const LazyProfile = lazy(() => import('./pages/Profile'));
 
 const originalError = console.error;
 console.error = (...args) => {

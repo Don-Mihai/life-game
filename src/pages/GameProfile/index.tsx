@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Modal, Typography, TextField, Button } from '@mui/material';
 import './LifeStats.module.scss';
 import Profile from '../../components/Profile/index.jsx';
-import SplitButton from '../../components/DropDownButton/index.jsx';
 import ModalLevel from './ModalLevel';
 import { addSkill, fetchSkills, updateSkill } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,20 +10,18 @@ import ChartBuilderModal from '../../components/ChartBuilderModal/index.jsx';
 import { getById } from '../../redux/User';
 import SkillsList from './SkillsList';
 import BasicMenu from '../../components/MenuButton';
-import { RootState } from '../../redux/store';
+import { AppDispatch, RootState } from '../../redux/store';
 
 const GameProfile = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { status } = useSelector((state: RootState) => state.skill);
   const [selectedLevel, setSelectedLevel] = useState<any>(null);
   const [openSkillModal, setOpenSkillModal] = useState(false);
-  const [newSkillName, setNewSkillName] = useState('');
+  const [newSkillName, setNewSkillName] = useState('Бэкэнд'); // Фронтенд
   const [isBuilderEnabled, setBuilderEnabled] = useState(false);
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(fetchSkills());
-    // @ts-ignore
     dispatch(getById());
   }, [dispatch]);
 
@@ -42,7 +39,7 @@ const GameProfile = () => {
     if (!newSkillName.trim()) return;
     try {
       // @ts-ignore
-      await dispatch(addSkill({ name: newSkillName, levels: [] })).unwrap();
+      await dispatch(addSkill({ name: newSkillName })).unwrap();
       setNewSkillName('');
       setOpenSkillModal(false);
     } catch (err) {

@@ -1,93 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { OrganizationChart, OrganizationChartNodeData } from 'primereact/organizationchart';
+import { OrganizationChart } from 'primereact/organizationchart';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { addLevel, getTreeLevelsById, updateNodePosition } from '../../redux/Level';
+import { useOrganizationChart } from './useOrganizationChart';
 
 const DragDropOrganizationChart = () => {
   const { skillId } = useParams<{ skillId: string }>();
-  const skills = useSelector((state: RootState) => state.skill.skills);
-  const [data, setData] = useState<OrganizationChartNodeData[]>([{}]);
+  const levelsTree = useSelector((state: RootState) => state.level.levelsTree);
+  const { setData, data, onDragStart, onDrop } = useOrganizationChart(levelsTree);
+
+  const [nodeCounter, setNodeCounter] = useState(1); // Счетчик для новых узлов
+  const dispatch = useDispatch<AppDispatch>();
+
+  const getTreeLevels = async (skillId: string) => {
+    await dispatch(getTreeLevelsById(skillId));
+  };
 
   useEffect(() => {
-    // Находим нужный навык по skillId
-    const skill = skills.find((skill) => skill.id === skillId);
+    getTreeLevels(skillId || '');
+  }, [skillId]);
 
-    if (skill && skill.levels) {
-      // Преобразуем уровни в структуру для OrganizationChart
-      const transformedData = transformLevelsToTree(skill.levels);
-      setData(transformedData);
-    }
-  }, [skillId, skills]);
+  const addNewLevel = async () => {
+    const newLevel: any = {
+      name: `Уровень ${nodeCounter}`,
+      skillId,
+      parentId: data[0]?.data?.id || null
+    };
 
-  const transformLevelsToTree = (levels: any[]): any[] => {
-    // Создаем карту уровней для удобства
-    const levelsMap = levels.reduce(
-      (acc, level) => {
-        acc[level.id] = { ...level, children: [] };
-        return acc;
-      },
-      {} as Record<string, any>
-    );
+    const updatedData = [{ ...data[0], children: [...data[0].children, { data: newLevel }] }];
+    setData(updatedData);
+    setNodeCounter((prev) => prev + 1); // Увеличиваем счетчик
 
-    const rootNodes: any[] = [];
-
-    levels.forEach((level) => {
-      if (level.parentId) {
-        levelsMap[level.parentId].children.push(levelsMap[level.id]);
-      } else {
-        rootNodes.push(levelsMap[level.id]);
-      }
-    });
-
-    return rootNodes;
+    dispatch(addLevel(newLevel));
   };
 
-  const onDragStart = (event: React.DragEvent, node: any) => {
-    event.dataTransfer.setData('node', JSON.stringify(node));
-  };
-
-  const onDrop = (event: React.DragEvent, targetNode: any) => {
-    const draggedNode = JSON.parse(event.dataTransfer.getData('node'));
-
-    if (draggedNode && draggedNode.id !== targetNode.id) {
-      const updatedTree = moveNode(data, draggedNode, targetNode);
-      setData(updatedTree);
-    }
-  };
-
-  const moveNode = (nodes: any[], draggedNode: any, targetNode: any): any[] => {
-    const filteredNodes = removeNode(nodes, draggedNode);
-    const updatedTree = addNode(filteredNodes, draggedNode, targetNode);
-    return updatedTree;
-  };
-
-  const removeNode = (nodes: any[], draggedNode: any): any[] => {
-    return nodes
-      .map((node) => {
-        if (node.id === draggedNode.id) {
-          return null;
-        }
-        if (node.children) {
-          node.children = removeNode(node.children, draggedNode);
-        }
-        return node;
+  const handleUpdateNodePosition = (draggedNode: any, targetNode: any) => {
+    dispatch(
+      updateNodePosition({
+        levelId: draggedNode.data.id,
+        newParentId: targetNode.data.id,
+        oldParentId: draggedNode.data.parentId
       })
-      .filter((node) => node !== null);
-  };
-
-  const addNode = (nodes: any[], draggedNode: any, targetNode: any): any[] => {
-    return nodes.map((node) => {
-      if (node.id === targetNode.id) {
-        if (!node.children) {
-          node.children = [];
-        }
-        node.children.push(draggedNode);
-      } else if (node.children) {
-        node.children = addNode(node.children, draggedNode, targetNode);
-      }
-      return node;
-    });
+    );
   };
 
   const renderNode = (node: any) => {
@@ -95,7 +51,7 @@ const DragDropOrganizationChart = () => {
       <div
         draggable
         onDragStart={(e) => onDragStart(e, node)}
-        onDrop={(e) => onDrop(e, node)}
+        onDrop={(e) => onDrop(e, node, handleUpdateNodePosition)}
         onDragOver={(e) => e.preventDefault()}
         style={{
           padding: '5px',
@@ -104,12 +60,19 @@ const DragDropOrganizationChart = () => {
           cursor: 'move'
         }}
       >
-        {node.name}
+        {node?.data?.name || 'Новый уровень'}
       </div>
     );
   };
 
-  return <OrganizationChart value={data} nodeTemplate={renderNode} />;
+  return (
+    <div>
+      <button onClick={addNewLevel} style={{ marginBottom: '10px' }}>
+        Создать уровень
+      </button>
+      <OrganizationChart value={data} nodeTemplate={renderNode} />
+    </div>
+  );
 };
 
 export default DragDropOrganizationChart;

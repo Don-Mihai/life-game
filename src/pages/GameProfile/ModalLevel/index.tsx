@@ -5,7 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import styles from './ModalLevel.module.scss';
 import EditorJS from '@editorjs/editorjs';
-import { updateSkillLevel } from '../../../redux/Skill';
+// import { updateSkillLevel } from '../../../redux/Skill';
 import { useDispatch } from 'react-redux';
 
 import Header from '@editorjs/header';
@@ -61,14 +61,14 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }: any)
           // const updatedDescription = processTextLinks(savedData);
           const finalDescription = processCodeBlocks(savedData);
 
-          dispatch(
-            // @ts-ignore
-            updateSkillLevel({
-              skillId: selectedLevel.skill.id, // ID навыка
-              levelIndex: selectedLevel.levelIndex, // Индекс уровня
-              description: JSON.stringify(finalDescription) // Новые данные уровня
-            })
-          );
+          // dispatch(
+          //   // @ts-ignore
+          //   updateSkillLevel({
+          //     skillId: selectedLevel.skill.id, // ID навыка
+          //     levelIndex: selectedLevel.levelIndex, // Индекс уровня
+          //     description: JSON.stringify(finalDescription) // Новые данные уровня
+          //   })
+          // );
         }
       });
       setEditorInstance(editor);
