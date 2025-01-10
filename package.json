@@ -31,6 +31,7 @@
     "immutability-helper": "^3.1.1",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
+    "lodash": "^4.17.21",
     "openai": "^4.72.0",
     "pdfmake": "^0.2.15",
     "primeicons": "^7.0.0",
@@ -87,6 +88,7 @@
   },
   "devDependencies": {
     "@iconify/icons-mdi": "^1.2.48",
+    "@types/lodash": "^4.17.14",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "husky": "^9.1.6",

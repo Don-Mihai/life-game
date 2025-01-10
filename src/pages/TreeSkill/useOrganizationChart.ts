@@ -1,8 +1,7 @@
-import { OrganizationChartNodeData } from 'primereact/organizationchart';
 import { useEffect, useState } from 'react';
 
-export const useOrganizationChart = (levelsTree: OrganizationChartNodeData) => {
-  const [data, setData] = useState<OrganizationChartNodeData[]>([{}]);
+export const useOrganizationChart = <T>(levelsTree: T) => {
+  const [data, setData] = useState<T[]>([{} as T]);
 
   useEffect(() => {
     setData([levelsTree]);

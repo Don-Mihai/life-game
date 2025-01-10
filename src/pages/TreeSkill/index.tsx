@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { OrganizationChart } from 'primereact/organizationchart';
+import { OrganizationChart, OrganizationChartNodeData } from 'primereact/organizationchart';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
@@ -9,7 +9,7 @@ import { useOrganizationChart } from './useOrganizationChart';
 const DragDropOrganizationChart = () => {
   const { skillId } = useParams<{ skillId: string }>();
   const levelsTree = useSelector((state: RootState) => state.level.levelsTree);
-  const { setData, data, onDragStart, onDrop } = useOrganizationChart(levelsTree);
+  const { setData, data, onDragStart, onDrop } = useOrganizationChart<OrganizationChartNodeData>(levelsTree);
 
   const [nodeCounter, setNodeCounter] = useState(1); // Счетчик для новых узлов
   const dispatch = useDispatch<AppDispatch>();

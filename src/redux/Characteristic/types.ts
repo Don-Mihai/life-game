@@ -8,3 +8,8 @@ export interface InitialState {
   characteristics: Characteristic[];
   isLoading: boolean;
 }
+
+export const initialState: InitialState = {
+  characteristics: [],
+  isLoading: false
+};
