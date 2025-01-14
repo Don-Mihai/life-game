@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 import { generateSkillLevels, updateSkill, deleteSkill } from '../../../../redux/Skill';
+import { addLevel } from '../../../../redux/Level';
 import styles from './Skill.module.scss';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
@@ -26,11 +27,6 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
   const [inputValue, setInputValue] = useState('');
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Если теги изменились, обновляем локальное состояние и отправляем на сервер
-    dispatch(updateSkill({ ...skill, tags }));
-  }, [tags.length, skill.id]);
 
   const handleKeyDownTags = (event) => {
     if (event.key === 'Enter' && inputValue && !tags.some((tag) => tag.title === inputValue)) {
@@ -61,16 +57,10 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
 
   const handleAddLevel = () => {
     const newLevel = {
-      task: '',
-      completed: false
+      skillId: skill.id
     };
 
-    const updatedSkill = {
-      ...skill,
-      levels: [...skill.levels, newLevel]
-    };
-
-    dispatch(updateSkill(updatedSkill));
+    dispatch(addLevel(newLevel));
   };
 
   const toggleExpand = () => {

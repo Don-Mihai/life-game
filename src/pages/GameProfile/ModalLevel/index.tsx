@@ -5,7 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import styles from './ModalLevel.module.scss';
 import EditorJS from '@editorjs/editorjs';
-// import { updateSkillLevel } from '../../../redux/Skill';
+import { updateLevel } from '../../../redux/Level';
 import { useDispatch } from 'react-redux';
 
 import Header from '@editorjs/header';
@@ -19,10 +19,11 @@ import Quote from '@editorjs/quote';
 // import LinkTool from '@editorjs/link';
 import CodeTool from '@editorjs/code';
 import { URL, processTextLinks, processCodeBlocks } from '../../../utils';
+import { AppDispatch } from '../../../redux/store';
 
 const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }: any) => {
   const [editorInstance, setEditorInstance] = useState<any>(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (selectedLevel && selectedLevel.levelData) {
@@ -58,17 +59,16 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }: any)
           const savedData = await editor.save();
 
           // Обработка текста и поиск ссылок
-          // const updatedDescription = processTextLinks(savedData);
-          const finalDescription = processCodeBlocks(savedData);
+          const updatedDescription = processTextLinks(savedData);
+          const finalDescription = processCodeBlocks(updatedDescription);
 
-          // dispatch(
-          //   // @ts-ignore
-          //   updateSkillLevel({
-          //     skillId: selectedLevel.skill.id, // ID навыка
-          //     levelIndex: selectedLevel.levelIndex, // Индекс уровня
-          //     description: JSON.stringify(finalDescription) // Новые данные уровня
-          //   })
-          // );
+          dispatch(
+            updateLevel({
+              skillId: selectedLevel.skill.id, // ID навыка
+              id: selectedLevel.levelData.id,
+              description: JSON.stringify(finalDescription) // Новые данные уровня
+            })
+          );
         }
       });
       setEditorInstance(editor);

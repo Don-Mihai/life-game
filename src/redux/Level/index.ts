@@ -7,20 +7,17 @@ import { OrganizationChartNodeData } from 'primereact/organizationchart';
 
 const API_URL = `${URL}/levels`;
 
-export const addLevel = createAsyncThunk<Level, Omit<Level, 'id'>>('skills/addLevel', async (newLevel) => {
+export const addLevel = createAsyncThunk<Level, Omit<Level, 'id'>>('levels/addLevel', async (newLevel) => {
   const response = await axios.post<Level>(API_URL, { ...newLevel, userId: getUserId() });
   return response.data;
 });
 
-// export const updateSkillLevel = createAsyncThunk<Skill, { skillId: string, levelIndex: number, description: string }>(
-//   'skills/updateSkillLevel',
-//   async ({ skillId, levelIndex, description }) => {
-//     const response = await axios.put<Skill>(`${API_URL}/${skillId}`, { levelIndex, description });
-//     return response.data;
-//   }
-// );
+export const updateLevel = createAsyncThunk<Level, any>('levels/updateLevel', async (payload) => {
+  const response = await axios.put<Level>(`${API_URL}/${payload.skillId}/update-data`, payload);
+  return response.data;
+});
 
-export const getTreeLevelsById = createAsyncThunk<OrganizationChartNodeData, string>('skills/getTreeLevelsById', async (skillId) => {
+export const getTreeLevelsById = createAsyncThunk<OrganizationChartNodeData, string>('levels/getTreeLevelsById', async (skillId) => {
   const response = await axios.get<OrganizationChartNodeData>(`${API_URL}/${skillId}/tree-levels`);
   return response.data;
 });

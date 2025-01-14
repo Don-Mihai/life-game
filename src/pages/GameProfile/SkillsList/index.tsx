@@ -41,6 +41,8 @@ const SkillsList = ({ handleLevelClick, setOpenSkillModal }: any) => {
     dispatch(updateSkillsOrder(reorderedSkills));
   };
 
+  console.log(skills);
+
   return (
     <div className={styles.skills}>
       <FormControl sx={{ m: 1, width: 300 }}>

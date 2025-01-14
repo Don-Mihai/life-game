@@ -15,7 +15,7 @@ export const fetchSkills = createAsyncThunk<Skill[]>('skills/fetchSkills', async
   return response.data;
 });
 
-export const addSkill = createAsyncThunk<Skill, Omit<Skill, 'id'>>('skills/addSkill', async (newSkill) => {
+export const addSkill = createAsyncThunk<Skill, Partial<Skill>>('skills/addSkill', async (newSkill) => {
   const response = await axios.post<Skill>(API_URL, { ...newSkill, userId: getUserId() });
   return response.data;
 });

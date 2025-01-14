@@ -23,7 +23,7 @@ const GameProfile = () => {
   useEffect(() => {
     dispatch(fetchSkills());
     dispatch(getById());
-  }, [dispatch]);
+  }, []);
 
   const handleCloseBuilder = () => {
     setBuilderEnabled(false);
@@ -38,7 +38,6 @@ const GameProfile = () => {
   const handleAddSkill = async () => {
     if (!newSkillName.trim()) return;
     try {
-      // @ts-ignore
       await dispatch(addSkill({ name: newSkillName })).unwrap();
       setNewSkillName('');
       setOpenSkillModal(false);
@@ -58,7 +57,6 @@ const GameProfile = () => {
         ...skill,
         levels: skill.levels.map((level: any) => (level.level === updatedLevel.level ? updatedLevel : level))
       };
-      // @ts-ignore
       await dispatch(updateSkill(updatedSkill)).unwrap();
       setSelectedLevel(null);
     } catch (err) {
