@@ -1,4 +1,4 @@
-import { OrganizationChartNodeData } from 'primereact/organizationchart';
+import { TreeNode } from 'primereact/treenode';
 
 // Интерфейс для уровня навыка
 export interface Level {
@@ -14,8 +14,26 @@ export interface Level {
   skillId: string; // Идентификатор навыка
 }
 
-interface LevelState {
-  levelsTree: OrganizationChartNodeData;
+interface NodeTreeData {
+  id: string;
+  parentId: string;
+  image: string;
+  name: string;
+  description: string;
 }
 
-export const initialState: LevelState = { levelsTree: { children: [] } as OrganizationChartNodeData };
+export interface TreeNodeI extends TreeNode {
+  data: NodeTreeData;
+}
+
+interface LevelState {
+  levelsTree: TreeNodeI;
+}
+
+export const initialState: LevelState = { levelsTree: { children: [], data: {} as NodeTreeData } as TreeNodeI };
+
+export interface UpdateNodePositionPayload {
+  levelId: string;
+  newParentId: string;
+  oldParentId: string;
+}

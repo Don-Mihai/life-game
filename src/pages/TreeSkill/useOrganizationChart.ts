@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+type ExtendedT<T> = T & { data: any, children: ExtendedT<T>[] };
 
 export const useOrganizationChart = <T>(levelsTree: T) => {
   const [data, setData] = useState<T[]>([{} as T]);
@@ -7,15 +8,15 @@ export const useOrganizationChart = <T>(levelsTree: T) => {
     setData([levelsTree]);
   }, [levelsTree]);
 
-  const onDragStart = (event: React.DragEvent, node: any) => {
+  const onDragStart = (event: React.DragEvent, node: T) => {
     event.dataTransfer.setData('node', JSON.stringify(node));
   };
 
-  const onDrop = (event: React.DragEvent, targetNode: any, callback: (draggedNode: any, targetNode: any) => void) => {
+  const onDrop = (event: React.DragEvent, targetNode: any, callback: (draggedNode: ExtendedT<T>, targetNode: ExtendedT<T>) => void) => {
     const draggedNode = JSON.parse(event.dataTransfer.getData('node'));
 
     if (draggedNode && draggedNode.data.id !== targetNode.data.id) {
-      const updatedTree = moveNode(data, draggedNode, targetNode);
+      const updatedTree = moveNode(data as ExtendedT<T>[], draggedNode, targetNode);
 
       console.log(updatedTree);
       setData(updatedTree);
@@ -24,7 +25,7 @@ export const useOrganizationChart = <T>(levelsTree: T) => {
     }
   };
 
-  const removeNode = (nodes: any[], draggedNode: any): any[] => {
+  const removeNode = (nodes: ExtendedT<T>[], draggedNode: ExtendedT<T>): ExtendedT<T>[] => {
     return nodes
       .map((node) => {
         if (node.data.id === draggedNode.data.id) {
@@ -44,7 +45,7 @@ export const useOrganizationChart = <T>(levelsTree: T) => {
       .filter((node) => node !== null); // Фильтруем удаленные узлы
   };
 
-  const addNode = (nodes: any[], draggedNode: any, targetNode: any): any[] => {
+  const addNode = (nodes: ExtendedT<T>[], draggedNode: ExtendedT<T>, targetNode: ExtendedT<T>): ExtendedT<T>[] => {
     return nodes.map((node) => {
       if (node.data.id === targetNode.data.id) {
         if (!node?.children?.length) {
@@ -58,7 +59,7 @@ export const useOrganizationChart = <T>(levelsTree: T) => {
     });
   };
 
-  const moveNode = (nodes: any[], draggedNode: any, targetNode: any): any[] => {
+  const moveNode = (nodes: ExtendedT<T>[], draggedNode: ExtendedT<T>, targetNode: ExtendedT<T>): ExtendedT<T>[] => {
     const filteredNodes = removeNode(nodes, draggedNode);
     const updatedTree = addNode(filteredNodes, draggedNode, targetNode);
     return updatedTree;

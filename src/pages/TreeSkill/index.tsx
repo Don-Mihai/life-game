@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { OrganizationChart, OrganizationChartNodeData } from 'primereact/organizationchart';
+import { OrganizationChart } from 'primereact/organizationchart';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { addLevel, getTreeLevelsById, updateNodePosition } from '../../redux/Level';
 import { useOrganizationChart } from './useOrganizationChart';
+import { Level, TreeNodeI } from '../../redux/Level/types';
 
 const DragDropOrganizationChart = () => {
   const { skillId } = useParams<{ skillId: string }>();
   const levelsTree = useSelector((state: RootState) => state.level.levelsTree);
-  const { setData, data, onDragStart, onDrop } = useOrganizationChart<OrganizationChartNodeData>(levelsTree);
+  const { setData, data, onDragStart, onDrop } = useOrganizationChart<TreeNodeI>(levelsTree);
 
   const [nodeCounter, setNodeCounter] = useState(1); // Счетчик для новых узлов
   const dispatch = useDispatch<AppDispatch>();
@@ -23,21 +24,22 @@ const DragDropOrganizationChart = () => {
   }, [skillId]);
 
   const addNewLevel = async () => {
-    const newLevel: any = {
+    const newLevel: Partial<Level> = {
       name: `Уровень ${nodeCounter}`,
       skillId,
-      //todo: расширить интерфейс
       parentId: data[0]?.data?.id || null
     };
 
-    const updatedData = [{ ...data[0], children: [...data[0].children, { data: newLevel }] }];
+    const rootLevel = data[0];
+
+    const updatedData = [{ ...rootLevel, children: [...(rootLevel.children as []), { data: newLevel }] }];
     setData(updatedData);
     setNodeCounter((prev) => prev + 1); // Увеличиваем счетчик
 
     dispatch(addLevel(newLevel));
   };
 
-  const handleUpdateNodePosition = (draggedNode: any, targetNode: any) => {
+  const handleUpdateNodePosition = (draggedNode: TreeNodeI, targetNode: TreeNodeI) => {
     dispatch(
       updateNodePosition({
         levelId: draggedNode.data.id,
@@ -47,7 +49,7 @@ const DragDropOrganizationChart = () => {
     );
   };
 
-  const renderNode = (node: any) => {
+  const renderNode = (node: TreeNodeI) => {
     return (
       <div
         draggable
