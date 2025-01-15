@@ -19,7 +19,8 @@ import Quote from '@editorjs/quote';
 // import LinkTool from '@editorjs/link';
 import CodeTool from '@editorjs/code';
 import { URL, processTextLinks, processCodeBlocks } from '../../../utils';
-import { AppDispatch } from '../../../redux/store';
+import { AppDispatch, RootState } from '../../../redux/store';
+import { useSelector } from 'react-redux';
 
 const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }: any) => {
   const [editorInstance, setEditorInstance] = useState<any>(null);

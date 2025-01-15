@@ -40,7 +40,7 @@ export const SKILL_LEVELS_JSON_SCHEMA = {
     required: ['levels']
   }
 };
-interface SkillState {
+export interface SkillState {
   skills: Skill[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null | undefined;

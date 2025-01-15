@@ -90,6 +90,10 @@ const skillsSlice = createSlice({
   reducers: {
     reorderSkills: (state, action) => {
       state.skills = action.payload;
+    },
+    updateSkillLocal: (state, action) => {
+      const index = state.skills.findIndex((skill) => skill.id === action.payload.id);
+      if (index !== -1) state.skills[index] = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -117,5 +121,5 @@ const skillsSlice = createSlice({
   }
 });
 
-export const { reorderSkills } = skillsSlice.actions;
+export const { reorderSkills, updateSkillLocal } = skillsSlice.actions;
 export default skillsSlice.reducer;

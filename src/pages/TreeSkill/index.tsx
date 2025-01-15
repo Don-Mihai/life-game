@@ -26,6 +26,7 @@ const DragDropOrganizationChart = () => {
     const newLevel: any = {
       name: `Уровень ${nodeCounter}`,
       skillId,
+      //todo: расширить интерфейс
       parentId: data[0]?.data?.id || null
     };
 

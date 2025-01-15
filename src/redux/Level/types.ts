@@ -11,6 +11,7 @@ export interface Level {
   children: string[]; // Дочерние уровни (id)
   createdAt?: string; // Временная метка создания
   updatedAt?: string; // Временная метка обновления
+  skillId: string; // Идентификатор навыка
 }
 
 interface LevelState {

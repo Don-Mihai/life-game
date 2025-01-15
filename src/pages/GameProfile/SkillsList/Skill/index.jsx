@@ -57,7 +57,8 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
 
   const handleAddLevel = () => {
     const newLevel = {
-      skillId: skill.id
+      skillId: skill.id,
+      parentId: skill.levels.length ? skill.levels[skill.levels.length - 1].id : null
     };
 
     dispatch(addLevel(newLevel));
