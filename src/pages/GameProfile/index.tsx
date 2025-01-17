@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
 import ChartBuilderModal from '../../components/ChartBuilderModal/index.jsx';
 import { getById } from '../../redux/User';
-import SkillsList from './SkillsList';
+import Tabs from './Tabs';
 import BasicMenu from '../../components/MenuButton';
 import { AppDispatch, RootState } from '../../redux/store';
 
@@ -16,8 +16,7 @@ const GameProfile = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { status } = useSelector((state: RootState) => state.skill);
   const [selectedLevel, setSelectedLevel] = useState<any>(null);
-  const [openSkillModal, setOpenSkillModal] = useState(false);
-  const [newSkillName, setNewSkillName] = useState('Бэкэнд'); // Фронтенд
+
   const [isBuilderEnabled, setBuilderEnabled] = useState(false);
 
   useEffect(() => {
@@ -32,19 +31,6 @@ const GameProfile = () => {
   const handleLevelClick = useCallback((skill: any, levelData: any, levelIndex: number) => setSelectedLevel({ skill, levelData, levelIndex }), []);
 
   const handleCloseModal = () => setSelectedLevel(null);
-
-  const handleSkillNameChange = (e: any) => setNewSkillName(e.target.value);
-
-  const handleAddSkill = async () => {
-    if (!newSkillName.trim()) return;
-    try {
-      await dispatch(addSkill({ name: newSkillName })).unwrap();
-      setNewSkillName('');
-      setOpenSkillModal(false);
-    } catch (err) {
-      console.error('Error adding skill:', err);
-    }
-  };
 
   const handleEditSkill = async (skill: any, updatedLevel: any) => {
     if (!skill?.levels) {
@@ -92,19 +78,7 @@ const GameProfile = () => {
 
       <Profile />
 
-      {/* Используем новый компонент SkillsList */}
-      <SkillsList handleLevelClick={handleLevelClick} setOpenSkillModal={setOpenSkillModal} />
-
-      {/* Модальное окно для добавления навыка */}
-      <Modal open={openSkillModal} onClose={() => setOpenSkillModal(false)}>
-        <div className={styles.modalBox}>
-          <Typography variant="h6">Добавить новый навык</Typography>
-          <TextField name="name" label="Имя навыка" value={newSkillName} onChange={handleSkillNameChange} fullWidth margin="normal" />
-          <Button onClick={handleAddSkill} variant="contained" color="primary">
-            Сохранить навык
-          </Button>
-        </div>
-      </Modal>
+      <Tabs handleLevelClick={handleLevelClick} />
 
       {/* Модальное окно для редактирования выбранного уровня */}
       {selectedLevel && (

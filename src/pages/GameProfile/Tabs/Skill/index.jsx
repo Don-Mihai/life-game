@@ -68,7 +68,7 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
     setIsExpanded(!isExpanded);
   };
 
-  const lastCompletedLevelIndex = skill.levels.findIndex((level) => !level.completed) - 1;
+  const lastCompletedLevelIndex = skill.levels?.findIndex?.((level) => !level.completed) - 1;
 
   const handleGenerateLevels = () => {
     dispatch(generateSkillLevels({ skillId: skill.id, skillName: skill.name }));

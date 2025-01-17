@@ -27,9 +27,16 @@ export const addLevel = createAsyncThunk<Level, Partial<Level>>('levels/addLevel
   return newLevelData;
 });
 
-export const updateLevel = createAsyncThunk<Level, Partial<Level>>('levels/updateLevel', async (payload) => {
-  const response = await axios.put<Level>(`${API_URL}/${payload.skillId}/update-data`, payload);
-  return response.data;
+export const updateLevel = createAsyncThunk<Level, Partial<Level>>('levels/updateLevel', async (payload, { getState, dispatch }) => {
+  const updatedLevel = (await axios.put<Level>(`${API_URL}/${payload.skillId}/update-data`, payload)).data;
+  const skills = (getState() as { skill: SkillState }).skill.skills;
+  const skill = skills.find((skill) => skill.id === updatedLevel.skillId);
+
+  if (skill && skill.levels) {
+    dispatch(updateSkillLocal({ ...skill, levels: skill.levels.map((level) => (level.id === updatedLevel.id ? updatedLevel : level)) }));
+  }
+
+  return updatedLevel;
 });
 
 export const getTreeLevelsById = createAsyncThunk<TreeNodeI, string>('levels/getTreeLevelsById', async (skillId) => {
