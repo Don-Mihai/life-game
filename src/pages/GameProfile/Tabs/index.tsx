@@ -1,41 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styles from './Tabs.module.scss';
 import AddIcon from '@mui/icons-material/Add';
-
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { IconButton, Tabs as MaterialTabs, Tab as MaterialTab } from '@mui/material';
+
 import SkillList from './SkillList';
+import TabContent from './TabContent';
+import { a11yProps } from './utils';
+import { Category } from '../../../redux/Category/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../../redux/store';
+import { addCategory, deleteCategory, editCategory, updateCategoryOrder } from '../../../redux/Category';
 
-function a11yProps(index: number) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`
-  };
-}
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 
-function TabPanel(props: any) {
-  const { children, tab, index, ...other } = props;
-
-  return (
-    <div
-      style={{ width: '100%', borderTop: '1px solid #e0e0e0' }}
-      role="tabpanel"
-      hidden={tab !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {tab === index && <div>{children}</div>}
-    </div>
-  );
-}
-
-const Tabs = ({ handleLevelClick, setOpenSkillModal }: any) => {
+const Tabs = ({ handleLevelClick }: any) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [tab, setTab] = React.useState(0);
-  const [tabs, setTabs] = useState([{ label: 'Все навыки' }, { label: 'Мои навыки' }]);
+  const user = useSelector((state: RootState) => state.user.user);
+  const [tab, setTab] = useState(0);
+  const [tabs, setTabs] = useState<Category[]>([]);
 
-  const handleChangeTab = (_: any, newValue: number) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleChangeTab = (_: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
 
@@ -43,40 +31,93 @@ const Tabs = ({ handleLevelClick, setOpenSkillModal }: any) => {
   //todo: добавить новое ствойство категории
   //todo: сделать перетаскивание табов между категориями
 
-  const handleAddTab = () => {
+  useEffect(() => {
+    if (user?.categories) {
+      setTabs(user.categories);
+    }
+  }, [user?.categories]);
+
+  const handleDeleteTab = async (id: string) => {
+    const category = await dispatch(deleteCategory(id)).unwrap();
+
+    setTabs(tabs.filter((tab) => tab.id !== category.id));
+  };
+
+  const handleEditTab = async (id: string) => {
+    const newTab = {
+      id,
+      label: 'new name'
+    };
+
+    const category = await dispatch(editCategory(newTab)).unwrap();
+
+    setTabs(tabs.map((tab) => (tab.id === id ? category : tab)));
+  };
+
+  const handleAddTab = async () => {
     const newTab = { label: `Новая категория ${tabs.length + 1}` };
-    setTabs([...tabs, newTab]);
+
+    const tab = await dispatch(addCategory(newTab)).unwrap();
+
+    setTabs([...tabs, tab]);
+  };
+
+  const onDragEnd = (result: DropResult<string>) => {
+    if (!result.destination) return;
+
+    const reorderedTabs = Array.from(tabs);
+    const [movedTab] = reorderedTabs.splice(result.source.index, 1);
+    reorderedTabs.splice(result.destination.index, 0, movedTab);
+
+    dispatch(updateCategoryOrder(reorderedTabs));
   };
 
   return (
     <div className={styles.tabs}>
-      <MaterialTabs
-        value={tab}
-        onChange={handleChangeTab}
-        indicatorColor="primary"
-        textColor="inherit"
-        variant="fullWidth"
-        aria-label="full width tabs example"
-        className={styles.tabsTop}
-      >
-        {tabs.map((tab, index) => (
-          // контекст клика сделать через функцию onContext а не оборачивать
-          <MaterialTab key={index} label={tab.label} {...a11yProps(index)} />
-        ))}
-        <IconButton onClick={handleAddTab}>
-          <AddIcon />
-        </IconButton>
-      </MaterialTabs>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="skillsDroppable">
+          {(provided) => (
+            <MaterialTabs
+              value={tab}
+              onChange={handleChangeTab}
+              indicatorColor="primary"
+              textColor="inherit"
+              variant="fullWidth"
+              aria-label="full width tabs example"
+              className={styles.tabsTop}
+            >
+              <MaterialTab key={'all'} label={'Все навыки'} {...a11yProps('all')} />
+              {tabs.map((tab, index) => (
+                // контекст клика сделать через функцию onContext а не оборачивать
+                <MaterialTab
+                  icon={
+                    <div {...provided.dragHandleProps} className={styles.dragHandle}>
+                      <DragIndicatorIcon />
+                    </div>
+                  }
+                  iconPosition="start"
+                  key={index}
+                  label={tab.label}
+                  {...a11yProps(index)}
+                />
+              ))}
+              <IconButton onClick={handleAddTab}>
+                <AddIcon />
+              </IconButton>
+            </MaterialTabs>
+          )}
+        </Droppable>
+      </DragDropContext>
 
-      <TabPanel tab={tab} index={0}>
+      <TabContent tab={tab} index={0}>
         <SkillList selectedTags={selectedTags} setSelectedTags={setSelectedTags} handleLevelClick={handleLevelClick} />
-      </TabPanel>
-      <TabPanel tab={tab} index={1}>
+      </TabContent>
+      <TabContent tab={tab} index={1}>
         Item Two
-      </TabPanel>
-      <TabPanel tab={tab} index={2}>
+      </TabContent>
+      <TabContent tab={tab} index={2}>
         Item Three
-      </TabPanel>
+      </TabContent>
     </div>
   );
 };

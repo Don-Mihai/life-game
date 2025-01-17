@@ -1,5 +1,7 @@
+import { Category } from '../Category/types';
+
 export interface UserState {
-  user: null | IUser;
+  user: IUser;
   users: IUser[];
 }
 
@@ -20,6 +22,7 @@ export interface IUser {
   [UserFields.PASSWORD]: string;
   characteristics: object[];
   tags: UserTag[];
+  categories: Category[];
   createdAt: string;
   updatedAt: string;
 }
