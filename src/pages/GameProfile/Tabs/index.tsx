@@ -69,7 +69,7 @@ const Tabs = ({ handleLevelClick, setOpenSkillModal }: any) => {
       </MaterialTabs>
 
       <TabPanel tab={tab} index={0}>
-        <SkillList selectedTags={selectedTags} setSelectedTags={setSelectedTags} setOpenSkillModal={setOpenSkillModal} handleLevelClick={handleLevelClick} />
+        <SkillList selectedTags={selectedTags} setSelectedTags={setSelectedTags} handleLevelClick={handleLevelClick} />
       </TabPanel>
       <TabPanel tab={tab} index={1}>
         Item Two
