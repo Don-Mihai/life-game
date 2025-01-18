@@ -3,9 +3,24 @@
 }
 
 .tabsTop {
+  display: flex;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 }
 
 .dragHandle {
   cursor: grab;
+}
+
+.tabsContainer {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.tabItem {
+  display: inline-flex;
+  align-items: center;
+}
+
+.dragging {
+  background-color: rgba(0, 0, 0, 0.1); /* Выделение элемента во время перетаскивания */
 }

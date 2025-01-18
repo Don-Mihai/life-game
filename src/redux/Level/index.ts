@@ -56,6 +56,12 @@ export const updateNodePosition = createAsyncThunk<Level, UpdateNodePositionPayl
   }
 );
 
+export const deleteLevel = createAsyncThunk<Level, Partial<Level>>('levels/deleteLevel', async (newLevel) => {
+  const response = await axios.delete<Level>(API_URL);
+
+  return response.data;
+});
+
 const levelsSlice = createSlice({
   name: 'level',
   initialState,

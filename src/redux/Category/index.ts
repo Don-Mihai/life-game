@@ -34,7 +34,9 @@ export const fetchCategories = createAsyncThunk<Category[]>('category/fetchCateg
   return categories;
 });
 
-export const updateCategoryOrder = createAsyncThunk<Category[], Category[]>('category/updateCategoryOrder', async () => {});
+export const updateCategoryOrder = createAsyncThunk<Category[], Category[]>('category/updateCategoryOrder', async () => {
+  return [] as Category[];
+});
 
 const categorySlice = createSlice({
   name: 'category',

@@ -74,40 +74,42 @@ const Tabs = ({ handleLevelClick }: any) => {
 
   return (
     <div className={styles.tabs}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="skillsDroppable">
-          {(provided) => (
-            <MaterialTabs
-              value={tab}
-              onChange={handleChangeTab}
-              indicatorColor="primary"
-              textColor="inherit"
-              variant="fullWidth"
-              aria-label="full width tabs example"
-              className={styles.tabsTop}
-            >
-              <MaterialTab key={'all'} label={'Все навыки'} {...a11yProps('all')} />
-              {tabs.map((tab, index) => (
-                // контекст клика сделать через функцию onContext а не оборачивать
-                <MaterialTab
-                  icon={
-                    <div {...provided.dragHandleProps} className={styles.dragHandle}>
-                      <DragIndicatorIcon />
-                    </div>
-                  }
-                  iconPosition="start"
-                  key={index}
-                  label={tab.label}
-                  {...a11yProps(index)}
-                />
-              ))}
-              <IconButton onClick={handleAddTab}>
-                <AddIcon />
-              </IconButton>
-            </MaterialTabs>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <div className={styles.tabsTop}>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="tabsDroppable" direction="horizontal">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={styles.tabsContainer} // Убедитесь, что контейнер имеет нужный стиль
+              >
+                <div>
+                  <MaterialTab key={'all'} label={'Все навыки'} {...a11yProps('all')} />
+                  {tabs.map((tab, index) => (
+                    <Draggable key={tab.id} draggableId={tab.id} index={index}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`${styles.tabItem} ${snapshot.isDragging ? styles.dragging : ''}`}
+                        >
+                          <MaterialTab icon={<DragIndicatorIcon />} iconPosition="start" label={tab.label} {...a11yProps(index)} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </div>
+
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        <IconButton onClick={handleAddTab}>
+          <AddIcon />
+        </IconButton>
+      </div>
 
       <TabContent tab={tab} index={0}>
         <SkillList selectedTags={selectedTags} setSelectedTags={setSelectedTags} handleLevelClick={handleLevelClick} />

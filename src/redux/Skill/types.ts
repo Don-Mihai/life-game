@@ -12,7 +12,7 @@ export interface Skill {
   rootLevel?: string; // Корневой уровень навыка (id)
   tags?: Record<string, any>[]; // Массив тегов
   order: number; // Порядок навыка
-  levels?: Level[]; // Массив уровней навыка
+  levels: Level[]; // Массив уровней навыка
   createdAt?: string; // Временная метка создания
   updatedAt?: string; // Временная метка обновления
 }
