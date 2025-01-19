@@ -7,20 +7,34 @@
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 }
 
-.dragHandle {
-  cursor: grab;
-}
-
 .tabsContainer {
   display: flex;
   flex-wrap: nowrap;
+  padding: 0;
+  margin: 0;
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+}
+
+.tabsList {
+  display: flex;
 }
 
 .tabItem {
   display: inline-flex;
   align-items: center;
+  padding: 4px 8px;
+  margin: 0 4px;
+  height: auto; /* Allow height to adjust to content */
+  font-size: 14px;
 }
 
 .dragging {
-  background-color: rgba(0, 0, 0, 0.1); /* Выделение элемента во время перетаскивания */
+  background-color: rgba(0, 0, 0, 0.1); /* Highlight dragging tab */
+}
+
+@media (max-width: 600px) {
+  .tabItem {
+    font-size: 12px; /* Adjust font size for smaller screens */
+    padding: 2px 4px; /* Reduce padding for compact layout */
+  }
 }

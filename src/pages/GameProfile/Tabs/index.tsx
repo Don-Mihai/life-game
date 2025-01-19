@@ -78,13 +78,20 @@ const Tabs = ({ handleLevelClick }: any) => {
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="tabsDroppable" direction="horizontal">
             {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className={styles.tabsContainer} // Убедитесь, что контейнер имеет нужный стиль
-              >
-                <div>
-                  <MaterialTab key={'all'} label={'Все навыки'} {...a11yProps('all')} />
+              <div {...provided.droppableProps} ref={provided.innerRef} className={styles.tabsContainer}>
+                <div className={styles.tabsList}>
+                  <MaterialTab
+                    sx={{
+                      padding: '4px 8px',
+                      minHeight: '32px',
+                      height: 'auto',
+                      fontSize: '14px',
+                      textTransform: 'none'
+                    }}
+                    key={'all'}
+                    label={'Все навыки'}
+                    {...a11yProps('all')}
+                  />
                   {tabs.map((tab, index) => (
                     <Draggable key={tab.id} draggableId={tab.id} index={index}>
                       {(provided, snapshot) => (
@@ -94,19 +101,30 @@ const Tabs = ({ handleLevelClick }: any) => {
                           {...provided.dragHandleProps}
                           className={`${styles.tabItem} ${snapshot.isDragging ? styles.dragging : ''}`}
                         >
-                          <MaterialTab icon={<DragIndicatorIcon />} iconPosition="start" label={tab.label} {...a11yProps(index)} />
+                          <MaterialTab
+                            sx={{
+                              padding: '4px 8px',
+                              minHeight: '32px',
+                              height: 'auto',
+                              fontSize: '14px',
+                              textTransform: 'none'
+                            }}
+                            icon={<DragIndicatorIcon />}
+                            iconPosition="start"
+                            label={tab.label}
+                            {...a11yProps(index)}
+                          />
                         </div>
                       )}
                     </Draggable>
                   ))}
                 </div>
-
                 {provided.placeholder}
               </div>
             )}
           </Droppable>
         </DragDropContext>
-        <IconButton onClick={handleAddTab}>
+        <IconButton sx={{ height: '40px' }} onClick={handleAddTab}>
           <AddIcon />
         </IconButton>
       </div>
