@@ -26,10 +26,23 @@
   margin: 0 4px;
   height: auto; /* Allow height to adjust to content */
   font-size: 14px;
+  text-transform: none; /* Matches "sx" style */
 }
 
 .dragging {
   background-color: rgba(0, 0, 0, 0.1); /* Highlight dragging tab */
+}
+
+.tabMaterial {
+  padding: 4px 8px;
+  min-height: 32px;
+  height: auto;
+  font-size: 14px;
+  text-transform: none;
+}
+
+.addTabButton {
+  height: 40px;
 }
 
 @media (max-width: 600px) {

@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import styles from './Tabs.module.scss';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { IconButton, Tabs as MaterialTabs, Tab as MaterialTab } from '@mui/material';
+import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 
 import SkillList from './SkillList';
 import TabContent from './TabContent';
@@ -80,18 +83,7 @@ const Tabs = ({ handleLevelClick }: any) => {
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef} className={styles.tabsContainer}>
                 <div className={styles.tabsList}>
-                  <MaterialTab
-                    sx={{
-                      padding: '4px 8px',
-                      minHeight: '32px',
-                      height: 'auto',
-                      fontSize: '14px',
-                      textTransform: 'none'
-                    }}
-                    key={'all'}
-                    label={'Все навыки'}
-                    {...a11yProps('all')}
-                  />
+                  <MaterialTab className={styles.tabMaterial} key={'all'} label={'Все навыки'} {...a11yProps('all')} />
                   {tabs.map((tab, index) => (
                     <Draggable key={tab.id} draggableId={tab.id} index={index}>
                       {(provided, snapshot) => (
@@ -101,19 +93,25 @@ const Tabs = ({ handleLevelClick }: any) => {
                           {...provided.dragHandleProps}
                           className={`${styles.tabItem} ${snapshot.isDragging ? styles.dragging : ''}`}
                         >
-                          <MaterialTab
-                            sx={{
-                              padding: '4px 8px',
-                              minHeight: '32px',
-                              height: 'auto',
-                              fontSize: '14px',
-                              textTransform: 'none'
-                            }}
-                            icon={<DragIndicatorIcon />}
-                            iconPosition="start"
-                            label={tab.label}
-                            {...a11yProps(index)}
-                          />
+                          <ContextMenuTrigger id={`tab-context-menu-${tab.id}`}>
+                            <MaterialTab
+                              className={styles.tabMaterial}
+                              icon={<DragIndicatorIcon />}
+                              iconPosition="start"
+                              label={tab.label}
+                              {...a11yProps(index)}
+                            />
+                          </ContextMenuTrigger>
+                          <ContextMenu id={`tab-context-menu-${tab.id}`}>
+                            <ContextMenuItem className={styles.tabContext} onClick={() => handleEditTab(tab.id)}>
+                              <EditIcon fontSize="small" style={{ marginRight: '8px' }} />
+                              Редактировать вкладку
+                            </ContextMenuItem>
+                            <ContextMenuItem className={styles.tabContext} onClick={() => handleDeleteTab(tab.id)}>
+                              <DeleteIcon fontSize="small" style={{ marginRight: '8px' }} />
+                              Удалить вкладку
+                            </ContextMenuItem>
+                          </ContextMenu>
                         </div>
                       )}
                     </Draggable>
@@ -124,7 +122,7 @@ const Tabs = ({ handleLevelClick }: any) => {
             )}
           </Droppable>
         </DragDropContext>
-        <IconButton sx={{ height: '40px' }} onClick={handleAddTab}>
+        <IconButton className={styles.addTabButton} onClick={handleAddTab}>
           <AddIcon />
         </IconButton>
       </div>
