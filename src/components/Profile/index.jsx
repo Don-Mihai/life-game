@@ -13,7 +13,6 @@ const Profile = React.memo(() => {
   return (
     <div className="profile">
       <div className="profile__avatar">
-        {/* <img src="https://i.gifer.com/origin/db/db773ee4aa154ea4f2cab588cff0ef9f_w200.gif" alt="User Avatar" className="profile__avatar-image" /> */}
         <Avatar className="profile__avatar-image" {...config} />
       </div>
       <div className="profile__info">
