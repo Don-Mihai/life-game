@@ -1,16 +1,6 @@
 export const URL = 'http://skill-manager.ru/api';
 // export const URL = 'http://localhost:5000';
 
-export const processTextLinks = (data: any) => {
-  // Рекурсивно обрабатываем текст в контенте
-  data.blocks.forEach((block: any) => {
-    if (block.data && block.data.text) {
-      block.data.text = block.data.text.replace(/https?:\/\/[^\s]+/g, (url: any) => `<a href="${url}" target="_blank">${url}</a>`);
-    }
-  });
-  return data;
-};
-
 export const processCodeBlocks = (data: any) => {
   // Функция для декодирования HTML сущностей
   const decodeHtmlEntities = (str: string) => {
@@ -42,6 +32,22 @@ export const processCodeBlocks = (data: any) => {
     }
   });
   return data;
+};
+
+export const attachClickHandler = (editor: any, selectedLevel: any) => {
+  const editorElement = document.getElementById(`editorjs-${selectedLevel.levelIndex}`);
+  if (editorElement) {
+    editorElement.addEventListener('click', (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'A') {
+        event.preventDefault(); // Отключаем стандартное поведение
+        const href = target.getAttribute('href');
+        if (href) {
+          window.open(href, '_blank', 'noopener,noreferrer'); // Открываем в новой вкладке
+        }
+      }
+    });
+  }
 };
 
 // Вспомогательная функция для преобразования уровня в формат Editor.js

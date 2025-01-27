@@ -22,14 +22,16 @@ import Skill from '../Skill';
 import styles from './SkillList.module.scss';
 import { useState } from 'react';
 import { addSkill, updateSkillsOrder } from '../../../../redux/Skill';
+import { Category } from '../../../../redux/Category/types';
 
 interface Props {
   selectedTags: string[];
   setSelectedTags: (tags: string[]) => void;
   handleLevelClick: (skill: SkillI, levelData: any, levelIndex: number) => void;
+  tab?: Category;
 }
 
-const SkillList = ({ selectedTags, setSelectedTags, handleLevelClick }: Props) => {
+const SkillList = ({ tab, selectedTags, setSelectedTags, handleLevelClick }: Props) => {
   const { user } = useSelector((state: RootState) => state.user);
   const { skills } = useSelector((state: RootState) => state.skill);
   const [openSkillModal, setOpenSkillModal] = useState(false);
@@ -59,7 +61,7 @@ const SkillList = ({ selectedTags, setSelectedTags, handleLevelClick }: Props) =
   const handleAddSkill = async () => {
     if (!newSkillName.trim()) return;
     try {
-      await dispatch(addSkill({ name: newSkillName })).unwrap();
+      await dispatch(addSkill({ name: newSkillName, categories: tab ? [tab?.id] : undefined })).unwrap();
       setNewSkillName('');
       setOpenSkillModal(false);
     } catch (err) {
@@ -67,7 +69,7 @@ const SkillList = ({ selectedTags, setSelectedTags, handleLevelClick }: Props) =
     }
   };
 
-  console.log(skills);
+  const filteredSkillsByCategories = tab ? skills.filter((skill: SkillI) => skill?.categories?.includes?.(tab.id)) : skills;
 
   return (
     <>
@@ -78,7 +80,7 @@ const SkillList = ({ selectedTags, setSelectedTags, handleLevelClick }: Props) =
               {skills.length === 0 ? (
                 <h3>Добавьте навык</h3>
               ) : (
-                skills.map((skill: SkillI, index: number) => (
+                filteredSkillsByCategories.map((skill: SkillI, index: number) => (
                   <Draggable key={skill.id} draggableId={skill.id.toString()} index={index}>
                     {(provided, snapshot) => (
                       <div className={`${styles.skillItem} ${snapshot.isDragging ? styles.dragging : ''}`} ref={provided.innerRef} {...provided.draggableProps}>

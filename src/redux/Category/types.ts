@@ -11,3 +11,8 @@ interface CategoryState {
 export const initialState: CategoryState = {
   categories: []
 };
+
+export interface CategoryDeletePayload {
+  categoryId: string;
+  userId: string | null;
+}

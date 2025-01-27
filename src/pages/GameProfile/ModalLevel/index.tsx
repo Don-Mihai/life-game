@@ -4,10 +4,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import styles from './ModalLevel.module.scss';
-import EditorJS from '@editorjs/editorjs';
+
 import { updateLevel } from '../../../redux/Level';
 import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../../../redux/store';
+import { useSelector } from 'react-redux';
 
+import EditorJS, { BlockToolConstructable } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import Embed from '@editorjs/embed';
 import Raw from '@editorjs/raw';
@@ -15,12 +18,10 @@ import SimpleImage from '@editorjs/simple-image';
 import Checklist from '@editorjs/checklist';
 import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
-
-// import LinkTool from '@editorjs/link';
 import CodeTool from '@editorjs/code';
-import { URL, processTextLinks, processCodeBlocks } from '../../../utils';
-import { AppDispatch, RootState } from '../../../redux/store';
-import { useSelector } from 'react-redux';
+import LinkTool from '@editorjs/link';
+
+import { processCodeBlocks, attachClickHandler } from '../../../utils';
 
 const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }: any) => {
   const [editorInstance, setEditorInstance] = useState<any>(null);
@@ -39,40 +40,48 @@ const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }: any)
         holder: `editorjs-${selectedLevel.levelIndex}`,
         data: selectedLevel.levelData.description ? JSON.parse(selectedLevel.levelData.description) : {},
         tools: {
-          header: Header,
+          header: {
+            class: Header as unknown as BlockToolConstructable,
+            inlineToolbar: true // Включить inline-toolbar для удобства
+          },
           // @ts-ignore
           embed: Embed,
           raw: Raw,
           simpleImage: SimpleImage,
           checklist: Checklist,
-          list: List,
+          list: {
+            class: List as unknown as BlockToolConstructable,
+            inlineToolbar: ['link']
+          },
           quote: Quote,
-          // linkTool: {
-          //   class: LinkTool,
-          //   config: {
-          //     endpoint: URL + '/common/validate-link'
-          //   }
-          // },
+          linkTool: {
+            class: LinkTool as unknown as BlockToolConstructable,
+            config: {
+              endpoint: ''
+            }
+          },
           code: CodeTool
         },
         autofocus: true,
+        onReady: () => {
+          setEditorInstance(editor); // Устанавливаем редактор как готовый
+          attachClickHandler(editor, selectedLevel); // Привязываем обработчик кликов
+        },
         onChange: async () => {
           const savedData = await editor.save();
 
           // Обработка текста и поиск ссылок
-          const updatedDescription = processTextLinks(savedData);
-          const finalDescription = processCodeBlocks(updatedDescription);
+          const finalDescription = processCodeBlocks(savedData);
 
           dispatch(
             updateLevel({
-              skillId: selectedLevel.skill.id, // ID навыка
+              skillId: selectedLevel.skill.id,
               id: selectedLevel.levelData.id,
               description: JSON.stringify(finalDescription) // Новые данные уровня
             })
           );
         }
       });
-      setEditorInstance(editor);
     }
     return () => {
       if (editorInstance) {

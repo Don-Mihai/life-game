@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { URL } from '../../utils.ts';
-import { Category, initialState } from './types.ts';
+import { Category, CategoryDeletePayload, initialState } from './types.ts';
 import { getUserId } from '../User/types.ts';
 import { get } from 'lodash';
 
@@ -15,14 +15,26 @@ export const addCategory = createAsyncThunk<Category, Partial<Category>>('catego
   return category;
 });
 
-export const deleteCategory = createAsyncThunk<Category, string>('category/deleteCategory', async (categoryId) => {
-  const category = (await axios.delete<Category>(API_URL + `/${categoryId}`)).data;
+export const deleteCategory = createAsyncThunk<Category[], string>('category/deleteCategory', async (categoryId) => {
+  const userId = getUserId();
+
+  const payload: CategoryDeletePayload = {
+    categoryId,
+    userId
+  };
+
+  const category = (await axios.post<Category[]>(API_URL + '/delete', payload)).data;
 
   return category;
 });
 
 export const editCategory = createAsyncThunk<Category, Partial<Category>>('category/editCategory', async (newCategory) => {
-  const category = (await axios.put<Category>(API_URL + `/${newCategory.id}`, newCategory)).data;
+  const userId = getUserId();
+  const payload = {
+    ...newCategory,
+    userId
+  };
+  const category = (await axios.put<Category>(API_URL + `/${newCategory.id}`, payload)).data;
 
   return category;
 });
@@ -34,8 +46,12 @@ export const fetchCategories = createAsyncThunk<Category[]>('category/fetchCateg
   return categories;
 });
 
-export const updateCategoryOrder = createAsyncThunk<Category[], Category[]>('category/updateCategoryOrder', async () => {
-  return [] as Category[];
+export const updateCategoryOrder = createAsyncThunk<Category[], Category[]>('category/updateCategoryOrder', async (reorderedTabs) => {
+  const response = await axios.put<Category[]>(`${API_URL}/update-order`, {
+    userId: getUserId(),
+    categories: reorderedTabs.map((category, index) => ({ ...category, order: index }))
+  });
+  return response.data;
 });
 
 const categorySlice = createSlice({

@@ -14,9 +14,8 @@ export const addLevel = createAsyncThunk<Level, Partial<Level>>('levels/addLevel
   const newLevelData = response.data;
 
   const state = getState() as { skill: SkillState };
-  console.log(state);
+
   const skill = state.skill.skills.find((skill) => skill.id === newLevelData.skillId);
-  console.log(skill);
 
   const newSkill = { ...skill, levels: [...(skill?.levels || []), newLevelData] };
 

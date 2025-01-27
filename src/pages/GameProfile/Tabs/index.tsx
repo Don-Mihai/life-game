@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import styles from './Tabs.module.scss';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+
 import { IconButton, Tabs as MaterialTabs, Tab as MaterialTab } from '@mui/material';
-import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 
 import SkillList from './SkillList';
 import TabContent from './TabContent';
@@ -14,48 +11,31 @@ import { a11yProps } from './utils';
 import { Category } from '../../../redux/Category/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
-import { addCategory, deleteCategory, editCategory, updateCategoryOrder } from '../../../redux/Category';
+import { addCategory, updateCategoryOrder } from '../../../redux/Category';
 
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
+import Tab from './Tab';
 
 const Tabs = ({ handleLevelClick }: any) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const user = useSelector((state: RootState) => state.user.user);
-  const [tab, setTab] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
   const [tabs, setTabs] = useState<Category[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleChangeTab = (_: React.SyntheticEvent, newValue: number) => {
-    setTab(newValue);
+  const handleChangeTab = (_: React.SyntheticEvent | null, newValue: number) => {
+    setTabIndex(newValue);
   };
 
-  //todo: добавление табов ( + редактирование навзания)
-  //todo: добавить новое ствойство категории
-  //todo: сделать перетаскивание табов между категориями
+  //todo: добавить новое ствойство категории (на бэк осталось)
+  //todo: сделать перетаскивание навыков между категориями
 
   useEffect(() => {
     if (user?.categories) {
       setTabs(user.categories);
     }
   }, [user?.categories]);
-
-  const handleDeleteTab = async (id: string) => {
-    const category = await dispatch(deleteCategory(id)).unwrap();
-
-    setTabs(tabs.filter((tab) => tab.id !== category.id));
-  };
-
-  const handleEditTab = async (id: string) => {
-    const newTab = {
-      id,
-      label: 'new name'
-    };
-
-    const category = await dispatch(editCategory(newTab)).unwrap();
-
-    setTabs(tabs.map((tab) => (tab.id === id ? category : tab)));
-  };
 
   const handleAddTab = async () => {
     const newTab = { label: `Новая категория ${tabs.length + 1}` };
@@ -69,10 +49,16 @@ const Tabs = ({ handleLevelClick }: any) => {
     if (!result.destination) return;
 
     const reorderedTabs = Array.from(tabs);
-    const [movedTab] = reorderedTabs.splice(result.source.index, 1);
-    reorderedTabs.splice(result.destination.index, 0, movedTab);
+    console.log(reorderedTabs);
+
+    const [movedTab] = reorderedTabs.splice(result.source.index - 1, 1);
+    reorderedTabs.splice(result.destination.index - 1, 0, movedTab);
+
+    console.log(reorderedTabs, movedTab, result.source.index, result.destination.index);
 
     dispatch(updateCategoryOrder(reorderedTabs));
+
+    setTabs(reorderedTabs);
   };
 
   return (
@@ -81,43 +67,28 @@ const Tabs = ({ handleLevelClick }: any) => {
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="tabsDroppable" direction="horizontal">
             {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef} className={styles.tabsContainer}>
-                <div className={styles.tabsList}>
-                  <MaterialTab className={styles.tabMaterial} key={'all'} label={'Все навыки'} {...a11yProps('all')} />
+              <div className={styles.tabsContainer}>
+                <MaterialTabs {...provided.droppableProps} ref={provided.innerRef} value={tabIndex} onChange={handleChangeTab} className={styles.tabsList}>
+                  <Draggable key={'all'} draggableId={'all'} index={0}>
+                    {(provided) => (
+                      <MaterialTab
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={styles.tabMaterial}
+                        onClick={() => handleChangeTab(null, 0)}
+                        key={'all'}
+                        label={'Все навыки'}
+                        {...a11yProps('all')}
+                      />
+                    )}
+                  </Draggable>
+
                   {tabs.map((tab, index) => (
-                    <Draggable key={tab.id} draggableId={tab.id} index={index}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className={`${styles.tabItem} ${snapshot.isDragging ? styles.dragging : ''}`}
-                        >
-                          <ContextMenuTrigger id={`tab-context-menu-${tab.id}`}>
-                            <MaterialTab
-                              className={styles.tabMaterial}
-                              icon={<DragIndicatorIcon />}
-                              iconPosition="start"
-                              label={tab.label}
-                              {...a11yProps(index)}
-                            />
-                          </ContextMenuTrigger>
-                          <ContextMenu id={`tab-context-menu-${tab.id}`}>
-                            <ContextMenuItem className={styles.tabContext} onClick={() => handleEditTab(tab.id)}>
-                              <EditIcon fontSize="small" style={{ marginRight: '8px' }} />
-                              Редактировать вкладку
-                            </ContextMenuItem>
-                            <ContextMenuItem className={styles.tabContext} onClick={() => handleDeleteTab(tab.id)}>
-                              <DeleteIcon fontSize="small" style={{ marginRight: '8px' }} />
-                              Удалить вкладку
-                            </ContextMenuItem>
-                          </ContextMenu>
-                        </div>
-                      )}
-                    </Draggable>
+                    <Tab onChangeTab={handleChangeTab} tab={tab} index={index + 1} setTabs={setTabs} key={tab.id} />
                   ))}
-                </div>
-                {provided.placeholder}
+                  {provided.placeholder}
+                </MaterialTabs>
               </div>
             )}
           </Droppable>
@@ -127,15 +98,14 @@ const Tabs = ({ handleLevelClick }: any) => {
         </IconButton>
       </div>
 
-      <TabContent tab={tab} index={0}>
+      <TabContent tab={tabIndex} index={0}>
         <SkillList selectedTags={selectedTags} setSelectedTags={setSelectedTags} handleLevelClick={handleLevelClick} />
       </TabContent>
-      <TabContent tab={tab} index={1}>
-        Item Two
-      </TabContent>
-      <TabContent tab={tab} index={2}>
-        Item Three
-      </TabContent>
+      {tabs.map((tab, index) => (
+        <TabContent tab={tabIndex} index={index + 1} key={tab.id}>
+          <SkillList tab={tab} selectedTags={selectedTags} setSelectedTags={setSelectedTags} handleLevelClick={handleLevelClick} />
+        </TabContent>
+      ))}
     </div>
   );
 };

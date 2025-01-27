@@ -18,7 +18,6 @@ export const useOrganizationChart = <T>(levelsTree: T) => {
     if (draggedNode && draggedNode.data.id !== targetNode.data.id) {
       const updatedTree = moveNode(data as ExtendedT<T>[], draggedNode, targetNode);
 
-      console.log(updatedTree);
       setData(updatedTree);
 
       callback?.(draggedNode, targetNode);

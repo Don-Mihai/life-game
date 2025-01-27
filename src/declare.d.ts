@@ -9,3 +9,6 @@ declare module '@editorjs/simple-image' {
 }
 declare module '@editorjs/checklist' {
 }
+
+declare module '@editorjs/link' {
+}

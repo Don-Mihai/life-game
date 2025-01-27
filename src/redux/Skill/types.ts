@@ -11,6 +11,7 @@ export interface Skill {
   userId: string; // Идентификатор пользователя
   rootLevel?: string; // Корневой уровень навыка (id)
   tags?: Record<string, any>[]; // Массив тегов
+  categories?: string[]; // Массив категорий
   order: number; // Порядок навыка
   levels: Level[]; // Массив уровней навыка
   createdAt?: string; // Временная метка создания
