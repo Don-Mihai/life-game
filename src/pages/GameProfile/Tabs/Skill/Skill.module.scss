@@ -41,8 +41,9 @@
   color: #88c0d0;
   font-size: 28px;
   cursor: pointer;
-  transition: transform 0.2s,
-  color 0.3s;
+  transition:
+    transform 0.2s,
+    color 0.3s;
 }
 
 .generateIcon:hover {
@@ -54,8 +55,9 @@
   color: #88c0d0;
   font-size: 28px;
   cursor: pointer;
-  transition: transform 0.2s,
-  color 0.3s;
+  transition:
+    transform 0.2s,
+    color 0.3s;
 
   &:hover {
     transform: scale(1.2);
@@ -66,8 +68,9 @@
   color: #1976d2;
   font-size: 28px;
   cursor: pointer;
-  transition: transform 0.2s,
-  color 0.3s;
+  transition:
+    transform 0.2s,
+    color 0.3s;
 
   &:hover {
     transform: scale(1.2);
@@ -78,8 +81,9 @@
   color: #ff4757;
   font-size: 28px;
   cursor: pointer;
-  transition: transform 0.2s,
-  color 0.3s;
+  transition:
+    transform 0.2s,
+    color 0.3s;
 
   &:hover {
     transform: scale(1.2);
@@ -91,19 +95,6 @@
   font-size: 14px;
   color: #555;
 }
-
-.skillContent {
-  overflow: hidden;
-}
-
-.skillLevels {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-
 
 .dragHandle {
   display: flex;
@@ -120,9 +111,5 @@
   }
   .skillName {
     font-size: 16px;
-  }
-
-  .skillLevels {
-    justify-content: center;
   }
 }

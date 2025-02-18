@@ -12,7 +12,6 @@ import Characteristics from './pages/Characteristics';
 import Auth from './pages/GameProfile/Auth';
 import Profile from './pages/Profile';
 import TreeSkill from './pages/TreeSkill';
-import Test from './pages/Test';
 
 // const LazyGameProfile = lazy(() => import('./pages/GameProfile'));
 // const LazyCharacteristics = lazy(() => import('./pages/Characteristics'));
@@ -57,10 +56,6 @@ const router = createBrowserRouter([
   {
     path: '/tree/:skillId',
     element: <TreeSkill />
-  },
-  {
-    path: '/test',
-    element: <Test />
   }
 ]);
 

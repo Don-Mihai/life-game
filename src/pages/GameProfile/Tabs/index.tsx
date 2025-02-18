@@ -16,7 +16,7 @@ import { addCategory, updateCategoryOrder } from '../../../redux/Category';
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
 import Tab from './Tab';
 
-const Tabs = ({ handleLevelClick }: any) => {
+const Tabs = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const user = useSelector((state: RootState) => state.user.user);
   const [tabIndex, setTabIndex] = useState(0);
@@ -99,11 +99,11 @@ const Tabs = ({ handleLevelClick }: any) => {
       </div>
 
       <TabContent tab={tabIndex} index={0}>
-        <SkillList selectedTags={selectedTags} setSelectedTags={setSelectedTags} handleLevelClick={handleLevelClick} />
+        <SkillList selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
       </TabContent>
       {tabs.map((tab, index) => (
         <TabContent tab={tabIndex} index={index + 1} key={tab.id}>
-          <SkillList tab={tab} selectedTags={selectedTags} setSelectedTags={setSelectedTags} handleLevelClick={handleLevelClick} />
+          <SkillList tab={tab} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
         </TabContent>
       ))}
     </div>

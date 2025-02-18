@@ -15,9 +15,10 @@ interface Props {
   levelData: LevelI;
   i: number;
   handleLevelClick: (skill: Skill, level: LevelI, i: number) => void;
+  dragHandleProps: any;
 }
 
-const Level = React.memo(({ skill, levelData, i, handleLevelClick }: Props) => {
+const Level = React.memo(({ skill, levelData, i, handleLevelClick, dragHandleProps }: Props) => {
   const [selectedEmoji, setSelectedEmoji] = useState(levelData.icon || null); // Состояние для выбранной эмодзи
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Состояние для отображения эмодзи-пикера
 
@@ -64,11 +65,12 @@ const Level = React.memo(({ skill, levelData, i, handleLevelClick }: Props) => {
       <ContextMenuTrigger id={`context-menu-${skill.name}-${i}`}>
         <Tooltip title={levelData.description && JSON.parse(levelData.description).blocks[0]?.data.text} placement="top" arrow>
           <div
-            className={`${styles.level} ${levelData.completed ? styles.completed : ''} ${selectedEmoji ? styles.levelWithIcon : ''}`}
+            className={`${styles.level} ${styles.dragHandle} ${levelData.completed ? styles.completed : ''} ${selectedEmoji ? styles.levelWithIcon : ''}`}
             onClick={(event) => {
               event.stopPropagation();
               handleLevelClick(skill, levelData, i);
             }}
+            {...dragHandleProps}
           >
             {/* Использование выбранной эмодзи */}
             {selectedEmoji ? selectedEmoji : i + 1}

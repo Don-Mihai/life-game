@@ -1,0 +1,27 @@
+.skillContent {
+  overflow: hidden;
+}
+
+.skillLevels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.levelItem {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.dragging {
+  opacity: 0.8;
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 430px) {
+  .skillLevels {
+    justify-content: center;
+  }
+}

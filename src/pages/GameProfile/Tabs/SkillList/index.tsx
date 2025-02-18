@@ -1,19 +1,6 @@
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AddIcon from '@mui/icons-material/Add';
-import {
-  Checkbox,
-  FormControl,
-  IconButton,
-  InputLabel,
-  ListItemText,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Modal,
-  Typography,
-  TextField,
-  Button
-} from '@mui/material';
+import { IconButton, Modal, Typography, TextField, Button } from '@mui/material';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../../redux/store';
@@ -27,11 +14,10 @@ import { Category } from '../../../../redux/Category/types';
 interface Props {
   selectedTags: string[];
   setSelectedTags: (tags: string[]) => void;
-  handleLevelClick: (skill: SkillI, levelData: any, levelIndex: number) => void;
   tab?: Category;
 }
 
-const SkillList = ({ tab, selectedTags, setSelectedTags, handleLevelClick }: Props) => {
+const SkillList = ({ tab, selectedTags, setSelectedTags }: Props) => {
   const { user } = useSelector((state: RootState) => state.user);
   const { skills } = useSelector((state: RootState) => state.skill);
   const [openSkillModal, setOpenSkillModal] = useState(false);
@@ -84,7 +70,7 @@ const SkillList = ({ tab, selectedTags, setSelectedTags, handleLevelClick }: Pro
                   <Draggable key={skill.id} draggableId={skill.id.toString()} index={index}>
                     {(provided, snapshot) => (
                       <div className={`${styles.skillItem} ${snapshot.isDragging ? styles.dragging : ''}`} ref={provided.innerRef} {...provided.draggableProps}>
-                        <Skill key={skill.id} skill={skill} user={user} handleLevelClick={handleLevelClick} dragHandleProps={provided.dragHandleProps} />
+                        <Skill key={skill.id} skill={skill} user={user} dragHandleProps={provided.dragHandleProps} />
                       </div>
                     )}
                   </Draggable>

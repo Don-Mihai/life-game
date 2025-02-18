@@ -61,6 +61,10 @@ export const deleteLevel = createAsyncThunk<Level, Partial<Level>>('levels/delet
   return response.data;
 });
 
+export const reorderLevel = createAsyncThunk('levels/reorder', async ({ levelId, newIndex }: { levelId: string, newIndex: number }) => {
+  await axios.put(`${API_URL}/reorder`, { newIndex, id: levelId });
+});
+
 const levelsSlice = createSlice({
   name: 'level',
   initialState,

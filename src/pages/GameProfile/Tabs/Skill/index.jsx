@@ -4,21 +4,22 @@ import { TextField, Autocomplete, IconButton } from '@mui/material';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
+
 import { useDispatch } from 'react-redux';
-import { motion } from 'framer-motion';
+
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 import { generateSkillLevels, updateSkill, deleteSkill } from '../../../../redux/Skill';
-import { addLevel } from '../../../../redux/Level';
+
 import styles from './Skill.module.scss';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 import Level from './Level';
 import { useNavigate } from 'react-router-dom';
+import Levels from './Levels';
 
-const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
+const Skill = ({ skill, user, dragHandleProps }) => {
   const dispatch = useDispatch();
-  const [isExpanded, setIsExpanded] = useState(true);
+
   const [isEditing, setIsEditing] = useState(false);
   const [newSkillName, setNewSkillName] = useState(skill.name);
 
@@ -53,19 +54,6 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
   const handleSaveSkill = () => {
     dispatch(updateSkill({ ...skill, name: newSkillName }));
     setIsEditing(false);
-  };
-
-  const handleAddLevel = () => {
-    const newLevel = {
-      skillId: skill.id,
-      parentId: skill.levels.length ? skill.levels[skill.levels.length - 1].id : null
-    };
-
-    dispatch(addLevel(newLevel));
-  };
-
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
   };
 
   const lastCompletedLevelIndex = skill.levels?.findIndex?.((level) => !level.completed) - 1;
@@ -136,26 +124,7 @@ const Skill = ({ handleLevelClick, skill, user, dragHandleProps }) => {
           Удалить навык
         </ContextMenuItem>
       </ContextMenu>
-      <motion.div
-        initial={{ height: 0, opacity: 0 }}
-        animate={isExpanded ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        className={styles.skillContent}
-      >
-        <div className={styles.skillLevels}>
-          {skill.levels.map((levelData, i) => (
-            <Level key={i} skill={skill} levelData={levelData} i={i} handleLevelClick={handleLevelClick} />
-          ))}
-          <IconButton
-            onClick={(event) => {
-              event.stopPropagation();
-              handleAddLevel(skill);
-            }}
-          >
-            <AddIcon />
-          </IconButton>
-        </div>
-      </motion.div>
+      <Levels skill={skill} />
     </div>
   );
 };

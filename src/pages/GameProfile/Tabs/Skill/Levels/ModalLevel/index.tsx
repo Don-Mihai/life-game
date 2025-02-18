@@ -5,9 +5,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import styles from './ModalLevel.module.scss';
 
-import { updateLevel } from '../../../redux/Level';
+import { updateLevel } from '../../../../../../redux/Level';
 import { useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../../../redux/store';
+import { AppDispatch, RootState } from '../../../../../../redux/store';
 import { useSelector } from 'react-redux';
 
 import EditorJS, { BlockToolConstructable } from '@editorjs/editorjs';
@@ -21,7 +21,7 @@ import Quote from '@editorjs/quote';
 import CodeTool from '@editorjs/code';
 import LinkTool from '@editorjs/link';
 
-import { processCodeBlocks, attachClickHandler } from '../../../utils';
+import { processCodeBlocks, attachClickHandler } from '../../../../../../utils';
 
 const SkillLevelModal = ({ selectedLevel, handleClose, handleChangeLevel }: any) => {
   const [editorInstance, setEditorInstance] = useState<any>(null);
