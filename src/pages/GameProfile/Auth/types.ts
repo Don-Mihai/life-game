@@ -1,7 +1,7 @@
 export enum INPUTS_KEYS {
   EMAIL = 'email',
   PASSWORD = 'password',
-  FIRST_NAME = 'firstName',
+  FIRST_NAME = 'firstName'
 }
 
 export interface PRegister {
@@ -12,7 +12,7 @@ export interface PRegister {
 
 export enum AUTH_MODE {
   LOGIN,
-  REGISTER,
+  REGISTER
 }
 
-export const initValues = { firstName: '', email: '', password: '' };
+export const initValues: any = { firstName: '', email: '', password: '' };

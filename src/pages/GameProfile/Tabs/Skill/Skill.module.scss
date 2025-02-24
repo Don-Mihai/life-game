@@ -103,6 +103,46 @@
   margin-right: 8px;
 }
 
+.tagsContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tagChip {
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.addTag {
+  display: flex;
+  align-items: center;
+}
+
+.addTagInput {
+  width: 20px;
+  border: none;
+  background: transparent;
+  outline: none;
+  transition: width 0.3s ease;
+  padding: 2px;
+  font-size: 0.9rem;
+}
+
+/* Делает placeholder незаметным */
+.addTagInput::placeholder {
+  color: transparent;
+}
+
+/* При фокусе инпут расширяется и становится заметным */
+.addTagInput:focus {
+  width: 100px;
+  border-bottom: 1px solid #000;
+  color: #000;
+  background: #fff;
+  /* placeholder можно сделать видимым при фокусе, если требуется */
+}
+
 @media (max-width: 430px) {
   .skill {
     display: flex;

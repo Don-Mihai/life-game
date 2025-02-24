@@ -12,6 +12,8 @@ import Characteristics from './pages/Characteristics';
 import Auth from './pages/GameProfile/Auth';
 import Profile from './pages/Profile';
 import TreeSkill from './pages/TreeSkill';
+import RegisterEmail from './pages/GameProfile/Auth/RegisterEmail';
+import CompleteRegistration from './pages/GameProfile/Auth/CompleteRegistration';
 
 // const LazyGameProfile = lazy(() => import('./pages/GameProfile'));
 // const LazyCharacteristics = lazy(() => import('./pages/Characteristics'));
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
   {
     path: '/auth',
     element: <Auth />
+  },
+  {
+    path: '/register',
+    element: <RegisterEmail />
+  },
+  {
+    path: '/complete-registration',
+    element: <CompleteRegistration />
   },
   {
     path: '/',

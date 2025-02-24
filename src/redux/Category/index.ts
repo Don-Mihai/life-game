@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { URL } from '../../utils.ts';
-import { Category, CategoryDeletePayload, initialState } from './types.ts';
-import { getUserId } from '../User/types.ts';
-import { get } from 'lodash';
+import { URL } from '../../utils';
+import { Category, CategoryDeletePayload, initialState } from './types';
+import { getUserId } from '../User/types';
 
 const API_URL = `${URL}/category`;
 

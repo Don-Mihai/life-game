@@ -17,7 +17,6 @@ import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea
 import Tab from './Tab';
 
 const Tabs = () => {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const user = useSelector((state: RootState) => state.user.user);
   const [tabIndex, setTabIndex] = useState(0);
   const [tabs, setTabs] = useState<Category[]>([]);
@@ -28,7 +27,6 @@ const Tabs = () => {
     setTabIndex(newValue);
   };
 
-  //todo: добавить новое ствойство категории (на бэк осталось)
   //todo: сделать перетаскивание навыков между категориями
 
   useEffect(() => {
@@ -99,11 +97,11 @@ const Tabs = () => {
       </div>
 
       <TabContent tab={tabIndex} index={0}>
-        <SkillList selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+        <SkillList />
       </TabContent>
       {tabs.map((tab, index) => (
         <TabContent tab={tabIndex} index={index + 1} key={tab.id}>
-          <SkillList tab={tab} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+          <SkillList tab={tab} />
         </TabContent>
       ))}
     </div>

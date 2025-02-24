@@ -4,6 +4,7 @@ import { TextField, Autocomplete, IconButton } from '@mui/material';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { Chip } from 'primereact/chip';
 
 import { useDispatch } from 'react-redux';
 
@@ -13,35 +14,31 @@ import { generateSkillLevels, updateSkill, deleteSkill } from '../../../../redux
 import styles from './Skill.module.scss';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
-import Level from './Level';
 import { useNavigate } from 'react-router-dom';
 import Levels from './Levels';
+import { Skill as SkillI } from '@/redux/Skill/types';
+import { AppDispatch } from '@/redux/store';
 
-const Skill = ({ skill, user, dragHandleProps }) => {
-  const dispatch = useDispatch();
+interface Props {
+  skill: SkillI;
+  dragHandleProps: any;
+}
+
+const Skill = ({ skill, dragHandleProps }: Props) => {
+  const dispatch = useDispatch<AppDispatch>();
 
   const [isEditing, setIsEditing] = useState(false);
   const [newSkillName, setNewSkillName] = useState(skill.name);
-
-  const [options, setOptions] = useState(user.tags || []);
   const [tags, setTags] = useState(skill.tags || []);
-  const [inputValue, setInputValue] = useState('');
+  const [newTagInput, setNewTagInput] = useState('');
 
   const navigate = useNavigate();
-
-  const handleKeyDownTags = (event) => {
-    if (event.key === 'Enter' && inputValue && !tags.some((tag) => tag.title === inputValue)) {
-      const payload = [...tags, { title: inputValue }];
-      setTags(payload);
-      setInputValue('');
-    }
-  };
 
   const handleDeleteSkill = () => {
     dispatch(deleteSkill(skill.id));
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
       handleSaveSkill();
     }
@@ -62,12 +59,20 @@ const Skill = ({ skill, user, dragHandleProps }) => {
     dispatch(generateSkillLevels({ skillId: skill.id, skillName: skill.name }));
   };
 
-  const handleTagChange = (event, newValue) => {
-    setTags(newValue);
-  };
-
   const handleOpenTree = () => {
     navigate(`/tree/${skill.id}`);
+  };
+
+  const handleDeleteTag = (tagToDelete: any) => {
+    setTags(tags.filter((tag) => tag.title !== tagToDelete.title));
+  };
+
+  const handleNewTagKeyDown = (event: any) => {
+    if (event.key === 'Enter' && newTagInput.trim() !== '' && !tags.some((tag) => tag.title === newTagInput.trim())) {
+      const updatedTags = [...tags, { title: newTagInput.trim() }];
+      setTags(updatedTags);
+      setNewTagInput('');
+    }
   };
 
   return (
@@ -83,23 +88,21 @@ const Skill = ({ skill, user, dragHandleProps }) => {
             ) : (
               <>
                 <div className={styles.skillName}>{skill.name}</div>
-                <Autocomplete
-                  multiple
-                  id="multiple-limit-tags"
-                  options={options}
-                  getOptionLabel={(option) => option.title}
-                  value={tags}
-                  onChange={handleTagChange}
-                  inputValue={inputValue}
-                  onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
-                  onKeyDown={handleKeyDownTags}
-                  sx={{
-                    '& .MuiAutocomplete-input': {
-                      minWidth: '36px !important'
-                    }
-                  }}
-                  renderInput={(params) => <TextField {...params} placeholder="Теги" variant="standard" />}
-                />
+                <div className={styles.tagsContainer}>
+                  {tags.map((tag, index) => (
+                    <Chip key={index} label={tag.title} removable onRemove={() => handleDeleteTag(tag)} className={styles.tagChip} />
+                  ))}
+                  <div className={styles.addTag}>
+                    <input
+                      type="text"
+                      value={newTagInput}
+                      onChange={(e) => setNewTagInput(e.target.value)}
+                      onKeyDown={handleNewTagKeyDown}
+                      className={styles.addTagInput}
+                      placeholder="Добавить тег"
+                    />
+                  </div>
+                </div>
               </>
             )}
             {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}

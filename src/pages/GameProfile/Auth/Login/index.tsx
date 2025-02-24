@@ -4,19 +4,25 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { INPUTS_KEYS } from '../types.ts';
+import { initValues, INPUTS_KEYS } from '../types';
 import { useDispatch } from 'react-redux';
-import { auth } from '../../../../redux/User/index.ts';
+import { auth } from '@/redux/User';
+import { AppDispatch } from '@/redux/store';
 
-const Login = ({ onChange, formValues }) => {
+const Login = () => {
   const [open, setOpen] = useState(false);
+  const [formValues, setFormValues] = useState<any>(initValues);
+
+  const onChange = (event: any) => {
+    setFormValues({ ...formValues, [event.target.name]: event.target.value });
+  };
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const onSignIn = async () => {
     const payload = { email: formValues[INPUTS_KEYS.EMAIL], password: formValues[INPUTS_KEYS.PASSWORD] };
-    const user = (await dispatch(auth(payload))).payload;
+    const user: any = (await dispatch(auth(payload))).payload;
 
     if (user?.id) {
       navigate('/');

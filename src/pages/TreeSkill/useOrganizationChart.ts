@@ -24,13 +24,12 @@ export const useOrganizationChart = <T>(levelsTree: T) => {
     }
   };
 
-  const removeNode = (nodes: ExtendedT<T>[], draggedNode: ExtendedT<T>): ExtendedT<T>[] => {
+  const removeNode = (nodes: ExtendedT<T>[], draggedNode: ExtendedT<T>): any[] => {
     return nodes
       .map((node) => {
         if (node.data.id === draggedNode.data.id) {
           return null; // Удаляем узел, если он совпадает с draggedNode
         }
-
         // Если у узла есть дети, создаем новый объект и обновляем детей рекурсивно
         if (node?.children?.length) {
           return {
@@ -38,7 +37,6 @@ export const useOrganizationChart = <T>(levelsTree: T) => {
             children: removeNode([...node.children], draggedNode) // Рекурсивно обновляем детей
           };
         }
-
         return { ...node }; // Возвращаем копию узла, если детей нет
       })
       .filter((node) => node !== null); // Фильтруем удаленные узлы

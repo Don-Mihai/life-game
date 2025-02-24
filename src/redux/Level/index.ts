@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { getUserId } from '../User/types.ts';
-import { URL } from '../../utils.ts';
-import { Level, TreeNodeI, UpdateNodePositionPayload, initialState } from './types.ts';
-import { SkillState } from '../Skill/types.ts';
+import { getUserId } from '../User/types';
+import { URL } from '../../utils';
+import { Level, TreeNodeI, UpdateNodePositionPayload, initialState } from './types';
+import { SkillState } from '../Skill/types';
 import { updateSkillLocal } from '../Skill';
 
 const API_URL = `${URL}/levels`;
@@ -55,10 +55,10 @@ export const updateNodePosition = createAsyncThunk<Level, UpdateNodePositionPayl
   }
 );
 
-export const deleteLevel = createAsyncThunk<Level, Partial<Level>>('levels/deleteLevel', async (newLevel) => {
-  const response = await axios.delete<Level>(API_URL);
+export const deleteLevel = createAsyncThunk<Level, string>('levels/deleteLevel', async (idLevel) => {
+  const updatedLevel = (await axios.delete<Level>(API_URL + `/${idLevel}`)).data;
 
-  return response.data;
+  return updatedLevel;
 });
 
 export const reorderLevel = createAsyncThunk('levels/reorder', async ({ levelId, newIndex }: { levelId: string, newIndex: number }) => {

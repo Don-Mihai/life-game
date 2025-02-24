@@ -3,7 +3,7 @@ import { Tooltip, Dialog, DialogActions, DialogContent, DialogTitle, Button } fr
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextmenu';
 import { useDispatch } from 'react-redux';
 import { updateSkill } from '../../../../../redux/Skill';
-import { updateLevel } from '../../../../../redux/Level';
+import { deleteLevel, updateLevel } from '../../../../../redux/Level';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import styles from './Level.module.scss';
 import { Skill } from '../../../../../redux/Skill/types';
@@ -15,10 +15,11 @@ interface Props {
   levelData: LevelI;
   i: number;
   handleLevelClick: (skill: Skill, level: LevelI, i: number) => void;
+  handleDeleteLevel: (level: LevelI) => void;
   dragHandleProps: any;
 }
 
-const Level = React.memo(({ skill, levelData, i, handleLevelClick, dragHandleProps }: Props) => {
+const Level = React.memo(({ skill, levelData, i, handleLevelClick, handleDeleteLevel, dragHandleProps }: Props) => {
   const [selectedEmoji, setSelectedEmoji] = useState(levelData.icon || null); // Состояние для выбранной эмодзи
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Состояние для отображения эмодзи-пикера
 
@@ -51,15 +52,6 @@ const Level = React.memo(({ skill, levelData, i, handleLevelClick, dragHandlePro
     dispatch(updateLevel(newLevel));
   };
 
-  const handleDeleteLevel = (index: number) => {
-    const updatedSkill = {
-      ...skill,
-      levels: skill.levels.filter((_, i) => i !== index)
-    };
-
-    dispatch(updateSkill(updatedSkill));
-  };
-
   return (
     <React.Fragment key={i}>
       <ContextMenuTrigger id={`context-menu-${skill.name}-${i}`}>
@@ -78,7 +70,7 @@ const Level = React.memo(({ skill, levelData, i, handleLevelClick, dragHandlePro
         </Tooltip>
       </ContextMenuTrigger>
       <ContextMenu id={`context-menu-${skill.name}-${i}`}>
-        <ContextMenuItem onClick={() => handleDeleteLevel(i)}>Удалить</ContextMenuItem>
+        <ContextMenuItem onClick={() => handleDeleteLevel(levelData)}>Удалить</ContextMenuItem>
         <ContextMenuItem onClick={() => handleMarkAsCompleted(levelData)}>Уровень пройден</ContextMenuItem>
         <ContextMenuItem onClick={toggleEmojiPicker}>Выбрать иконку для уровня</ContextMenuItem>
       </ContextMenu>

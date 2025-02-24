@@ -7,7 +7,7 @@ const initialValues: Partial<IUser> = {
   [UserFields.PASSWORD]: ''
 };
 
-export const useProfileForm = (user: IUser | null) => {
+export const useProfileForm = (user: IUser | undefined) => {
   const [formValues, setFormValues] = useState<IUser>(initialValues as IUser);
 
   useEffect(() => {

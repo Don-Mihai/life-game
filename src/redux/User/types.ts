@@ -1,8 +1,8 @@
 import { Category } from '../Category/types';
 
 export interface UserState {
-  user: IUser;
-  users: IUser[];
+  user?: IUser;
+  users?: IUser[];
 }
 
 export enum UserFields {
@@ -30,6 +30,11 @@ export interface IUser {
 export interface PAuth {
   email?: string;
   password?: string;
+}
+
+export interface PRegisterEmail {
+  firstName: string;
+  email: string;
 }
 
 export const LOCAL_STORAGE_KEY = 'GAME_USER_ID';

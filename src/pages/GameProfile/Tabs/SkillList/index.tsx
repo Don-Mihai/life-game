@@ -12,25 +12,15 @@ import { addSkill, updateSkillsOrder } from '../../../../redux/Skill';
 import { Category } from '../../../../redux/Category/types';
 
 interface Props {
-  selectedTags: string[];
-  setSelectedTags: (tags: string[]) => void;
   tab?: Category;
 }
 
-const SkillList = ({ tab, selectedTags, setSelectedTags }: Props) => {
-  const { user } = useSelector((state: RootState) => state.user);
+const SkillList = ({ tab }: Props) => {
   const { skills } = useSelector((state: RootState) => state.skill);
   const [openSkillModal, setOpenSkillModal] = useState(false);
   const [newSkillName, setNewSkillName] = useState('');
 
   const dispatch = useDispatch<AppDispatch>();
-
-  const handleChange = (event: any) => {
-    const {
-      target: { value }
-    } = event;
-    setSelectedTags(typeof value === 'string' ? value.split(',') : value);
-  };
 
   const onDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -70,7 +60,7 @@ const SkillList = ({ tab, selectedTags, setSelectedTags }: Props) => {
                   <Draggable key={skill.id} draggableId={skill.id.toString()} index={index}>
                     {(provided, snapshot) => (
                       <div className={`${styles.skillItem} ${snapshot.isDragging ? styles.dragging : ''}`} ref={provided.innerRef} {...provided.draggableProps}>
-                        <Skill key={skill.id} skill={skill} user={user} dragHandleProps={provided.dragHandleProps} />
+                        <Skill key={skill.id} skill={skill} dragHandleProps={provided.dragHandleProps} />
                       </div>
                     )}
                   </Draggable>

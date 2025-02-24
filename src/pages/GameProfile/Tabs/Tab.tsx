@@ -8,10 +8,10 @@ import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'rctx-contextme
 import { Draggable } from '@hello-pangea/dnd';
 import { a11yProps } from './utils';
 
-import { deleteCategory, editCategory } from '../../../redux/Category';
-import { AppDispatch, RootState } from '../../../redux/store';
+import { deleteCategory, editCategory } from '@/redux/Category';
+import { AppDispatch } from '@/redux/store';
 import { useDispatch } from 'react-redux';
-import { Category } from '../../../redux/Category/types';
+import { Category } from '@/redux/Category/types';
 
 import styles from './Tabs.module.scss';
 import { useState } from 'react';

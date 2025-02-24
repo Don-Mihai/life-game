@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import SplitButton from 'components/DropDownButton';
+import SplitButton from '@/components/DropDownButton';
 import './MenuButton.scss';
 import { Link } from 'react-router-dom';
 

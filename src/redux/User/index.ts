@@ -1,12 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { UserState, IUser, PAuth, LOCAL_STORAGE_KEY } from './types';
+import { UserState, IUser, PAuth, LOCAL_STORAGE_KEY, PRegisterEmail } from './types';
 import { URL } from '../../utils';
 
 const API_URL = URL + '/users';
-
-const PROFILE_URL = 'https://6762f51117ec5852cae7acd4.mockapi.io/users/1';
 
 const initialState: UserState = {
   user: {} as IUser,
@@ -88,3 +86,21 @@ export const register = createAsyncThunk(
     }
   }
 );
+
+export const registerEmail = createAsyncThunk('user/registerEmail', async (payload: PRegisterEmail): Promise<any> => {
+  try {
+    const response = await axios.post(API_URL + '/registerEmail', payload);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+});
+
+export const completeRegistration = createAsyncThunk('user/completeRegistration', async (payload: any): Promise<any> => {
+  try {
+    const response = await axios.post(API_URL + '/completeRegistration', payload);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+});

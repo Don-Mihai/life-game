@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import ModalLevel from './ModalLevel';
 import { updateSkill } from '../../../../../redux/Skill';
-import { addLevel, reorderLevel } from '../../../../../redux/Level';
+import { addLevel, deleteLevel, reorderLevel } from '../../../../../redux/Level';
 import { AppDispatch } from '../../../../../redux/store';
 import { useDispatch } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
@@ -9,9 +9,11 @@ import { IconButton } from '@mui/material';
 import Level from '../Level';
 import styles from './Levels.module.scss';
 import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
+import { Level as LevelI } from '../../../../../redux/Level/types';
+import { Skill } from '../../../../../redux/Skill/types';
 
 interface Props {
-  skill: any;
+  skill: Skill;
 }
 
 const Levels = ({ skill }: Props) => {
@@ -54,13 +56,23 @@ const Levels = ({ skill }: Props) => {
     });
   };
 
-  const handleAddLevel = () => {
+  const handleAddLevel = async () => {
     const newLevel = {
       skillId: skill.id,
       parentId: levels.length ? levels[levels.length - 1].id : null
     };
 
-    dispatch(addLevel(newLevel));
+    const addedLevel = await dispatch(addLevel(newLevel)).unwrap();
+    setLevels([...levels, addedLevel]);
+  };
+
+  const handleDeleteLevel = async (level: LevelI) => {
+    try {
+      await dispatch(deleteLevel(level.id)).unwrap();
+      setLevels(levels.filter((l: LevelI) => l.id !== level.id));
+    } catch (err) {
+      console.error('Error deleting level:', err);
+    }
   };
 
   const onDragEnd = async (result: DropResult) => {
@@ -106,6 +118,7 @@ const Levels = ({ skill }: Props) => {
                         levelData={level}
                         i={index}
                         handleLevelClick={handleLevelClick}
+                        handleDeleteLevel={handleDeleteLevel}
                         dragHandleProps={provided.dragHandleProps}
                       />
                     </div>

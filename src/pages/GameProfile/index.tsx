@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './LifeStats.module.scss';
-import Profile from '../../components/Profile/index.jsx';
+import Profile from '@/components/Profile';
 import { fetchSkills } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
-import ChartBuilderModal from '../../components/ChartBuilderModal/index.jsx';
+import ChartBuilderModal from '../../components/ChartBuilderModal';
 import { getById } from '../../redux/User';
 import Tabs from './Tabs';
 import BasicMenu from '../../components/MenuButton';

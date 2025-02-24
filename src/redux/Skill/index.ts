@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import OpenAI from 'openai';
-import { getUserId } from '../User/types.ts';
-import { URL } from '../../utils.ts';
-import { SKILL_LEVELS_JSON_SCHEMA, Skill, initialState } from './types.ts';
-import { OPEN_AI_CONFIG } from './openAIConfig.ts';
-import { Level } from '../Level/types.ts';
+import { getUserId } from '../User/types';
+import { URL } from '../../utils';
+import { SKILL_LEVELS_JSON_SCHEMA, Skill, initialState } from './types';
+import { OPEN_AI_CONFIG } from './openAIConfig';
+import { Level } from '../Level/types';
 
 const API_URL = `${URL}/skills`;
 const openai = new OpenAI(OPEN_AI_CONFIG);
