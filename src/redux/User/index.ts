@@ -89,7 +89,7 @@ export const register = createAsyncThunk(
 
 export const registerEmail = createAsyncThunk('user/registerEmail', async (payload: PRegisterEmail): Promise<any> => {
   try {
-    const response = await axios.post(API_URL + '/registerEmail', payload);
+    const response = await axios.post(API_URL + '/register-email', payload);
     return response.data;
   } catch (error) {
     return error;
@@ -98,7 +98,7 @@ export const registerEmail = createAsyncThunk('user/registerEmail', async (paylo
 
 export const completeRegistration = createAsyncThunk('user/completeRegistration', async (payload: any): Promise<any> => {
   try {
-    const response = await axios.post(API_URL + '/completeRegistration', payload);
+    const response = await axios.post(API_URL + '/complete-registration', payload);
     return response.data;
   } catch (error) {
     return error;
