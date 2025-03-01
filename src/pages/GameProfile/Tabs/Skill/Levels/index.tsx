@@ -68,7 +68,7 @@ const Levels = ({ skill }: Props) => {
 
   const handleDeleteLevel = async (level: LevelI) => {
     try {
-      await dispatch(deleteLevel(level.id)).unwrap();
+      await dispatch(deleteLevel(level)).unwrap();
       setLevels(levels.filter((l: LevelI) => l.id !== level.id));
     } catch (err) {
       console.error('Error deleting level:', err);

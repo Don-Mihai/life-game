@@ -22,6 +22,7 @@ interface Props {
 const Level = React.memo(({ skill, levelData, i, handleLevelClick, handleDeleteLevel, dragHandleProps }: Props) => {
   const [selectedEmoji, setSelectedEmoji] = useState(levelData.icon || null); // Состояние для выбранной эмодзи
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Состояние для отображения эмодзи-пикера
+  const [level, setLevel] = useState(levelData);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -42,25 +43,27 @@ const Level = React.memo(({ skill, levelData, i, handleLevelClick, handleDeleteL
     setShowEmojiPicker(!showEmojiPicker); // Переключаем отображение пикера
   };
 
-  const handleMarkAsCompleted = (levelData: LevelI) => {
+  const handleMarkAsCompleted = async (levelData: LevelI) => {
     const newLevel: LevelI = {
       ...levelData,
       skillId: skill.id,
-      completed: true
+      completed: !levelData?.completed
     };
 
-    dispatch(updateLevel(newLevel));
+    const res = await dispatch(updateLevel(newLevel)).unwrap();
+
+    setLevel(res);
   };
 
   return (
     <React.Fragment key={i}>
       <ContextMenuTrigger id={`context-menu-${skill.name}-${i}`}>
-        <Tooltip title={levelData.description && JSON.parse(levelData.description).blocks[0]?.data.text} placement="top" arrow>
+        <Tooltip title={level.description && JSON.parse(level.description).blocks[0]?.data.text} placement="top" arrow>
           <div
-            className={`${styles.level} ${styles.dragHandle} ${levelData.completed ? styles.completed : ''} ${selectedEmoji ? styles.levelWithIcon : ''}`}
+            className={`${styles.level} ${styles.dragHandle} ${level.completed ? styles.completed : ''} ${selectedEmoji ? styles.levelWithIcon : ''}`}
             onClick={(event) => {
               event.stopPropagation();
-              handleLevelClick(skill, levelData, i);
+              handleLevelClick(skill, level, i);
             }}
             {...dragHandleProps}
           >
@@ -70,8 +73,8 @@ const Level = React.memo(({ skill, levelData, i, handleLevelClick, handleDeleteL
         </Tooltip>
       </ContextMenuTrigger>
       <ContextMenu id={`context-menu-${skill.name}-${i}`}>
-        <ContextMenuItem onClick={() => handleDeleteLevel(levelData)}>Удалить</ContextMenuItem>
-        <ContextMenuItem onClick={() => handleMarkAsCompleted(levelData)}>Уровень пройден</ContextMenuItem>
+        <ContextMenuItem onClick={() => handleDeleteLevel(level)}>Удалить</ContextMenuItem>
+        <ContextMenuItem onClick={() => handleMarkAsCompleted(level)}>Уровень пройден</ContextMenuItem>
         <ContextMenuItem onClick={toggleEmojiPicker}>Выбрать иконку для уровня</ContextMenuItem>
       </ContextMenu>
       <Dialog open={showEmojiPicker} onClose={toggleEmojiPicker}>

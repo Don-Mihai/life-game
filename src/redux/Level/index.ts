@@ -26,14 +26,8 @@ export const addLevel = createAsyncThunk<Level, Partial<Level>>('levels/addLevel
   return newLevelData;
 });
 
-export const updateLevel = createAsyncThunk<Level, Partial<Level>>('levels/updateLevel', async (payload, { getState, dispatch }) => {
+export const updateLevel = createAsyncThunk<Level, Partial<Level>>('levels/updateLevel', async (payload) => {
   const updatedLevel = (await axios.put<Level>(`${API_URL}/${payload.skillId}/update-data`, payload)).data;
-  const skills = (getState() as { skill: SkillState }).skill.skills;
-  const skill = skills.find((skill) => skill.id === updatedLevel.skillId);
-
-  if (skill && skill.levels) {
-    dispatch(updateSkillLocal({ ...skill, levels: skill.levels.map((level) => (level.id === updatedLevel.id ? updatedLevel : level)) }));
-  }
 
   return updatedLevel;
 });
@@ -55,8 +49,17 @@ export const updateNodePosition = createAsyncThunk<Level, UpdateNodePositionPayl
   }
 );
 
-export const deleteLevel = createAsyncThunk<Level, string>('levels/deleteLevel', async (idLevel) => {
-  const updatedLevel = (await axios.delete<Level>(API_URL + `/${idLevel}`)).data;
+export const deleteLevel = createAsyncThunk<Level, Level>('levels/deleteLevel', async (level, { getState, dispatch }) => {
+  const updatedLevel = (await axios.delete<Level>(API_URL + `/${level.id}`)).data;
+
+  const state = getState() as { skill: SkillState };
+
+  const skill = state.skill.skills.find((skill) => skill.id === level.skillId);
+  const newSkill = { ...skill, levels: skill?.levels.filter((level) => level.id !== updatedLevel.id) };
+
+  if (skill) {
+    dispatch(updateSkillLocal(newSkill));
+  }
 
   return updatedLevel;
 });
