@@ -15,12 +15,6 @@ import TreeSkill from './pages/TreeSkill';
 import RegisterEmail from './pages/GameProfile/Auth/RegisterEmail';
 import CompleteRegistration from './pages/GameProfile/Auth/CompleteRegistration';
 
-// const LazyGameProfile = lazy(() => import('./pages/GameProfile'));
-// const LazyCharacteristics = lazy(() => import('./pages/Characteristics'));
-// const LazyTreeSkill = lazy(() => import('./pages/TreeSkill'));
-// const LazyTest = lazy(() => import('./pages/Test'));
-// const LazyProfile = lazy(() => import('./pages/Profile'));
-
 const originalError = console.error;
 console.error = (...args) => {
   // убираю ошибку из библиотеки drang-and-drop
