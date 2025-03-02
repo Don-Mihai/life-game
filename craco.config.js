@@ -1,4 +1,4 @@
-import { resolve, dirname } from 'path';
+const { resolve, dirname } = require('path');
 
 export const webpack = {
   alias: {
