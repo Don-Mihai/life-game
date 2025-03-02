@@ -2,7 +2,6 @@
   "name": "config",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "dependencies": {
     "@editorjs/checklist": "^1.6.0",
     "@editorjs/code": "^2.9.3",
