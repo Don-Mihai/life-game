@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { UserState, IUser, PAuth, LOCAL_STORAGE_KEY, PRegisterEmail } from './types';
+import { UserState, IUser, PAuth, LOCAL_STORAGE_KEY, PRegisterEmail, RCompleteRegistration } from './types';
 import { URL } from '../../utils';
 
 const API_URL = URL + '/users';
@@ -96,11 +96,13 @@ export const registerEmail = createAsyncThunk('user/registerEmail', async (paylo
   }
 });
 
-export const completeRegistration = createAsyncThunk('user/completeRegistration', async (payload: any): Promise<any> => {
+export const completeRegistration = createAsyncThunk('user/completeRegistration', async (payload: any): Promise<RCompleteRegistration | undefined> => {
   try {
-    const response = await axios.post(API_URL + '/complete-registration', payload);
-    return response.data;
+    const response = (await axios.post(API_URL + '/complete-registration', payload)).data;
+    localStorage.setItem(LOCAL_STORAGE_KEY, String(response.user.id));
+
+    return response;
   } catch (error) {
-    return error;
+    return;
   }
 });

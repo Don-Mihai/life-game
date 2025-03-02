@@ -37,6 +37,12 @@ export interface PRegisterEmail {
   email: string;
 }
 
+export interface RCompleteRegistration {
+  token: string;
+  user: IUser;
+  message: string;
+}
+
 export const LOCAL_STORAGE_KEY = 'GAME_USER_ID';
 
 export const getUserId = () => localStorage.getItem(LOCAL_STORAGE_KEY);

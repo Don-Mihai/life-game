@@ -23,14 +23,10 @@ const CompleteRegistration = () => {
   const handleCompleteRegistration = async () => {
     try {
       const payload = { token, [INPUTS_KEYS.PASSWORD]: formValues.password };
-      const resultAction = await dispatch(completeRegistration(payload));
-      if (resultAction.meta?.requestStatus === 'fulfilled') {
-        navigate('/');
-      } else {
-        setError('Ошибка завершения регистрации');
-      }
+      await dispatch(completeRegistration(payload));
+      navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Ошибка завершения регистрации');
+      setError(err.response?.message || 'Ошибка завершения регистрации');
     }
   };
 
