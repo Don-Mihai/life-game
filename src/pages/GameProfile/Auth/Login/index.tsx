@@ -23,6 +23,7 @@ const Login = () => {
   const onSignIn = async () => {
     const payload = { email: formValues[INPUTS_KEYS.EMAIL], password: formValues[INPUTS_KEYS.PASSWORD] };
     const user: any = (await dispatch(auth(payload))).payload;
+    console.log(user);
 
     if (user?.id) {
       navigate('/');

@@ -1,4 +1,4 @@
-export const URL = 'http://skill-manager.ru/api';
+export const URL = process.env.REACT_APP_BACK_URL || 'http://skill-manager.ru/api';
 // export const URL = 'http://localhost:5000';
 
 export const processCodeBlocks = (data: any) => {

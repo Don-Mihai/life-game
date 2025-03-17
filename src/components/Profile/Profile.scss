@@ -7,7 +7,7 @@
   box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
   background-color: white;
 
-  &:hover [class*="Characteristics_actions"] {
+  &:hover [class*='Characteristics_actions'] {
     display: block;
   }
 
@@ -42,7 +42,7 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    font-size: 18px;
+    font-size: 14px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     outline: none;
@@ -57,10 +57,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 500;
     color: #333;
-    margin-bottom: 10px;
     height: 28px;
 
     .MuiInputBase-root {

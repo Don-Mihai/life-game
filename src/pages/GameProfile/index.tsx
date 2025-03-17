@@ -5,7 +5,7 @@ import { fetchSkills } from '../../redux/Skill';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './LifeStats.module.scss';
 import ChartBuilderModal from '../../components/ChartBuilderModal';
-import { getById } from '../../redux/User';
+import { getCurrentUser } from '../../redux/User';
 import Tabs from './Tabs';
 import BasicMenu from '../../components/MenuButton';
 import { AppDispatch, RootState } from '../../redux/store';
@@ -18,7 +18,7 @@ const GameProfile = () => {
 
   useEffect(() => {
     dispatch(fetchSkills());
-    dispatch(getById());
+    dispatch(getCurrentUser());
   }, []);
 
   const handleCloseBuilder = () => {

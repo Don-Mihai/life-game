@@ -4,7 +4,7 @@ import styles from './Profile.module.scss';
 import { useEffect } from 'react';
 import useDebounce from './useDebounce';
 import { UserFields } from '../../redux/User/types';
-import { editUser, getById } from '../../redux/User';
+import { editUser, getCurrentUser } from '../../redux/User';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import Avatar, { genConfig } from 'react-nice-avatar';
@@ -23,7 +23,7 @@ const Profile = () => {
   const debauncedFormValues = useDebounce(formValues, 1000);
 
   useEffect(() => {
-    dispatch(getById());
+    dispatch(getCurrentUser());
   }, []);
 
   useEffect(() => {

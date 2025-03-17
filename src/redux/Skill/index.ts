@@ -1,40 +1,38 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import OpenAI from 'openai';
 import { getUserId } from '../User/types';
-import { URL } from '../../utils';
 import { SKILL_LEVELS_JSON_SCHEMA, Skill, initialState } from './types';
 import { OPEN_AI_CONFIG } from './openAIConfig';
 import { Level } from '../Level/types';
+import { axiosInstance } from '@/api';
 
-const API_URL = `${URL}/skills`;
+const API_URL = `/skills`;
 const openai = new OpenAI(OPEN_AI_CONFIG);
 
 export const fetchSkills = createAsyncThunk<Skill[]>('skills/fetchSkills', async () => {
-  const response = await axios.get<Skill[]>(API_URL, { params: { userId: getUserId() } });
+  const response = await axiosInstance.get<Skill[]>(API_URL);
   return response.data;
 });
 
 export const addSkill = createAsyncThunk<Skill, Partial<Skill>>('skills/addSkill', async (newSkill) => {
-  const response = await axios.post<Skill>(API_URL, { ...newSkill, userId: getUserId() });
+  const response = await axiosInstance.post<Skill>(API_URL, { ...newSkill });
   return response.data;
 });
 
 export const updateSkill = createAsyncThunk<Skill, Skill>('skills/updateSkill', async (updatedSkill) => {
-  const response = await axios.put<Skill>(`${API_URL}/${updatedSkill.id}`, updatedSkill);
+  const response = await axiosInstance.put<Skill>(`${API_URL}/${updatedSkill.id}`, updatedSkill);
   return response.data;
 });
 
 export const updateSkillsOrder = createAsyncThunk<Skill[], Skill[]>('skills/updateSkillsOrder', async (updatedSkills) => {
-  const response = await axios.put<Skill[]>(`${API_URL}/update-order`, {
-    userId: getUserId(),
+  const response = await axiosInstance.put<Skill[]>(`${API_URL}/update-order`, {
     skills: updatedSkills.map((skill, index) => ({ id: skill.id, order: index }))
   });
   return response.data;
 });
 
 export const deleteSkill = createAsyncThunk<string, string>('skills/deleteSkill', async (skillId) => {
-  await axios.delete(`${API_URL}/${skillId}`);
+  await axiosInstance.delete(`${API_URL}/${skillId}`);
   return skillId;
 });
 
@@ -42,7 +40,7 @@ export const generateSkillLevels = createAsyncThunk<Skill, { skillId: string, sk
   'skills/generateSkillLevels',
   async ({ skillId, skillName }, { rejectWithValue }) => {
     try {
-      const response = await axios.get<Skill>(`${API_URL}/${skillId}`);
+      const response = await axiosInstance.get<Skill>(`${API_URL}/${skillId}`);
       const skill = response.data;
 
       const completion = await openai.chat.completions.create({
@@ -74,7 +72,7 @@ export const generateSkillLevels = createAsyncThunk<Skill, { skillId: string, sk
 
       skill.levels = generatedLevels;
 
-      const updatedResponse = await axios.put<Skill>(`${API_URL}/${skillId}`, skill);
+      const updatedResponse = await axiosInstance.put<Skill>(`${API_URL}/${skillId}`, skill);
 
       return updatedResponse.data;
     } catch (error: any) {
@@ -83,7 +81,6 @@ export const generateSkillLevels = createAsyncThunk<Skill, { skillId: string, sk
   }
 );
 
-// Skills slice
 const skillsSlice = createSlice({
   name: 'skills',
   initialState,

@@ -14,5 +14,4 @@ export const initialState: CategoryState = {
 
 export interface CategoryDeletePayload {
   categoryId: string;
-  userId: string | null;
 }
