@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import OpenAI from 'openai';
-import { getUserId } from '../User/types';
 import { SKILL_LEVELS_JSON_SCHEMA, Skill, initialState } from './types';
 import { OPEN_AI_CONFIG } from './openAIConfig';
 import { Level } from '../Level/types';
@@ -36,13 +35,10 @@ export const deleteSkill = createAsyncThunk<string, string>('skills/deleteSkill'
   return skillId;
 });
 
-export const generateSkillLevels = createAsyncThunk<Skill, { skillId: string, skillName: string }, { rejectValue: string }>(
+export const generateSkillLevels = createAsyncThunk<Skill, { skill: Skill }, { rejectValue: string }>(
   'skills/generateSkillLevels',
-  async ({ skillId, skillName }, { rejectWithValue }) => {
+  async ({ skill }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get<Skill>(`${API_URL}/${skillId}`);
-      const skill = response.data;
-
       const completion = await openai.chat.completions.create({
         model: 'gpt-4o-2024-08-06',
         messages: [
@@ -52,7 +48,7 @@ export const generateSkillLevels = createAsyncThunk<Skill, { skillId: string, sk
           },
           {
             role: 'user',
-            content: `Generate a detailed 10-level learning guide for the skill "${skillName}". Each level should provide:
+            content: `Generate a detailed 10-level learning guide for the skill "${skill.name}". Each level should provide:
 - A clear, concise **goal** for what the learner will achieve.
 - A detailed **methodology** or steps for learning the level.
 - A curated list of **resources** including:
@@ -72,7 +68,7 @@ export const generateSkillLevels = createAsyncThunk<Skill, { skillId: string, sk
 
       skill.levels = generatedLevels;
 
-      const updatedResponse = await axiosInstance.put<Skill>(`${API_URL}/${skillId}`, skill);
+      const updatedResponse = await axiosInstance.put<Skill>(`${API_URL}/${skill.id}`, { levels: generatedLevels });
 
       return updatedResponse.data;
     } catch (error: any) {

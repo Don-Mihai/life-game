@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { UserState, IUser, PAuth, LOCAL_STORAGE_KEY, PRegisterEmail, RCompleteRegistration } from './types';
+import { UserState, IUser, PAuth, LOCAL_STORAGE_TOKEN, PRegisterEmail, RCompleteRegistration } from './types';
 import { axiosInstance } from '@/api';
 
 const API_URL = '/users';
@@ -13,12 +13,7 @@ const initialState: UserState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    setUser: (state, action: PayloadAction<IUser>) => {
-      localStorage.setItem(LOCAL_STORAGE_KEY, String(action.payload.id));
-      state.user = action.payload;
-    }
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(auth.fulfilled, (state, action) => {
@@ -38,8 +33,6 @@ export const userSlice = createSlice({
   }
 });
 
-export const { setUser } = userSlice.actions;
-
 export default userSlice.reducer;
 
 export const editUser = createAsyncThunk('user/editUser', async (user: Partial<IUser>): Promise<IUser | undefined> => {
@@ -54,7 +47,7 @@ export const getCurrentUser = createAsyncThunk('user/getCurrentUser', async (): 
 
 export const auth = createAsyncThunk('user/auth', async (payload: PAuth): Promise<IUser | undefined> => {
   const response = await axiosInstance.post(API_URL + '/auth', payload);
-  localStorage.setItem('accessToken', response?.data?.token);
+  localStorage.setItem(LOCAL_STORAGE_TOKEN, response?.data?.token);
   return response?.data?.user;
 });
 
@@ -70,7 +63,7 @@ export const registerEmail = createAsyncThunk('user/registerEmail', async (paylo
 export const completeRegistration = createAsyncThunk('user/completeRegistration', async (payload: any): Promise<RCompleteRegistration | undefined> => {
   try {
     const response = (await axiosInstance.post(API_URL + '/complete-registration', payload)).data;
-    localStorage.setItem(LOCAL_STORAGE_KEY, String(response.user.id));
+    localStorage.setItem(LOCAL_STORAGE_TOKEN, response?.data?.token);
 
     return response.data;
   } catch (error) {

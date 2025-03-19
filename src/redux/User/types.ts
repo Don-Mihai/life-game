@@ -43,6 +43,4 @@ export interface RCompleteRegistration {
   message: string;
 }
 
-export const LOCAL_STORAGE_KEY = 'GAME_USER_ID';
-
-export const getUserId = () => localStorage.getItem(LOCAL_STORAGE_KEY);
+export const LOCAL_STORAGE_TOKEN = 'TOKEN';

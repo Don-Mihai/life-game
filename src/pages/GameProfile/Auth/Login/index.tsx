@@ -26,6 +26,7 @@ const Login = () => {
     console.log(user);
 
     if (user?.id) {
+      console.log('navigate');
       navigate('/');
     } else {
       setOpen(true);

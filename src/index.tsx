@@ -5,7 +5,7 @@ import ErrorBoundary from './ErrorBoundary';
 
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
-import { LOCAL_STORAGE_KEY } from './redux/User/types';
+import { LOCAL_STORAGE_TOKEN } from './redux/User/types';
 
 import GameProfile from './pages/GameProfile';
 import Characteristics from './pages/Characteristics';
@@ -23,8 +23,10 @@ console.error = (...args) => {
 };
 
 const authLoader = () => {
-  const token = localStorage.getItem(LOCAL_STORAGE_KEY);
+  console.log('auth');
+  const token = localStorage.getItem(LOCAL_STORAGE_TOKEN);
   if (!token) {
+    console.log('token', token);
     throw new Response('Unauthorized', { status: 401 });
   }
   return token;

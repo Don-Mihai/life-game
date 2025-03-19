@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-import { TextField, Autocomplete, IconButton } from '@mui/material';
+import { TextField } from '@mui/material';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -53,10 +53,10 @@ const Skill = ({ skill, dragHandleProps }: Props) => {
     setIsEditing(false);
   };
 
-  const lastCompletedLevelIndex = skill.levels?.findIndex?.((level) => !level.completed) - 1;
+  const completedLevels = skill.levels?.reduce((acum, level) => (level?.completed ? acum + 1 : acum), -1);
 
   const handleGenerateLevels = () => {
-    dispatch(generateSkillLevels({ skillId: skill.id, skillName: skill.name }));
+    dispatch(generateSkillLevels({ skill }));
   };
 
   const handleOpenTree = () => {
@@ -105,7 +105,7 @@ const Skill = ({ skill, dragHandleProps }: Props) => {
                 </div>
               </>
             )}
-            {lastCompletedLevelIndex >= 0 && <div className={styles.completedLevel}>Уровень: {lastCompletedLevelIndex + 1}</div>}
+            {completedLevels >= 0 && <div className={styles.completedLevel}>Уровень: {completedLevels + 1}</div>}
           </div>
         </div>
       </ContextMenuTrigger>
