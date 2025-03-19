@@ -1,5 +1,6 @@
 // api.ts
 import axios from 'axios';
+import { LOCAL_STORAGE_TOKEN } from './redux/User/types';
 
 const API_URL = process.env.REACT_APP_BACK_URL || 'http://skill-manager.ru/api';
 
@@ -9,7 +10,7 @@ export const axiosInstance = axios.create({
 
 // Интерцептор для автоматической подстановки токена
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem(LOCAL_STORAGE_TOKEN);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -22,8 +23,8 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Здесь можно добавить логику обновления токена или выхода из системы
-      localStorage.removeItem('accessToken');
-      window.location.href = '/login';
+      localStorage.removeItem(LOCAL_STORAGE_TOKEN);
+      window.location.href = '/auth';
     }
     return Promise.reject(error);
   }
@@ -69,13 +70,13 @@ axiosInstance.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refreshToken');
         const response = await axios.post('/auth/refresh', { refreshToken });
-        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem(LOCAL_STORAGE_TOKEN, response.data.accessToken);
         axiosInstance.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.accessToken;
         processQueue(null, response.data.accessToken);
         return axiosInstance(originalRequest);
       } catch (err) {
         processQueue(err);
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN);
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
