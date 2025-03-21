@@ -18,29 +18,6 @@ export interface Skill {
   updatedAt?: string; // Временная метка обновления
 }
 
-export const SKILL_LEVELS_JSON_SCHEMA = {
-  name: 'skill_levels_schema',
-  schema: {
-    type: 'object',
-    properties: {
-      levels: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            completed: { type: 'boolean', default: false },
-            description: {
-              type: 'string',
-              description: 'Editor.js JSON string including task, description, and resources'
-            }
-          },
-          required: ['completed', 'description']
-        }
-      }
-    },
-    required: ['levels']
-  }
-};
 export interface SkillState {
   skills: Skill[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';

@@ -1,12 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import OpenAI from 'openai';
-import { SKILL_LEVELS_JSON_SCHEMA, Skill, initialState } from './types';
-import { OPEN_AI_CONFIG } from './openAIConfig';
-import { Level } from '../Level/types';
+import { Skill, initialState } from './types';
 import { axiosInstance } from '@/api';
 
 const API_URL = `/skills`;
-const openai = new OpenAI(OPEN_AI_CONFIG);
 
 export const fetchSkills = createAsyncThunk<Skill[]>('skills/fetchSkills', async () => {
   const response = await axiosInstance.get<Skill[]>(API_URL);
@@ -35,47 +31,10 @@ export const deleteSkill = createAsyncThunk<string, string>('skills/deleteSkill'
   return skillId;
 });
 
-export const generateSkillLevels = createAsyncThunk<Skill, { skill: Skill }, { rejectValue: string }>(
-  'skills/generateSkillLevels',
-  async ({ skill }, { rejectWithValue }) => {
-    try {
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-2024-08-06',
-        messages: [
-          {
-            role: 'system',
-            content: `You are a professional curriculum developer for skills. Respond with a structured JSON for levels.`
-          },
-          {
-            role: 'user',
-            content: `Generate a detailed 10-level learning guide for the skill "${skill.name}". Each level should provide:
-- A clear, concise **goal** for what the learner will achieve.
-- A detailed **methodology** or steps for learning the level.
-- A curated list of **resources** including:
-  - At least 2-3 high-quality YouTube videos with accurate URLs.
-  - At least 1 article or documentation link.
-  - Optionally, any additional learning tools (e.g., interactive platforms or tutorials).`
-          }
-        ],
-        response_format: {
-          type: 'json_schema',
-          json_schema: SKILL_LEVELS_JSON_SCHEMA
-        }
-      });
-
-      const generatedData = completion.choices[0].message.content || '{}';
-      const generatedLevels: Level[] = JSON.parse(generatedData).levels;
-
-      skill.levels = generatedLevels;
-
-      const updatedResponse = await axiosInstance.put<Skill>(`${API_URL}/${skill.id}`, { levels: generatedLevels });
-
-      return updatedResponse.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response ? error.response.data : error.message);
-    }
-  }
-);
+export const generateSkillLevels = createAsyncThunk<Skill, Skill>('skills/generateSkillLevels', async (skill) => {
+  const response = await axiosInstance.post(`${API_URL}/generate-levels`, { skillId: skill.id });
+  return response.data;
+});
 
 const skillsSlice = createSlice({
   name: 'skills',
@@ -101,15 +60,15 @@ const skillsSlice = createSlice({
         const index = state.skills.findIndex((skill) => skill.id === action.payload.id);
         if (index !== -1) state.skills[index] = action.payload;
       })
+      .addCase(generateSkillLevels.fulfilled, (state, action) => {
+        const index = state.skills.findIndex((skill) => skill.id === action.payload.id);
+        if (index !== -1) state.skills[index] = action.payload;
+      })
       .addCase(updateSkillsOrder.fulfilled, (state, action) => {
         state.skills = action.payload;
       })
       .addCase(deleteSkill.fulfilled, (state, action) => {
         state.skills = state.skills.filter((skill) => skill.id !== action.payload);
-      })
-      .addCase(generateSkillLevels.fulfilled, (state, action) => {
-        const index = state.skills.findIndex((skill) => skill.id === action.payload.id);
-        if (index !== -1) state.skills[index] = action.payload;
       });
   }
 });

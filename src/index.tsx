@@ -14,6 +14,7 @@ import Profile from './pages/Profile';
 import TreeSkill from './pages/TreeSkill';
 import RegisterEmail from './pages/GameProfile/Auth/RegisterEmail';
 import CompleteRegistration from './pages/GameProfile/Auth/CompleteRegistration';
+import HomePage from './pages/Home';
 
 const originalError = console.error;
 console.error = (...args) => {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: '/tree/:skillId',
     element: <TreeSkill />
+  },
+  {
+    path: '/home',
+    element: <HomePage />
   }
 ]);
 

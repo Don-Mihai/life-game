@@ -4,6 +4,7 @@ import { TextField } from '@mui/material';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import { Chip } from 'primereact/chip';
 
 import { useDispatch } from 'react-redux';
@@ -56,7 +57,7 @@ const Skill = ({ skill, dragHandleProps }: Props) => {
   const completedLevels = skill.levels?.reduce((acum, level) => (level?.completed ? acum + 1 : acum), -1);
 
   const handleGenerateLevels = () => {
-    dispatch(generateSkillLevels({ skill }));
+    dispatch(generateSkillLevels(skill));
   };
 
   const handleOpenTree = () => {
@@ -111,7 +112,7 @@ const Skill = ({ skill, dragHandleProps }: Props) => {
       </ContextMenuTrigger>
       <ContextMenu className={styles.skillMenu} id={`skill-context-menu-${skill.name}`}>
         <ContextMenuItem className={styles.skillContext} onClick={handleOpenTree}>
-          <DeleteIcon fontSize="small" style={{ marginRight: '8px' }} />
+          <AccountTreeIcon fontSize="small" style={{ marginRight: '8px' }} />
           Открыть в режиме дерева
         </ContextMenuItem>
         <ContextMenuItem className={styles.skillContext} onClick={handleGenerateLevels}>

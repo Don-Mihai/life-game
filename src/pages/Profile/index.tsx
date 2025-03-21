@@ -1,5 +1,4 @@
 import { TextField } from '@mui/material';
-// @ts-ignore
 import styles from './Profile.module.scss';
 import { useEffect } from 'react';
 import useDebounce from './useDebounce';
@@ -14,7 +13,7 @@ import { useProfileForm } from './useProfileForm';
 const Profile = () => {
   const user = useSelector((store: RootState) => store.user.user);
 
-  const { formValues, handleChange, clearInputs } = useProfileForm(user);
+  const { formValues, handleChange } = useProfileForm(user);
 
   const config = genConfig(user?.email);
 
@@ -36,9 +35,8 @@ const Profile = () => {
       <Avatar className="profile__avatar-image" {...config} />
       <div className={styles.form}>
         <TextField onChange={handleChange} value={formValues[UserFields.NAME]} name={UserFields.NAME} label="Имя" fullWidth />
-        <TextField onChange={handleChange} value={formValues[UserFields.EMAIL]} name={UserFields.EMAIL} label="Почта" fullWidth />
+        <TextField onChange={handleChange} disabled value={formValues[UserFields.EMAIL]} name={UserFields.EMAIL} label="Почта" fullWidth />
         <TextField onChange={handleChange} value={formValues[UserFields.PASSWORD]} name={UserFields.PASSWORD} label="Пароль" fullWidth />
-        <button onClick={clearInputs}>очистить</button>
       </div>
     </div>
   );

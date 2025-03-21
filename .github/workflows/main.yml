@@ -22,7 +22,7 @@ jobs:
       # Шаг 3: Выполнение скрипта деплоя фронтенда
       - name: Deploy Frontend
         run: |
-          ssh -o StrictHostKeyChecking=no root@90.156.156.29 << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@213.148.23.136 << 'EOF'
             echo "Сборка фронтенда..."
             cd /var/www/life-game || { echo "Не удалось перейти в директорию фронтенда."; exit 1; }
           
